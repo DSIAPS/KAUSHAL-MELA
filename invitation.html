@@ -753,6 +753,7 @@ el('ksModal').addEventListener('click',function(ev){if(ev.target===el('ksModal')
     <p class="heart">♥</p>
     <p id="footSign"></p>
     <p class="tagline-foot">THE DAY OUR STUDENTS HAVE BEEN BUILDING FOR</p>
+    <p class="kv-credit">Digital invitation and KAVYA by the Department of Skill and Innovation · Powered by Project TRINeTRA</p>
   </div>
 </footer>
 
@@ -1248,7 +1249,7 @@ const INVITE = {
       <div class="pass-name">${esc(r.name)}</div>
       <div class="pass-meta">${r.vip ? 'Chief Guest' : guests}<br>${esc(INVITE.dateText)}, ${esc(INVITE.timeText)}<br>${esc(INVITE.venueName)}</div>
       <div class="qr" aria-label="QR code of your e-pass">${qrSvg(new URL('pass.html?id=' + encodeURIComponent(r.id), location.href).href)}</div>
-      ${chip(r.status)}</div>${gband}</div>`;
+      ${chip(r.status)}<div class="pass-kv"><img src="kavya.png" alt="">Show me this at the entry gate. KAVYA will scan you in! 📷</div></div>${gband}</div>`;
   }
   const modal = $('modal');
   function showForm(){ $('formPart').style.display = ''; $('donePart').style.display = 'none'; $('rErr').textContent = ''; }
@@ -1258,8 +1259,8 @@ const INVITE = {
       $('doneTitle').textContent = 'Your reply is saved';
       $('passBox').innerHTML = passHtml(r);
       $('doneText').textContent = INVITE.rsvpScript
-        ? 'Take a screenshot of this e-pass and show it at the help desk on the day. The status changes to Confirmed once the school confirms your reply.'
-        : 'Your booking is confirmed. Take a screenshot of this e-pass and show it at the help desk on the day.';
+        ? 'Take a screenshot of this e-pass and show it at the entry gate on the day. The status changes to Confirmed once the school confirms your reply.'
+        : 'Your booking is confirmed. Take a screenshot of this e-pass and show it at the entry gate on the day.';
       $('statusBtn').style.display = ''; $('statusBtn').onclick = () => statusCard(r.name);
     } else {
       $('doneTitle').textContent = 'Thank you for letting us know';
@@ -1514,5 +1515,60 @@ const INVITE = {
 </script>
 
 
+
+<!-- ================= KAVYA HOST ================= -->
+<style>
+.kv-credit{margin-top:18px;font-size:12px;letter-spacing:.02em;opacity:.75;line-height:1.5}
+.pass-kv{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;font-weight:600;text-align:left;line-height:1.3}
+.pass-kv img{width:34px;height:auto;flex:none}
+#kvHost{position:fixed;right:12px;bottom:14px;z-index:60;display:flex;align-items:flex-end;gap:8px;pointer-events:none;flex-direction:row-reverse}
+#kvBot{width:74px;height:auto;pointer-events:auto;cursor:pointer;border:0;background:none;padding:0;transform:translateY(140%);transition:transform .6s cubic-bezier(.2,1.5,.4,1);filter:drop-shadow(0 6px 10px rgba(0,0,0,.25))}
+#kvBot img{width:100%;display:block}
+#kvHost.in #kvBot{transform:none;animation:kvBob 2.4s ease-in-out .8s infinite}
+@keyframes kvBob{50%{transform:translateY(-6px) rotate(-3deg)}}
+#kvHost.talk #kvBot img{animation:kvTalk .25s ease-in-out infinite alternate}
+@keyframes kvTalk{to{transform:scale(1.04,.97)}}
+#kvBub{pointer-events:auto;max-width:min(260px,68vw);background:#fff;color:#2a1a12;border:2px solid #B71C2B;border-radius:18px 18px 4px 18px;padding:10px 12px;font-size:14px;line-height:1.35;box-shadow:0 8px 24px rgba(0,0,0,.18);margin-bottom:46px;opacity:0;transform:translateY(10px) scale(.9);transform-origin:bottom right;transition:.3s;visibility:hidden}
+#kvHost.say #kvBub{opacity:1;transform:none;visibility:visible}
+#kvBub b{display:block;color:#B71C2B;font-size:12px;letter-spacing:.06em;margin-bottom:2px}
+#kvBub .kvb{display:flex;gap:6px;margin-top:8px}
+#kvBub button{border:1px solid #B71C2B;background:#fff;color:#B71C2B;border-radius:999px;padding:3px 10px;font-size:12px;cursor:pointer}
+@media (prefers-reduced-motion:reduce){#kvBot,#kvBub{transition:none}#kvHost.in #kvBot,#kvHost.talk #kvBot img{animation:none}}
+body.locked #kvHost,#appLayer.open~#kvHost{display:none}
+</style>
+<div id="kvHost" aria-live="polite">
+  <button id="kvBot" type="button" aria-label="KAVYA, your Mela host"><img src="kavya.png" alt=""></button>
+  <div id="kvBub"><b>KAVYA</b><span id="kvTxt"></span><div class="kvb"><button type="button" id="kvSay">🔊 Hear me</button><button type="button" id="kvX">Close</button></div></div>
+</div>
+<script>
+(function(){
+  const $ = i => document.getElementById(i), host = $('kvHost');
+  const START = new Date('2026-11-28T10:00:00+05:30').getTime();
+  let hideT = null, said = new Set(), busy = false;
+  function daysLine(){ const ms = START - Date.now(); if (ms <= 0) return 'The Mela is on! Come on in, the stalls are open! 🎉';
+    const d = Math.ceil(ms / 864e5); return d <= 1 ? 'Just one more sleep! See you tomorrow at 10 AM! 🎉' : `${d} days to go! I'm practising my welcome already 🤖`; }
+  function speak(t){ try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, ''));
+    const v = speechSynthesis.getVoices().find(x => /en[-_]IN/i.test(x.lang)) || speechSynthesis.getVoices().find(x => /^en/i.test(x.lang)); if (v){ u.voice = v; u.lang = v.lang; }
+    u.onstart = () => host.classList.add('talk'); u.onend = u.onerror = () => host.classList.remove('talk'); speechSynthesis.speak(u); } catch(e) {} }
+  function say(t, ms){ $('kvTxt').textContent = t; host.classList.add('in','say'); busy = true; clearTimeout(hideT);
+    hideT = setTimeout(() => { host.classList.remove('say'); busy = false; }, ms || 6000); }
+  $('kvSay').onclick = () => speak($('kvTxt').textContent);
+  $('kvX').onclick = () => { host.classList.remove('say'); busy = false; clearTimeout(hideT); try { speechSynthesis.cancel(); } catch(e) {} };
+  const TAPS = [() => 'Namaskar! I\'m KAVYA, your Mela host. Tap Confirm your presence and I\'ll make your e-pass! 🎫', daysLine,
+    () => 'At the Mela, stalls take coupons only. Buy them with cash at the Coupon Counter near the gate 🎟️', () => 'Everything at the Mela is made by our students. Come and cheer them on! 👏'];
+  let tap = 0; $('kvBot').onclick = () => say(TAPS[tap++ % TAPS.length](), 7000);
+  function hello(){ say('Namaskar! I\'m KAVYA, your Mela host. You\'re invited to Kaushal Mela 2026! 🎉', 7500); watch(); }
+  const ob = $('openBtn'); if (ob) ob.addEventListener('click', () => setTimeout(hello, 5000));
+  setTimeout(() => { if (!document.body.classList.contains('locked') && !host.classList.contains('in')) hello(); }, 1800);
+  const LINES = { event:'Here\'s the plan for the day! 📅', awaits:'All of this is made by our students! 🛠️', appSec:'Peek inside the Mela App: stalls and prices are here! 📱',
+    venue:'Remember: coupons first! Cash only at the Coupon Counter 🎟️', count:daysLine, rsvp:'Tap Confirm and I\'ll make your e-pass for the gate! 🎫' };
+  function watch(){ if (!('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; const k = e.target.id || 'count'; if (said.has(k) || busy) return;
+      said.add(k); const l = LINES[k]; say(typeof l === 'function' ? l() : l, 4500); }), { threshold: .45 });
+    ['event','awaits','appSec','venue','rsvp'].forEach(id => { const el = $(id); if (el) io.observe(el); });
+    const c = document.querySelector('section.count'); if (c) io.observe(c); }
+  const pb = $('passBox'); if (pb) new MutationObserver(() => { if (pb.querySelector('.pass')) setTimeout(() => say('Yay! Your e-pass is ready. See you on Saturday! 🎉', 6000), 400); }).observe(pb, { childList: true });
+})();
+</script>
 </body>
 </html>
