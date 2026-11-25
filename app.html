@@ -684,6 +684,7 @@ const APP = {
   let list = {}; try { list = JSON.parse(localStorage.getItem('kmList') || '{}') || {}; } catch(e) {}
   const saveList = () => { try { localStorage.setItem('kmList', JSON.stringify(list)); } catch(e) {} $('listCnt').textContent = Object.keys(list).length; };
   $('listCnt').textContent = Object.keys(list).length;
+  const SEMO = s => ({Food:'🍽️',Plants:'🌱',Health:'🩺',Art:'🎨',Crafts:'✂️',Fun:'🎮',Culture:'🎭',Tech:'🤖',Help:'🎟️'})[s && s.cat] || '🏷️';
   const stallOf = no => D.stalls.find(s => String(s.no) === String(no)) || { no, name:'Stall ' + no, cls:'' };
   function photo(it, big){
     let src = it.photo || ''; const m = src.match(/(?:\/d\/|id=)([\w-]{20,})/);
@@ -693,7 +694,7 @@ const APP = {
   function card(it){
     const on = !!list[it.id], s = stallOf(it.stall);
     return `<div class="pc" role="button" tabindex="0" data-pid="${esc(it.id)}"><button class="heart${on?' on':''}" data-heart="${esc(it.id)}" aria-label="${on?'Remove from':'Add to'} my list">${on?'♥':'♡'}</button>
-      ${photo(it)}<div class="inf"><div class="nm">${esc(it.name)}</div><div class="pr">${esc(PR(it.price))}</div><div class="st">Stall ${esc(s.no)} · ${esc(s.name)}</div></div></div>`;
+      ${photo(it)}<div class="inf"><div class="nm">${esc(it.name)}</div><div class="pr">${esc(PR(it.price))}</div><div class="st">${esc(s.name)}</div></div></div>`;
   }
   function renderShop(){
     document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.sv === sv));
@@ -705,21 +706,21 @@ const APP = {
       const hot = D.items.filter(i => i.hot);
       h = `<input class="search" id="q" type="search" placeholder="Search: painting, momo, sapling…" value="${esc(q)}" aria-label="Search products">
         <div class="cats">${cats.map(c => `<button data-cat="${esc(c)}" aria-pressed="${c===cat}">${c==='All'?'All':(ICON[c]||'')+' '+esc(c)}</button>`).join('')}</div>`;
-      if (stallF){ const s = stallOf(stallF); h += `<p class="small muted" style="margin-top:8px">Stall ${esc(s.no)}: ${esc(s.name)} · <a href="#" data-clear>show all</a></p>`; }
+      if (stallF){ const s = stallOf(stallF); h += `<p class="small muted" style="margin-top:8px">${esc(s.name)} · <a href="#" data-clear>show all</a></p>`; }
       if (!q && cat === 'All' && !stallF && hot.length) h += `<h2 class="h">⭐ Must try</h2><div class="hscroll">${hot.map(card).join('')}</div>`;
       h += `<h2 class="h">${stallF ? 'Products' : 'All products'} <span class="small muted">(${shown.length})</span></h2>`;
       h += shown.length ? `<div class="grid">${shown.map(card).join('')}</div>` : `<p class="empty">No products match. Try another word or category.</p>`;
       if (D.demo) h += `<p class="foot">Sample items for preview. The real stall list will appear here before the Mela.</p>`;
     } else if (sv === 'stalls'){
       h = D.stalls.map(s => { const n = D.items.filter(i => String(i.stall) === String(s.no)).length;
-        return `<button class="stallrow" data-stall="${esc(s.no)}"><span class="sno">${esc(s.no)}</span><span><b>${esc(s.name)}</b><span class="small muted">${esc(s.cls)} · ${n} item${n===1?'':'s'} · ${ICON[s.cat]||''} ${esc(s.cat||'')}</span></span></button>`; }).join('');
+        return `<button class="stallrow" data-stall="${esc(s.no)}"><span class="sno">${SEMO(s)}</span><span><b>${esc(s.name)}</b><span class="small muted">${esc(s.cls)} · ${n} item${n===1?'':'s'} · ${ICON[s.cat]||''} ${esc(s.cat||'')}</span></span></button>`; }).join('');
     } else {
       const ids = Object.keys(list).filter(id => D.items.some(i => i.id === id));
       if (!ids.length) h = `<p class="empty">Your list is empty.<br>Tap ♡ on any product to plan what to buy.</p>`;
       else {
         let total = 0;
         const rows = ids.filter(id => D.items.find(i => i.id === id)).map(id => { const it = D.items.find(i => i.id === id), qn = list[id] || 1, s = stallOf(it.stall); total += qn * PN(it.price);
-          return `<div class="li">${photo(it)}<div class="g"><b>${esc(it.name)}</b><div class="small muted">Stall ${esc(s.no)} · ${esc(PR(it.price))} each</div></div>
+          return `<div class="li">${photo(it)}<div class="g"><b>${esc(it.name)}</b><div class="small muted">${esc(s.name)} · ${esc(PR(it.price))} each</div></div>
             <div class="qty"><button data-q="${esc(id)}" data-d="-1" aria-label="One less">−</button><b>${qn}</b><button data-q="${esc(id)}" data-d="1" aria-label="One more">+</button></div></div>`; }).join('');
         h = `<div class="listtotal"><div><span>Coupons you will need (about) · buy at the Coupon Counter</span><br><b>₹${total}${ids.some(id => { const it = D.items.find(i => i.id === id); return it && !/^\d+$/.test(String(it.price)); }) ? '+' : ''}</b></div><span>${ids.length} item${ids.length===1?'':'s'}</span></div>${rows}
           <p class="cashnote">💵 All stalls accept <b>cash only</b>. Small notes and coins help the students give change quickly.</p>`;
@@ -731,9 +732,9 @@ const APP = {
   function openItem(id){
     const it = D.items.find(i => i.id === id); if (!it) return; const s = stallOf(it.stall), on = !!list[id];
     $('pdIn').innerHTML = `<button class="x" data-close aria-label="Close">×</button>${photo(it, true)}<div class="bd"><h3>${esc(it.name)}</h3><p class="pr">${esc(PR(it.price))}</p>
-      <p class="muted">Made by <b>${esc(s.cls || s.name)}</b> · Stall ${esc(s.no)}: ${esc(s.name)}</p>${it.desc ? `<p style="margin-top:10px">${esc(it.desc)}</p>` : ''}
+      <p class="muted">Made by <b>${esc(s.cls || s.name)}</b>${s.cls ? ' · ' + esc(s.name) : ''}</p>${it.desc ? `<p style="margin-top:10px">${esc(it.desc)}</p>` : ''}
       <div class="row" style="margin-top:16px"><button class="btn" data-heart="${esc(id)}">${on ? '♥ In my list' : '♡ Add to my list'}</button><button class="btn ghost" data-showmap="${esc(s.no)}">Show on map</button></div>
-      <p class="cashnote">💵 Pay in cash at Stall ${esc(s.no)}.</p></div>`;
+      <p class="cashnote">🎟️ Pay with Mela coupons (buy them at the Coupon Counter).</p></div>`;
     $('pd').classList.add('open');
   }
   const closeItem = () => $('pd').classList.remove('open');
@@ -759,10 +760,10 @@ const APP = {
     const boxed = D.stalls.filter(s => Array.isArray(s.box)), rest = D.stalls.filter(s => !Array.isArray(s.box));
     let h = `<div class="lay"><img src="mela-map.jpg" alt="Kaushal Mela 2026 ground layout" onerror="this.parentNode.classList.add('noimg')">`;
     boxed.forEach(s => { const [l, t, w, hh] = s.box, hi = String(mapHi) === String(s.no), c = CATC[s.cat] || '#B8893A';
-      h += `<button class="hs${hi ? ' hi' : ''}" data-stall="${esc(s.no)}" style="left:${l}%;top:${t}%;width:${w}%;height:${hh}%;--c:${c}" aria-label="Stall ${esc(s.no)}: ${esc(s.name)}"><span>${esc(s.no)}</span></button>`; });
+      h += `<button class="hs${hi ? ' hi' : ''}" data-stall="${esc(s.no)}" style="left:${l}%;top:${t}%;width:${w}%;height:${hh}%;--c:${c}" aria-label="${esc(s.name)}"><span>${SEMO(s)}</span></button>`; });
     h += `</div>`;
-    if (rest.length) h += `<div class="rest">${rest.map(s => `<button class="chipst" data-stall="${esc(s.no)}">${esc(s.no)} · ${esc(s.name)}</button>`).join('')}</div>`;
-    h += `<div class="stl">${D.stalls.map(s => `<button class="chipst${String(mapHi) === String(s.no) ? ' on' : ''}" data-hl="${esc(s.no)}" style="--c:${CATC[s.cat] || '#B8893A'}"><b>${esc(s.no)}</b>${esc(s.name)}</button>`).join('')}</div>`;
+    if (rest.length) h += `<div class="rest">${rest.map(s => `<button class="chipst" data-stall="${esc(s.no)}">${esc(s.name)}</button>`).join('')}</div>`;
+    h += `<div class="stl">${D.stalls.map(s => `<button class="chipst${String(mapHi) === String(s.no) ? ' on' : ''}" data-hl="${esc(s.no)}" style="--c:${CATC[s.cat] || '#B8893A'}"><b>${SEMO(s)}</b>${esc(s.name)}</button>`).join('')}</div>`;
     $('mapBox').innerHTML = h;
     const hl = mapHi && $('mapBox').querySelector('.hs.hi'); if (hl) setTimeout(() => hl.scrollIntoView({block:'center', behavior:'smooth'}), 80);
     const used = [...new Set(D.stalls.map(s => s.cat))];
@@ -838,7 +839,7 @@ const APP = {
     help:{ en:APP.help, hi:"सहायता डेस्क प्रवेश द्वार के पास है। शिक्षक और स्वयंसेवक रास्ता, खोई चीज़ों और हर मदद के लिए वहाँ हैं।", as:"সহায় কেন্দ্ৰ প্ৰৱেশদ্বাৰৰ ওচৰত আছে। শিক্ষক আৰু স্বেচ্ছাসেৱকসকলে বাট, হেৰোৱা বস্তু আৰু সকলো সহায় কৰিব।" },
     cash:{ en:"Stalls accept Mela coupons only. Buy them with cash at the Coupon Counter.", hi:"स्टॉल पर केवल मेला कूपन चलते हैं। कूपन काउंटर से नकद देकर कूपन लें।", as:"ষ্টলত কেৱল মেলা কুপন চলিব। কুপন কাউণ্টাৰৰ পৰা নগদ ধনেৰে কুপন লওক।" },
     thanks:{ en:"You are welcome! Enjoy the Mela 😊", hi:"आपका स्वागत है! मेले का आनंद लीजिए 😊", as:"আপোনাক স্বাগতম! মেলা উপভোগ কৰক 😊" },
-    sorry:{ en:"Sorry, I did not get that. Try: momo, painting, under ₹50, stall 6, coupons, where is Mehendi, programme. For anything else, the help desk near the entry gate will help.", hi:"माफ़ कीजिए, समझ नहीं पाया। पूछिए: मोमो, पेंटिंग, स्टॉल 6, कूपन, कार्यक्रम, सहायता।", as:"ক্ষমা কৰিব, বুজি নাপালোঁ। সোধক: মোমো, ছবি, ষ্টল ৬, কুপন, কাৰ্যসূচী, সহায়।" },
+    sorry:{ en:"Sorry, I did not get that. Try: momo, painting, under ₹50, Game Zone, coupons, where is Mehendi, programme. For anything else, the help desk near the entry gate will help.", hi:"माफ़ कीजिए, समझ नहीं पाया। पूछिए: मोमो, पेंटिंग, कूपन, कार्यक्रम, सहायता।", as:"ক্ষমা কৰিব, বুজি নাপালোঁ। সোধক: মোমো, ছবি, কুপন, কাৰ্যসূচী, সহায়।" },
     who:{ en:"I am KAVYA, created by the KAVYA team of DSI students at APS Jorhat. Meet my big robot self at the Mela kiosk!", hi:"मैं काव्या हूँ, एपीएस जोरहाट के छात्रों ने मुझे बनाया है। मेले के कियोस्क पर मेरे बड़े रूप से मिलिए!", as:"মই কাব্যা, এপিএছ যোৰহাটৰ ছাত্ৰ-ছাত্ৰীয়ে বনোৱা। মেলাৰ কিঅস্কত মোৰ ডাঙৰ ৰূপটোক লগ পাওক!" },
     stall:{ en:"Stall", hi:"स्टॉल", as:"ষ্টল" }, price:{ en:"Price", hi:"कीमत", as:"দাম" },
     q:{ en:['🍲 Food','⭐ Must try','🛍️ Stalls','🕘 Programme','🙋 Help'], hi:['🍲 खाना','⭐ ख़ास','🛍️ स्टॉल','🕘 कार्यक्रम','🙋 सहायता'], as:['🍲 খাদ্য','⭐ বিশেষ','🛍️ ষ্টল','🕘 কাৰ্যসূচী','🙋 সহায়'] },
@@ -863,12 +864,12 @@ const APP = {
       const v = tags.map(tg => vs.find(x => x.lang.replace('_','-').toLowerCase().startsWith(tg.toLowerCase()))).find(Boolean); if (v) { u.voice = v; u.lang = v.lang; }
       u.onstart = () => $('miniFace').classList.add('talk'); u.onend = () => $('miniFace').classList.remove('talk'); speechSynthesis.speak(u); } catch(e) {}
   }
-  function stallTxt(s){ const its = D.items.filter(i => String(i.stall) === String(s.no)).map(i => `${i.name} ${PR(i.price)}`).join(', '); return `${t('stall')} ${s.no}: ${s.name}${s.cls ? ' (' + s.cls + ')' : ''}${its ? ' — ' + its : ''}`; }
+  function stallTxt(s){ const its = D.items.filter(i => String(i.stall) === String(s.no)).map(i => `${i.name} ${PR(i.price)}`).join(', '); return `${s.name}${s.cls ? ' (' + s.cls + ')' : ''}${its ? ' — ' + its : ''}`; }
   const stallOfNo = n => D.stalls.find(x => String(x.no) === String(n)) || { no:n, name:'', cls:'' };
-  const itemLine = i => { const st = stallOfNo(i.stall); return `${i.icon || '🛍️'} ${i.name}: ${/^at /i.test(String(i.price)) ? 'price ' + String(i.price).toLowerCase() : PR(i.price)} · ${t('stall')} ${i.stall} ${st.name}${i.desc && /counter/i.test(i.desc) ? ' (' + i.desc.replace('Counter: ','') + ')' : ''}`; };
-  const COUPON = { en:"Stalls accept Mela coupons only (₹10, ₹20, ₹50 and ₹100). Buy them with cash at the Coupon Counter (stall 22) near the entry gate. UPI is not available.",
-    hi:"स्टॉल पर केवल मेला कूपन चलते हैं (₹10, ₹20, ₹50, ₹100)। प्रवेश द्वार के पास कूपन काउंटर (स्टॉल 22) से नकद देकर कूपन लें। UPI उपलब्ध नहीं है।",
-    as:"ষ্টলত কেৱল মেলা কুপন চলিব (₹10, ₹20, ₹50, ₹100)। প্ৰৱেশদ্বাৰৰ ওচৰৰ কুপন কাউণ্টাৰৰ (ষ্টল 22) পৰা নগদ ধনেৰে কুপন লওক। UPI নাথাকিব।" };
+  const itemLine = i => { const st = stallOfNo(i.stall); return `${i.icon || '🛍️'} ${i.name}: ${/^at /i.test(String(i.price)) ? 'price ' + String(i.price).toLowerCase() : PR(i.price)} · ${st.name}${i.desc && /counter/i.test(i.desc) ? ' (' + i.desc.replace('Counter: ','') + ')' : ''}`; };
+  const COUPON = { en:"Stalls accept Mela coupons only (₹10, ₹20, ₹50 and ₹100). Buy them with cash at the Coupon Counter near the entry gate. UPI is not available.",
+    hi:"स्टॉल पर केवल मेला कूपन चलते हैं (₹10, ₹20, ₹50, ₹100)। प्रवेश द्वार के पास कूपन काउंटर से नकद देकर कूपन लें। UPI उपलब्ध नहीं है।",
+    as:"ষ্টলত কেৱল মেলা কুপন চলিব (₹10, ₹20, ₹50, ₹100)। প্ৰৱেশদ্বাৰৰ ওচৰৰ কুপন কাউণ্টাৰৰ পৰা নগদ ধনেৰে কুপন লওক। UPI নাথাকিব।" };
   const ABOUT = { en:"Kaushal Mela 2026 is APS Jorhat's skill fair on Saturday, 28 November 2026, from 10 AM. Students run every stall: food, plants, health, art and craft, games and tech. Come see what our young makers have learnt!",
     hi:"कौशल मेला 2026 एपीएस जोरहाट का कौशल मेला है, शनिवार 28 नवंबर 2026, सुबह 10 बजे से। हर स्टॉल छात्र चलाते हैं: खाना, पौधे, स्वास्थ्य, कला, खेल और तकनीक।",
     as:"কৌশল মেলা ২০২৬ এপিএছ যোৰহাটৰ দক্ষতা মেলা, শনিবাৰ ২৮ নৱেম্বৰ ২০২৬, পুৱা ১০ বজাৰ পৰা। প্ৰতিটো ষ্টল ছাত্ৰ-ছাত্ৰীয়ে চলায়।" };
@@ -901,7 +902,7 @@ const APP = {
     if (has('food')) { const f = D.items.filter(i => /food/i.test(i.cat)); const counters = [...new Set(f.map(i => (i.desc || '').replace('Counter: ', '')).filter(x => x && !/food court/i.test(x)))];
       return { text: t('food') + ' ' + f.slice(0, 14).map(i => `${i.icon || ''} ${i.name} ${PR(i.price)}`).join(', ') + (counters.length ? `. Food Court counters: ${counters.join(', ')}.` : ''), map: 2 }; }
     if (has('must')) { const m = D.items.filter(i => i.hot); return m.length ? t('must') + ' ' + m.map(itemLine).join(' · ') : t('must') + ' ' + ['H5','A10','N3','Z1'].map(id => D.items.find(i => i.id === id)).filter(Boolean).map(itemLine).join(' · '); }
-    if (has('stalls')) return D.stalls.map(x => `${x.no}. ${x.name}`).join(' · ');
+    if (has('stalls')) return D.stalls.map(x => `${SEMO(x)} ${x.name}`).join(' · ');
     if (has('prog') || /chief guest|inaugurat|start|open|date|day/.test(s)) return t('when') + ' ' + (D.programme || []).map(p => `${p.time} ${p.what}`).join(' · ');
     if (/kaushal|mela|about|what is this|मेला|মেলা/.test(s)) return ABOUT[L] || ABOUT.en;
     if (/story|stories|video|episode|kaushal play|tv/.test(s)) return 'Watch Kaushal Stories, short films about every stall, on the Home tab of this app.';
