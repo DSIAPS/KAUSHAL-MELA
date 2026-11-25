@@ -348,8 +348,16 @@ function boom(){
       og.gain.setValueAtTime(0, t + .9 + i * .08); og.gain.linearRampToValueAtTime(.12, t + .95 + i * .08); og.gain.exponentialRampToValueAtTime(.001, t + 2.6); o.connect(og); og.connect(A.destination); o.start(t + .9); o.stop(t + 2.7); });
   } catch(e){}
 }
+/* --- anonymous viewer count (category only, no names) --- */
+const LOGURL = 'https://script.google.com/macros/s/AKfycbwU9G8D8idXBm9SCi_snA7oCHVwd02Duy_l1FnUz2OTycXfyhLObraZrDr-ZHINJUDemQ/exec';
+const VID = (() => { let v = store.get('vid', ''); if (!v){ v = Math.random().toString(36).slice(2, 10); store.set('vid', v); } return v; })();
+function logv(ev, ep){ try {
+  const who = ev === 'tv' ? 'TV screen' : (prof !== null && PROFILES[prof] ? PROFILES[prof][0] : 'Unknown');
+  const q = new URLSearchParams({action: 'view', ev, who, ep: ep || '', dev: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'mobile' : 'desktop', vid: VID, t: Date.now()});
+  const img = new Image(); img.src = LOGURL + '?' + q.toString();
+} catch(e) {} }
 function choose(k){
-  prof = k; store.set('prof', k); $('me').style.setProperty('--c', PROFILES[k][1]);
+  prof = k; store.set('prof', k); $('me').style.setProperty('--c', PROFILES[k][1]); logv('open');
   $('who').classList.add('hide'); boom();
   const s = $('sting'); s.classList.remove('go'); void s.offsetWidth; s.classList.add('go');
   setTimeout(() => { B.classList.remove('lock'); startHero(); }, 2700);
@@ -441,7 +449,7 @@ $('md').onclick = ev => { if (ev.target === $('md')) closeInfo(); };
 /* --- player --- */
 let pk = 0, nxTimer;
 function play(k){
-  pk = k; const e = EPS[k], v = $('pv'); stopHero(); clearTimeout(nxTimer); $('nx').classList.remove('on');
+  pk = k; const e = EPS[k], v = $('pv'); logv('play', lbl(e) + ' ' + e.t); stopHero(); clearTimeout(nxTimer); $('nx').classList.remove('on');
   $('ptitle').innerHTML = `${esc(e.t)}<small>${esc(lbl(e))} · ${esc(e.m)}</small>`;
   $('pl').classList.add('on'); B.classList.add('lock');
   const old = $('pyt'); if (old) old.remove();
@@ -476,7 +484,7 @@ let ti = 0;
 function tvPlay(){ const e = EPS[ti], v = $('tvv'); v.src = e.f; $('tvb').src = e.f; $('tvt').textContent = e.t; $('tvm').textContent = lbl(e) + ' · ' + e.m;
   v.play().catch(() => { v.muted = true; v.play(); }); $('tvb').play().catch(() => {}); }
 $('tvv').onended = () => { ti = (ti + 1) % EPS.length; tvPlay(); };
-function startTV(){ $('who').classList.add('hide'); stopHero(); ti = 0; $('tv').classList.add('on'); B.classList.add('lock'); tvPlay();
+function startTV(){ logv('tv', 'Kaushal TV loop'); $('who').classList.add('hide'); stopHero(); ti = 0; $('tv').classList.add('on'); B.classList.add('lock'); tvPlay();
   const d = document.documentElement; if (d.requestFullscreen) d.requestFullscreen().catch(() => {}); }
 function stopTV(){ if (!$('tv').classList.contains('on')) return; $('tv').classList.remove('on'); $('tvv').pause(); $('tvb').pause(); B.classList.remove('lock');
   if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); startHero(); }
