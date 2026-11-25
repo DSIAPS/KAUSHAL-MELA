@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kaushal Play · Kaushal Mela 2026</title>
+<meta name="description" content="Kaushal Play: the student skill-story streaming platform of Kaushal Mela 2026, Army Public School Jorhat. Hosted by KAVYA.">
+<meta property="og:title" content="Kaushal Play · Kaushal Mela 2026">
+<meta property="og:description" content="Watch every student skill story from Kaushal Mela 2026. Hosted by KAVYA, a DSI initiative.">
+<meta property="og:image" content="ep9.jpg">
+<meta name="theme-color" content="#0d0f2e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: a festive school streaming channel, cinematic at night
+   IDEA: a streaming service built by students: profiles, intro sting, hero trailer, rows, top 5, next-episode countdown
+   PICTURE: the live hero trailer of the newest episode, filling the first screen
+   COLOUR and TYPE: deep indigo night, saffron and pink light, Poppins 800 titles
+   LAYOUT: hero, then horizontal rows of vertical posters, modal details, full-screen player */
+:root{--bg:#0d0f2e;--bg2:#171a45;--ink:#fff;--mute:#b9bde6;--sa:#ff9f1c;--pk:#ff3d7f;--gd:#ffd54a;--sky:#2ec4f1}
+*{box-sizing:border-box;margin:0;padding:0;min-width:0}
+html,body{background:var(--bg);color:var(--ink)}
+body{font:16px/1.5 Poppins,system-ui,sans-serif;overflow-x:clip}
+body.lock{overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block}
+:focus-visible{outline:3px solid var(--gd);outline-offset:3px}
+.hide{display:none!important}
+
+/* profiles */
+#who{position:fixed;inset:0;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:24px;
+  background:radial-gradient(ellipse at 50% 30%,#232a7a 0%,var(--bg) 70%)}
+#who .brand{font-size:clamp(30px,6vw,54px)}
+#who h2{font-size:clamp(22px,3.4vw,36px);font-weight:600}
+.profs{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(14px,3vw,34px)}
+.prof{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--mute);font-weight:600;transition:color .2s}
+.prof .av{width:clamp(96px,14vw,150px);aspect-ratio:1;border-radius:18px;overflow:hidden;position:relative;border:4px solid transparent;transition:border-color .2s,transform .2s;background:var(--c)}
+.prof .av img{position:absolute;bottom:-6%;left:50%;width:86%;transform:translateX(-50%)}
+.prof:hover,.prof:focus-visible{color:#fff}.prof:hover .av,.prof:focus-visible .av{border-color:#fff;transform:scale(1.05)}
+#who small{color:var(--mute);font-size:13px}
+
+/* intro sting */
+#sting{position:fixed;inset:0;z-index:95;background:#000;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0}
+#sting.go{animation:stOut 3.2s forwards}
+@keyframes stOut{0%{opacity:1}82%{opacity:1}100%{opacity:0}}
+#sting .w{position:relative;width:min(34vw,240px);aspect-ratio:1;transform:scale(.2);opacity:0}
+#sting.go .w{animation:stW 2.8s cubic-bezier(.2,.9,.3,1) forwards}
+@keyframes stW{0%{transform:scale(.2) rotate(-90deg);opacity:0}30%{transform:scale(1) rotate(0);opacity:1}70%{transform:scale(1.08)}100%{transform:scale(7);opacity:0}}
+#sting .w img{position:absolute;inset:0;width:100%;height:100%}
+#sting.go .w .spin{animation:sp 1.2s linear infinite}
+#sting .t{position:absolute;bottom:22%;left:0;right:0;text-align:center;font-weight:800;font-size:clamp(26px,5vw,52px);letter-spacing:.32em;opacity:0}
+#sting.go .t{animation:stT 2.6s .5s forwards}
+@keyframes stT{0%{opacity:0;letter-spacing:.9em}40%{opacity:1;letter-spacing:.32em}80%{opacity:1}100%{opacity:0}}
+
+/* nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;gap:22px;padding:12px max(4vw,16px);
+  background:linear-gradient(rgba(13,15,46,.9),transparent);transition:background .3s}
+nav.solid{background:var(--bg)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:24px;letter-spacing:.04em;white-space:nowrap}
+.brand .lg{position:relative;width:1.6em;height:1.6em;flex:none}
+.brand .lg img{position:absolute;inset:0;width:100%;height:100%}
+.brand b{color:var(--sa)}
+.spin{animation:sp 16s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.links{display:flex;gap:18px;font-size:15px;color:var(--mute)}
+.links button:hover,.links button.on{color:#fff}
+.nr{margin-left:auto;display:flex;align-items:center;gap:12px}
+#q{width:0;opacity:0;transition:all .3s;background:rgba(0,0,0,.6);border:1px solid #fff;color:#fff;border-radius:8px;padding:8px 12px;font:15px Poppins,sans-serif}
+#q.open{width:min(220px,42vw);opacity:1}
+.ib{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.ib svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round}
+#me{width:38px;height:38px;border-radius:8px;overflow:hidden;position:relative;background:var(--c,#ff3d7f)}
+#me img{position:absolute;bottom:-4px;left:50%;width:90%;transform:translateX(-50%)}
+
+/* hero */
+.hero{position:relative;height:min(92vh,880px);min-height:560px;overflow:hidden;display:flex;align-items:flex-end}
+.hero .bgv{position:absolute;inset:0;display:flex;justify-content:flex-end;
+  background:radial-gradient(ellipse at 75% 40%,#3b2b8f 0%,var(--bg) 65%)}
+.hero .bgv video{height:100%;aspect-ratio:9/16;object-fit:cover;margin-right:6vw;filter:saturate(1.1);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent),linear-gradient(transparent 70%,#000);mask-image:radial-gradient(ellipse 70% 85% at 50% 45%,#000 55%,transparent 100%)}
+.hero .blur{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero .blur video{position:absolute;inset:-10%;width:120%;height:120%;object-fit:cover;filter:blur(40px) brightness(.45) saturate(1.4)}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,15,46,.95) 0%,rgba(13,15,46,.6) 40%,transparent 70%),linear-gradient(transparent 60%,var(--bg))}
+.hin{position:relative;z-index:2;padding:0 max(4vw,16px) clamp(70px,10vh,120px);max-width:640px}
+.kick{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--mute);font-size:14px;letter-spacing:.12em;margin-bottom:10px}
+.kick .lg{position:relative;width:28px;height:28px}.kick .lg img{position:absolute;inset:0;width:100%;height:100%}
+.kick span{color:var(--sa)}
+.hero h1{font-size:clamp(36px,6vw,72px);font-weight:800;line-height:1.02;text-wrap:balance;text-shadow:0 6px 30px rgba(0,0,0,.5)}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:14px 0 10px;font-weight:600;font-size:15px;color:var(--mute)}
+.meta .new{color:#3ddc97}
+.pill{border:1px solid var(--mute);border-radius:4px;padding:0 6px;font-size:12px;line-height:20px}
+.hero p{font-size:clamp(15px,1.6vw,18px);color:#e6e8ff;max-width:52ch;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+.hb{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.bt{display:inline-flex;align-items:center;gap:10px;border-radius:8px;padding:12px 26px;font-weight:800;font-size:17px;transition:transform .15s,background .2s;white-space:nowrap}
+.bt svg{width:22px;height:22px}
+.bt:active{transform:scale(.96)}
+.bw{background:#fff;color:var(--bg)}.bw:hover{background:#e6e6ff}
+.bg{background:rgba(185,189,230,.28);color:#fff}.bg:hover{background:rgba(185,189,230,.4)}
+#mute{position:absolute;right:max(4vw,16px);bottom:clamp(80px,12vh,130px);z-index:3;width:46px;height:46px;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3)}
+#mute svg{width:22px;height:22px;fill:#fff}
+
+/* rows */
+main{position:relative;z-index:3;margin-top:-60px;padding-bottom:40px}
+.row{margin-bottom:34px}
+.row h2{font-size:clamp(18px,2vw,24px);font-weight:800;padding:0 max(4vw,16px);margin-bottom:10px;display:flex;align-items:baseline;gap:12px}
+.row h2 small{font-size:13px;font-weight:600;color:var(--sa)}
+.track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px max(4vw,16px) 18px;scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.card{flex:none;width:clamp(140px,15vw,210px);scroll-snap-align:start;text-align:left;position:relative;transition:transform .25s}
+.card .po{display:block;position:relative;z-index:1;aspect-ratio:9/16;border-radius:10px;overflow:hidden;background:var(--bg2);box-shadow:0 10px 24px rgba(0,0,0,.4)}
+.card .po img,.card .po video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.card .po video{opacity:0;transition:opacity .3s}
+.card.pv .po video{opacity:1}
+.card .po::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 50%,rgba(0,0,0,.85))}
+.card .ct{position:absolute;left:10px;right:10px;bottom:10px;z-index:2}
+.card .ct b{display:block;font-size:15px;line-height:1.2;font-weight:800;text-wrap:balance}
+.card .ct i{font-style:normal;font-size:12px;color:var(--mute)}
+.card .tag{position:absolute;top:8px;left:8px;z-index:2;background:var(--pk);font-weight:800;font-size:11px;border-radius:4px;padding:2px 7px}
+.card .tag.y{background:var(--gd);color:var(--bg)}
+.card .bar{position:absolute;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.25);z-index:3}
+.card .bar span{display:block;height:100%;background:var(--pk)}
+.card:hover,.card:focus-visible{transform:scale(1.07);z-index:5}
+.card.soon .po{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:14px;background:repeating-linear-gradient(135deg,#1c1f55 0 14px,#20245f 14px 28px);border:2px dashed #3c4296}
+.card.soon .po::after{display:none}
+.card.soon .po img{position:static;width:60%;opacity:.8}
+.card.soon b{font-weight:800}.card.soon i{font-style:normal;font-size:12px;color:var(--mute)}
+/* top 5 */
+.top .card{width:clamp(200px,22vw,290px);display:flex;align-items:flex-end}
+.top .num{flex:none;width:44%;font-size:clamp(120px,13vw,190px);font-weight:800;line-height:.78;color:var(--bg);-webkit-text-stroke:4px var(--sa);letter-spacing:-.08em;text-align:right;margin-right:-8%;z-index:0}
+.top .po{flex:1}
+
+/* modal */
+#md{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.7);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:4vh 12px}
+#md.on{display:flex}
+.mb{width:min(860px,100%);background:var(--bg2);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:pop .3s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{from{transform:scale(.9);opacity:0}}
+.mtop{position:relative;display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:26px;padding:26px;background:radial-gradient(ellipse at 20% 0%,#3b2b8f,transparent 70%)}
+.mtop video{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:12px;background:#000}
+.mtop h3{font-size:clamp(26px,3.6vw,40px);font-weight:800;line-height:1.08}
+.mtop p{color:#dfe2ff;margin-top:10px}
+.mtop .who{margin-top:14px;font-size:14px;color:var(--mute)}
+.mtop .who b{color:#fff}
+.mx{position:absolute;right:14px;top:14px;width:40px;height:40px;border-radius:50%;background:var(--bg);font-size:24px;font-weight:800;z-index:2}
+.circ{width:46px;height:46px;border-radius:50%;border:2px solid var(--mute);display:inline-flex;align-items:center;justify-content:center;font-size:22px;font-weight:800}
+.eps{padding:6px 26px 26px}
+.eps h4{font-size:20px;font-weight:800;margin:10px 0}
+.ep{display:grid;grid-template-columns:28px 64px 1fr auto;gap:14px;align-items:center;width:100%;text-align:left;padding:12px;border-radius:10px;border-bottom:1px solid #2a2e6a}
+.ep:hover,.ep.cur{background:#232766}
+.ep .n{font-size:22px;font-weight:800;color:var(--mute)}
+.ep img{width:64px;aspect-ratio:9/16;object-fit:cover;border-radius:6px}
+.ep b{display:block;font-weight:800;line-height:1.25}.ep i{font-style:normal;font-size:13px;color:var(--mute)}
+.ep .d{font-size:13px;color:var(--mute);white-space:nowrap}
+
+/* player */
+#pl{position:fixed;inset:0;z-index:80;background:#000;display:none;align-items:center;justify-content:center}
+#pl.on{display:flex}
+#pbg{position:absolute;inset:0;overflow:hidden}#pbg video{position:absolute;inset:-10%;width:120%;height:120%;object-fit:cover;filter:blur(50px) brightness(.4)}
+#pv{position:relative;height:100%;max-width:100%;aspect-ratio:9/16;object-fit:contain;background:#000}
+#pyt{position:relative;height:100%;aspect-ratio:9/16;max-width:100%;border:0}
+#pback{position:absolute;left:16px;top:16px;z-index:3;display:flex;align-items:center;gap:8px;font-weight:800;background:rgba(0,0,0,.45);border-radius:999px;padding:8px 16px 8px 10px}
+#pback svg{width:22px;height:22px;stroke:#fff;stroke-width:3;fill:none}
+#ptitle{position:absolute;left:16px;bottom:18px;z-index:3;max-width:min(40vw,420px);font-weight:800;font-size:clamp(14px,1.6vw,22px);text-shadow:0 2px 10px #000}
+#ptitle small{display:block;font-weight:600;color:var(--mute);font-size:.7em}
+#nx{position:absolute;right:20px;bottom:24px;z-index:4;display:none;align-items:center;gap:14px;background:rgba(23,26,69,.95);border-radius:12px;padding:12px;box-shadow:0 14px 40px rgba(0,0,0,.6);max-width:calc(100% - 40px)}
+#nx.on{display:flex;animation:pop .3s}
+#nx img{width:64px;aspect-ratio:9/16;object-fit:cover;border-radius:6px}
+#nx small{color:var(--mute);font-size:12px;font-weight:600}#nx b{display:block;font-weight:800;line-height:1.2}
+#nx .go{position:relative;width:52px;height:52px;flex:none;border-radius:50%;background:#fff;color:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+#nx .go svg{position:absolute;inset:-4px;width:60px;height:60px;transform:rotate(-90deg)}
+#nx .go circle{fill:none;stroke:var(--pk);stroke-width:4;stroke-dasharray:170;stroke-dashoffset:0}
+#nx.on .go circle{animation:cd 6s linear forwards}@keyframes cd{to{stroke-dashoffset:170}}
+
+#tap{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;font-weight:800;font-size:20px;background:rgba(0,0,0,.35)}#tap span{width:90px;height:90px;border-radius:50%;background:#fff;color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:38px;padding-left:6px}#perr{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5;background:var(--bg2);border-radius:12px;padding:18px 22px;max-width:320px;text-align:center;font-weight:600}
+/* tv mode */
+#tv{position:fixed;inset:0;z-index:85;background:var(--bg);display:none}
+#tv.on{display:block}
+#tvbg{position:absolute;inset:0;overflow:hidden}#tvbg video{position:absolute;inset:-10%;width:120%;height:120%;object-fit:cover;filter:blur(50px) brightness(.45) saturate(1.3)}
+#tvv{position:absolute;top:50%;left:50%;height:92vh;aspect-ratio:9/16;transform:translate(-50%,-50%);border-radius:18px;box-shadow:0 0 0 6px #fff,0 30px 80px rgba(0,0,0,.6);object-fit:cover;background:#000}
+.tvs{position:absolute;top:50%;transform:translateY(-50%);width:calc(50vw - 26vh - 70px)}
+#tvl{left:4vw}#tvr{right:4vw;text-align:right}
+#tvl .brand{font-size:clamp(22px,2.6vw,46px)}
+#tvl p{color:var(--mute);font-weight:600;margin-top:14px;font-size:clamp(13px,1.3vw,22px)}
+#tvr img.k{width:min(20vh,200px);margin-left:auto;animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-10px)}}
+#tvr .np{display:inline-block;margin-top:14px;background:var(--pk);font-weight:800;border-radius:6px;padding:4px 14px;font-size:clamp(12px,1.1vw,18px)}
+#tvr h3{font-size:clamp(20px,2.4vw,44px);font-weight:800;line-height:1.08;margin-top:10px}
+#tvr p{color:var(--mute);font-weight:600;font-size:clamp(12px,1.2vw,20px);margin-top:6px}
+#tvx{position:absolute;right:14px;top:14px;opacity:.2;background:#fff;color:var(--bg);font-weight:800;border-radius:999px;padding:6px 14px}
+#tvx:hover,#tvx:focus{opacity:1}
+@media(max-width:900px){.tvs{display:none}}
+
+footer{padding:30px max(4vw,16px) 50px;color:var(--mute);font-size:14px;border-top:1px solid #23276a;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
+footer b{color:#fff}
+footer a{color:var(--gd);font-weight:800;text-decoration:none}
+
+@media(max-width:760px){
+  .links{display:none}
+  .hero{height:auto;min-height:0;flex-direction:column;align-items:stretch}
+  .hero .bgv{position:relative;height:62vh;justify-content:center}
+  .hero .bgv video{margin:0}
+  .hero::after{background:linear-gradient(transparent 30%,var(--bg) 62%)}
+  .hin{margin-top:-90px;padding-bottom:40px;text-align:center;margin-inline:auto}
+  .kick,.meta,.hb{justify-content:center}
+  #mute{top:calc(62vh - 70px);bottom:auto}
+  main{margin-top:0}
+  .mtop{grid-template-columns:1fr;text-align:center}.mtop video{max-width:240px;margin:0 auto}
+  .ep{grid-template-columns:52px 1fr auto}.ep .n{display:none}.ep img{width:52px}
+  #ptitle{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition:none!important}}
+</style>
+</head>
+<body class="lock">
+
+<div id="who">
+  <div class="brand"><span class="lg"><img src="logo_back.png" alt=""><img class="spin" src="logo_wheel.png" alt=""><img src="logo_front.png" alt=""></span>KAUSHAL<b>PLAY</b></div>
+  <h2>Who’s watching?</h2>
+  <div class="profs" id="profs"></div>
+  <small>Our own student-built streaming platform · Kaushal Mela 2026 · APS Jorhat</small>
+</div>
+
+<div id="sting" aria-hidden="true"><div class="w"><img src="logo_back.png" alt=""><img class="spin" src="logo_wheel.png" alt=""><img src="logo_front.png" alt=""></div><div class="t">KAUSHAL PLAY</div></div>
+
+<nav id="nav">
+  <div class="brand"><span class="lg"><img src="logo_back.png" alt=""><img class="spin" src="logo_wheel.png" alt=""><img src="logo_front.png" alt=""></span>KAUSHAL<b>PLAY</b></div>
+  <div class="links"><button class="on" data-go="top">Home</button><button data-go="r-new">New</button><button data-go="r-top">Top 5</button><button data-go="r-list">My List</button><button id="tvLink">Kaushal TV</button><a href="invitation.html" style="color:inherit;text-decoration:none">Invitation</a><a href="app.html" style="color:inherit;text-decoration:none">Mela App</a></div>
+  <div class="nr">
+    <input id="q" type="search" placeholder="Search stalls, mentors…" aria-label="Search">
+    <button class="ib" id="qb" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg></button>
+    <button id="me" aria-label="Switch profile"><img src="kavya.png" alt=""></button>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="blur"><video id="hbl" muted loop playsinline preload="auto"></video></div>
+  <div class="bgv"><video id="hv" muted loop playsinline preload="auto"></video></div>
+  <div class="hin">
+    <div class="kick"><span class="lg"><img src="logo_back.png" alt=""><img class="spin" src="logo_wheel.png" alt=""><img src="logo_front.png" alt=""></span><span>K</span> ORIGINAL SERIES</div>
+    <h1 id="ht"></h1>
+    <div class="meta" id="hm"></div>
+    <p id="hd"></p>
+    <div class="hb">
+      <button class="bt bw" id="hplay"><svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z" fill="currentColor"/></svg>Play</button>
+      <button class="bt bg" id="hinfo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5" stroke-linecap="round"/></svg>More info</button>
+    </div>
+  </div>
+  <button id="mute" aria-label="Turn sound on"><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path id="mwave" d="M16 9l5 6M21 9l-5 6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg></button>
+</section>
+
+<main id="rows"></main>
+
+<footer>
+  <div><b>Kaushal Play</b> · our own student-built streaming platform for every skill story of Kaushal Mela 2026<br>28 November · Army Public School Jorhat · Hosted by <b>KAVYA</b> · A Department of Skill and Innovation Initiative</div>
+  <span style="display:flex;gap:16px;flex-wrap:wrap"><a href="invitation.html">💌 Invitation</a><a href="app.html">📱 Mela App &amp; Map</a><a href="https://ptpn566-sudo.github.io/kavya-ar/" target="_blank" rel="noopener">🤖 Meet KAVYA in AR</a></span>
+</footer>
+
+<div id="md" role="dialog" aria-modal="true" aria-label="Episode details"><div class="mb" id="mb"></div></div>
+
+<div id="pl" role="dialog" aria-modal="true" aria-label="Player">
+  <div id="pbg"><video id="pbv" muted playsinline></video></div>
+  <video id="pv" playsinline controls></video>
+  <button id="pback"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Back</button>
+  <div id="ptitle"></div><button id="tap" class="hide"><span>▶</span>Tap to play</button><div id="perr" class="hide">This video could not load. Please check your internet and try again.</div>
+  <div id="nx"><img id="nxi" alt=""><div><small>Next episode</small><b id="nxt"></b></div><button class="go" id="nxg" aria-label="Play next now"><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="27"/></svg>▶</button><button class="circ" id="nxc" aria-label="Cancel next episode" style="width:36px;height:36px;font-size:18px">×</button></div>
+</div>
+
+<div id="tv">
+  <div id="tvbg"><video id="tvb" muted playsinline></video></div>
+  <div class="tvs" id="tvl"><div class="brand"><span class="lg"><img src="logo_back.png" alt=""><img class="spin" src="logo_wheel.png" alt=""><img src="logo_front.png" alt=""></span>KAUSHAL<b>TV</b></div><p>Live on the big screen from Kaushal Play<br>Kaushal Mela 2026 · APS Jorhat</p></div>
+  <video id="tvv" playsinline></video>
+  <div class="tvs" id="tvr"><img class="k" src="kavya.png" alt=""><span class="np">NOW PLAYING</span><h3 id="tvt"></h3><p id="tvm"></p></div>
+  <button id="tvx">Exit Kaushal TV</button>
+</div>
+
+<script>
+{
+/* ===== EPISODES =====
+   To add an episode: add one line at the END of this list (newest last).
+   yt: YouTube ID from the school channel (optional). g: row/genre. */
+const EPS = [
+  {n:0, t:'Meet KAVYA', m:'Created by the DSI student team', g:'kavya', d:31, f:'ep0.mp4', i:'ep0.jpg', yt:'',
+   s:'Say hello to KAVYA, the Kaushal Assistant for Visitors and Young Achievers, built by our DSI students to host Kaushal Mela 2026.'},
+  {n:1, t:'Plant Nursery & Habitat Garden', m:'Mentor: Mr Juel Sheikh', g:'green', d:38, f:'ep1.mp4', i:'ep1.jpg', yt:'',
+   s:'Students raise saplings and build a living habitat garden, learning nursery skills that grow a greener campus.'},
+  {n:2, t:'Family Health Handbook', m:'Mentors: Ms Pranakshi Hazarika & Mr Ayushman Hazarika', g:'life', d:30, f:'ep2.mp4', i:'ep2.jpg', yt:'',
+   s:'A handbook made by students to help every family track health, first aid and healthy habits at home.'},
+  {n:3, t:'Art Gallery', m:'Mentor: Mr Rajen Borah · Art and Craft / Tie & Dye', g:'art', d:38, f:'ep3.mp4', i:'ep3.jpg', yt:'',
+   s:'Paintings, folk art plates, Assam heritage pieces and home décor, all handmade by our young artists for the Art Stall.'},
+  {n:4, t:'Colours on Our Walls', m:'Mentor: Mr Rajen Borah · Art and Craft', g:'art', d:62, f:'ep4.mp4', i:'ep4.jpg', yt:'',
+   s:'The Vocational Hub and campus walls come alive with folk dancers, Bihu colours and bright ideas for a better tomorrow.'},
+  {n:5, t:'Hydroponics & Animal Care', m:'Mentor: Punam Lingwal', g:'green', d:62, f:'ep5.mp4', i:'ep5.jpg', yt:'',
+   s:'A Herbal Garden of 19 medicinal plants, planted, labelled and cared for by students. Grow Health… Live Healthy.'},
+  {n:6, t:'Shaping Material & Apparel', m:'Mentor: Purnima Mishra', g:'art', d:45, f:'ep6.mp4', i:'ep6.jpg', yt:'',
+   s:'Pipe-cleaner lilies, handmade bouquets, clay charms, macramé keychains, spoon lotus diyas and wall hangings, all crafted by our students.'},
+  {n:7, t:'Cooking Without Fire', m:'Mentor: Masum Bharadwaj', g:'life', d:50, f:'ep7.mp4', i:'ep7.jpg', yt:'',
+   s:'Our little chefs practise bhel puri and no-fire laddoos for the final show, because cooking is a skill and every skill needs practice.'},
+  {n:8, t:'APS Jorhat Gearing Up', m:'Campus tour with KAVYA', g:'kavya', d:78, f:'ep8.mp4', i:'ep8.jpg', yt:'',
+   s:'KAVYA takes you from the main gate past the courtyard, auditorium and Herbal Garden, and along the colourful Mural Trail while preparations for Kaushal Mela 2026 are in full swing.'},
+  {n:9, t:'Young Tech Minds · The Journey', m:'Dept. of Information Technology · Mentor: Akashdeep Saikia', g:'tech', d:97, f:'ep9.mp4', i:'ep9.jpg', yt:'',
+   s:'From the Cyber Suraksha Bot on National Technology Day to Pratyuttar X at the Hack Fests (Mentor: Tapan Saikia), and now web apps, 3D games and AI experiments for Kaushal Mela 2026. Preparing for India 2047.'},
+];
+const ROWS = [
+  ['r-new', 'New on Kaushal Play', '', e => true, 'new'],
+  ['r-top', 'Top 5 at Kaushal Mela', 'Most loved this week', null, 'top'],
+  ['r-cont', 'Continue watching', '', null, 'cont'],
+  ['r-tech', 'Tech & Innovation', 'Young Tech Minds', e => e.g === 'tech'],
+  ['r-green', 'Green Skills', 'Grow · Nurture · Sustain', e => e.g === 'green'],
+  ['r-art', 'Art & Craft', 'Made by hand, with heart', e => e.g === 'art'],
+  ['r-life', 'Health & Life Skills', '', e => e.g === 'life'],
+  ['r-list', 'My List', '', null, 'list'],
+  ['r-kavya', 'Behind the Scenes', 'KAVYA and the campus', e => e.g === 'kavya'],
+];
+const PROFILES = [['Student', '#ff3d7f'], ['Parent', '#2e7bd5'], ['Teacher', '#13a36b'], ['Guest', '#ff9f1c']];
+
+const $ = id => document.getElementById(id), B = document.body;
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+const lbl = e => e.n === 0 ? 'Trailer' : 'Episode ' + e.n;
+const dur = s => s < 60 ? s + ' sec' : '1 min ' + (s - 60 ? (s - 60) + ' sec' : '');
+const latest = EPS[EPS.length - 1];
+const store = { get(k, d){ try { return JSON.parse(localStorage.getItem('kp_' + k)) ?? d; } catch(e){ return d; } }, set(k, v){ try { localStorage.setItem('kp_' + k, JSON.stringify(v)); } catch(e){} } };
+let prog = store.get('prog', {}), list = store.get('list', []), prof = store.get('prof', null);
+
+/* --- profiles + sting --- */
+$('profs').innerHTML = PROFILES.map(([n, c], k) => `<button class="prof" data-k="${k}"><span class="av" style="--c:${c}"><img src="kavya.png" alt=""></span>${n}</button>`).join('');
+function boom(){
+  try {
+    const A = new (window.AudioContext || window.webkitAudioContext)(), t = A.currentTime, g = A.createGain(); g.connect(A.destination);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.9, t + .05); g.gain.exponentialRampToValueAtTime(.001, t + 2.6);
+    [55, 110, 165, 220, 330].forEach((f, i) => { const o = A.createOscillator(); o.type = i ? 'sawtooth' : 'sine'; o.frequency.setValueAtTime(f * .5, t); o.frequency.exponentialRampToValueAtTime(f, t + .9);
+      const og = A.createGain(); og.gain.value = i ? .07 : .5; o.connect(og); og.connect(g); o.start(t); o.stop(t + 2.7); });
+    const ch = [523, 659, 784, 1047]; ch.forEach((f, i) => { const o = A.createOscillator(), og = A.createGain(); o.type = 'triangle'; o.frequency.value = f;
+      og.gain.setValueAtTime(0, t + .9 + i * .08); og.gain.linearRampToValueAtTime(.12, t + .95 + i * .08); og.gain.exponentialRampToValueAtTime(.001, t + 2.6); o.connect(og); og.connect(A.destination); o.start(t + .9); o.stop(t + 2.7); });
+  } catch(e){}
+}
+function choose(k){
+  prof = k; store.set('prof', k); $('me').style.setProperty('--c', PROFILES[k][1]);
+  $('who').classList.add('hide'); boom();
+  const s = $('sting'); s.classList.remove('go'); void s.offsetWidth; s.classList.add('go');
+  setTimeout(() => { B.classList.remove('lock'); startHero(); }, 2700);
+}
+$('profs').onclick = ev => { const b = ev.target.closest('.prof'); if (b) choose(+b.dataset.k); };
+$('me').onclick = () => { stopHero(); B.classList.add('lock'); $('who').classList.remove('hide'); };
+
+/* --- hero --- */
+function heroSet(e){
+  $('ht').textContent = e.t;
+  $('hm').innerHTML = `<span class="new">New episode</span><span>2026</span><span class="pill">ALL AGES</span><span>${dur(e.d)}</span><span>${lbl(e)}</span>`;
+  $('hd').textContent = e.s + ' ' + e.m + '.';
+  $('hv').src = e.f; $('hbl').src = e.f;
+}
+function startHero(){ const v = $('hv'); v.play().catch(() => {}); $('hbl').play().catch(() => {}); }
+function stopHero(){ $('hv').pause(); $('hbl').pause(); }
+heroSet(latest);
+$('hplay').onclick = () => play(EPS.length - 1);
+$('hinfo').onclick = () => info(EPS.length - 1);
+$('mute').onclick = () => { const v = $('hv'); v.muted = !v.muted; $('mwave').setAttribute('d', v.muted ? 'M16 9l5 6M21 9l-5 6' : 'M16 8.5c1.5 1.8 1.5 5.2 0 7M18.6 6c2.8 3.3 2.8 8.7 0 12'); $('mute').setAttribute('aria-label', v.muted ? 'Turn sound on' : 'Mute'); };
+
+/* --- rows --- */
+function card(e, opt = {}){
+  const k = EPS.indexOf(e), p = prog[k];
+  const tag = e === latest ? '<span class="tag">NEW</span>' : (opt.top ? '' : '');
+  const bar = p && p > .02 && p < .97 ? `<span class="bar"><span style="width:${p * 100}%"></span></span>` : '';
+  const po = `<span class="po"><img src="${e.i}" alt="" loading="lazy"><video muted playsinline preload="none" data-src="${e.f}"></video>${tag}<span class="ct"><b>${esc(e.t)}</b><i>${esc(lbl(e))}</i></span>${bar}</span>`;
+  return `<button class="card" data-k="${k}" aria-label="${esc(lbl(e) + ': ' + e.t)}">${opt.num ? `<span class="num">${opt.num}</span>` : ''}${po}</button>`;
+}
+function soon(){ return `<div class="card soon"><span class="po"><img src="kavya.png" alt=""><b>More stories coming</b><i>New stalls every day till 28 Nov</i></span></div>`; }
+function render(filter = ''){
+  const f = filter.trim().toLowerCase(), hit = e => !f || (e.t + ' ' + e.m + ' ' + e.s).toLowerCase().includes(f);
+  let html = '';
+  if (f){
+    const r = EPS.filter(hit);
+    html = `<section class="row" style="padding-top:90px"><h2>Results for “${esc(filter)}”</h2><div class="track">${r.length ? r.map(e => card(e)).join('') : '<p style="color:var(--mute)">No stories match. Try a stall or mentor name.</p>'}</div></section>`;
+  } else for (const [id, title, sub, fn, kind] of ROWS){
+    let items = [], extra = '', cls = '';
+    if (kind === 'top'){ cls = 'top'; items = [9, 8, 7, 6, 5].map(n => EPS.find(e => e.n === n)).filter(Boolean); extra = items.map((e, i) => card(e, {num: i + 1})).join(''); }
+    else if (kind === 'cont'){ items = EPS.filter((e, k) => prog[k] > .02 && prog[k] < .97); if (!items.length) continue; }
+    else if (kind === 'list'){ items = list.map(k => EPS[k]).filter(Boolean); if (!items.length) continue; }
+    else items = EPS.filter(fn);
+    if (kind === 'new') items = items.slice().reverse();
+    if (!items.length) continue;
+    html += `<section class="row ${cls}" id="${id}"><h2>${title}${sub ? `<small>${sub}</small>` : ''}</h2><div class="track">${extra || items.map(e => card(e)).join('')}${kind === 'new' ? soon() : ''}</div></section>`;
+  }
+  $('rows').innerHTML = html;
+}
+render();
+$('rows').addEventListener('click', ev => { const c = ev.target.closest('.card[data-k]'); if (c) info(+c.dataset.k); });
+/* hover preview */
+let pvT;
+$('rows').addEventListener('pointerover', ev => {
+  const c = ev.target.closest('.card[data-k]'); if (!c || c.classList.contains('pv') || ev.pointerType === 'touch') return;
+  clearTimeout(pvT); pvT = setTimeout(() => { const v = c.querySelector('video'); if (!v.src) v.src = v.dataset.src; v.currentTime = 8; v.play().then(() => c.classList.add('pv')).catch(() => {}); }, 600);
+});
+$('rows').addEventListener('pointerout', ev => {
+  const c = ev.target.closest('.card[data-k]'); if (!c || c.contains(ev.relatedTarget)) return;
+  clearTimeout(pvT); c.classList.remove('pv'); const v = c.querySelector('video'); if (v) v.pause();
+});
+
+/* --- nav --- */
+addEventListener('scroll', () => $('nav').classList.toggle('solid', scrollY > 40), {passive: true});
+document.querySelector('.links').onclick = ev => { const b = ev.target.closest('[data-go]'); if (!b) return; const el = $(b.dataset.go); if (el) scrollTo({top: el.offsetTop - 70, behavior: 'smooth'}); else if (b.dataset.go === 'r-list') alertList(); };
+function alertList(){ $('q').value = ''; render(); }
+$('qb').onclick = () => { $('q').classList.toggle('open'); if ($('q').classList.contains('open')) $('q').focus(); else { $('q').value = ''; render(); } };
+$('q').oninput = () => render($('q').value);
+
+/* --- details modal --- */
+let mk = 0;
+function info(k){
+  mk = k; const e = EPS[k], inL = list.includes(k);
+  $('mb').innerHTML = `<div class="mtop"><button class="mx" id="mx" aria-label="Close">×</button>
+    <video src="${e.f}" poster="${e.i}" muted autoplay loop playsinline></video>
+    <div><div class="kick"><span>K</span> ORIGINAL · ${esc(lbl(e))}</div><h3>${esc(e.t)}</h3>
+      <div class="meta">${e === latest ? '<span class="new">New</span>' : ''}<span>2026</span><span class="pill">ALL AGES</span><span>${dur(e.d)}</span><span class="pill">HD</span></div>
+      <p>${esc(e.s)}</p><div class="who"><b>${esc(e.m)}</b><br>Hosted by KAVYA · Kaushal Mela 2026</div>
+      <div class="hb"><button class="bt bw" id="mplay"><svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z" fill="currentColor"/></svg>${prog[k] > .02 && prog[k] < .97 ? 'Resume' : 'Play'}</button>
+      <button class="circ" id="madd" aria-label="${inL ? 'Remove from My List' : 'Add to My List'}">${inL ? '✓' : '+'}</button></div></div></div>
+    <div class="eps"><h4>All episodes</h4>${EPS.map((x, j) => `<button class="ep ${j === k ? 'cur' : ''}" data-j="${j}"><span class="n">${x.n}</span><img src="${x.i}" alt=""><span><b>${esc(x.t)}</b><i>${esc(x.m)}</i></span><span class="d">${dur(x.d)}</span></button>`).join('')}</div>`;
+  $('md').classList.add('on'); B.classList.add('lock'); stopHero(); $('mx').focus();
+  $('mx').onclick = closeInfo; $('mplay').onclick = () => { closeInfo(true); play(k); };
+  $('madd').onclick = () => { list = list.includes(k) ? list.filter(x => x !== k) : [...list, k]; store.set('list', list); render(); info(k); };
+  $('mb').querySelector('.eps').onclick = ev => { const b = ev.target.closest('.ep'); if (b) { closeInfo(true); play(+b.dataset.j); } };
+}
+function closeInfo(keep){ $('md').classList.remove('on'); $('mb').innerHTML = ''; if (keep !== true){ B.classList.remove('lock'); startHero(); } }
+$('md').onclick = ev => { if (ev.target === $('md')) closeInfo(); };
+
+/* --- player --- */
+let pk = 0, nxTimer;
+function play(k){
+  pk = k; const e = EPS[k], v = $('pv'); stopHero(); clearTimeout(nxTimer); $('nx').classList.remove('on');
+  $('ptitle').innerHTML = `${esc(e.t)}<small>${esc(lbl(e))} · ${esc(e.m)}</small>`;
+  $('pl').classList.add('on'); B.classList.add('lock');
+  const old = $('pyt'); if (old) old.remove();
+  if (e.yt){ v.classList.add('hide'); v.pause(); const f = document.createElement('iframe'); f.id = 'pyt'; f.allow = 'autoplay; encrypted-media; fullscreen'; f.allowFullscreen = true;
+    f.src = `https://www.youtube.com/embed/${e.yt}?autoplay=1&rel=0&playsinline=1&modestbranding=1`; $('pl').insertBefore(f, $('pback')); }
+  else { v.classList.remove('hide'); v.src = e.f; v.poster = e.i; $('pbv').src = e.f;
+    v.onloadedmetadata = () => { const p = prog[k]; if (p > .02 && p < .97) v.currentTime = p * v.duration; };
+    $('tap').classList.add('hide'); $('perr').classList.add('hide');
+    v.play().catch(() => $('tap').classList.remove('hide')); $('pbv').play().catch(() => {}); }
+  $('pback').focus();
+}
+const pv = $('pv');
+$('tap').onclick = () => { $('tap').classList.add('hide'); pv.play().catch(() => { pv.muted = true; pv.play().catch(() => {}); }); $('pbv').play().catch(() => {}); };
+pv.onerror = () => { $('tap').classList.add('hide'); $('perr').classList.remove('hide'); };
+pv.ontimeupdate = () => {
+  if (!pv.duration) return; prog[pk] = pv.currentTime / pv.duration;
+  $('pbv').currentTime = Math.abs($('pbv').currentTime - pv.currentTime) > .5 ? pv.currentTime : $('pbv').currentTime;
+  if (pv.duration - pv.currentTime < 6 && !$('nx').classList.contains('on') && !nxTimer){
+    const n = EPS[(pk + 1) % EPS.length]; $('nxi').src = n.i; $('nxt').textContent = n.t; $('nx').classList.add('on');
+  }
+};
+pv.onpause = () => store.set('prog', prog);
+pv.onended = () => { prog[pk] = 1; store.set('prog', prog); if ($('nx').classList.contains('on')) play((pk + 1) % EPS.length); };
+$('nxg').onclick = () => play((pk + 1) % EPS.length);
+$('nxc').onclick = () => { $('nx').classList.remove('on'); nxTimer = 1; };
+function closePlayer(){ pv.pause(); $('pbv').pause(); store.set('prog', prog); const y = $('pyt'); if (y) y.remove(); nxTimer = 0;
+  $('nx').classList.remove('on'); $('pl').classList.remove('on'); B.classList.remove('lock'); render($('q').value); startHero(); }
+$('pback').onclick = closePlayer;
+
+/* --- TV mode (loops everything; local files so it works offline on the kiosk) --- */
+let ti = 0;
+function tvPlay(){ const e = EPS[ti], v = $('tvv'); v.src = e.f; $('tvb').src = e.f; $('tvt').textContent = e.t; $('tvm').textContent = lbl(e) + ' · ' + e.m;
+  v.play().catch(() => { v.muted = true; v.play(); }); $('tvb').play().catch(() => {}); }
+$('tvv').onended = () => { ti = (ti + 1) % EPS.length; tvPlay(); };
+function startTV(){ $('who').classList.add('hide'); stopHero(); ti = 0; $('tv').classList.add('on'); B.classList.add('lock'); tvPlay();
+  const d = document.documentElement; if (d.requestFullscreen) d.requestFullscreen().catch(() => {}); }
+function stopTV(){ if (!$('tv').classList.contains('on')) return; $('tv').classList.remove('on'); $('tvv').pause(); $('tvb').pause(); B.classList.remove('lock');
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); startHero(); }
+$('tvLink').onclick = startTV; $('tvx').onclick = stopTV;
+
+document.addEventListener('keydown', ev => { if (ev.key !== 'Escape') return;
+  if ($('tv').classList.contains('on')) stopTV(); else if ($('pl').classList.contains('on')) closePlayer(); else if ($('md').classList.contains('on')) closeInfo(); });
+
+if (location.search.includes('tv') || location.hash === '#tv') startTV();
+else if (prof !== null && PROFILES[prof]) { $('me').style.setProperty('--c', PROFILES[prof][1]); }
+}
+</script>
+</body>
+</html>

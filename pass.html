@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kaushal Mela 2026 · E-pass</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{--red:#B71C2B;--brown:#4A2A1A;--gold:#C9962E;--cream:#FFF8EC}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--cream);color:var(--brown);display:flex;flex-direction:column;align-items:center;padding:24px 16px}
+  img.logo{width:84px;height:84px}
+  h1{font-size:20px;margin:8px 0 18px;text-align:center}
+  .card{width:100%;max-width:420px;background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 30px rgba(74,42,26,.12);text-align:center;border-top:8px solid var(--red)}
+  .big{font-size:26px;font-weight:800;margin:6px 0}
+  .id{font-family:ui-monospace,monospace;letter-spacing:.06em;font-size:15px;color:#7a5a45}
+  .meta{margin:10px 0 0;line-height:1.6}
+  .state{margin-top:16px;padding:14px;border-radius:16px;font-weight:700;font-size:18px}
+  .ok{background:#E3F6E8;color:#17672F}.warn{background:#FFF1D6;color:#8A5A00}.bad{background:#FDE3E3;color:#9B1C1C}.info{background:#F3ECE0}
+  button,input{font:inherit}
+  input{width:100%;padding:12px;border:1.5px solid #D9C7AE;border-radius:12px;margin:10px 0;text-align:center;font-size:20px;letter-spacing:.2em}
+  button{width:100%;padding:13px;border:0;border-radius:14px;background:var(--red);color:#fff;font-weight:700;cursor:pointer}
+  button.ghost{background:transparent;color:var(--brown);border:1.5px solid #D9C7AE;margin-top:10px}
+  .foot{margin-top:18px;font-size:13px;color:#8a6a55;text-align:center;max-width:420px}
+  .foot a{color:var(--brown)}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+</style>
+</head>
+<body>
+<img class="logo" src="km-logo.png" alt="Kaushal Mela 2026">
+<h1>Kaushal Mela 2026 · E-pass</h1>
+<div class="card" id="card"><p>Loading your pass…</p></div>
+<div class="foot" id="foot"></div>
+
+<script>
+(function(){
+  const SCRIPT = 'https://script.google.com/macros/s/AKfycbwU9G8D8idXBm9SCi_snA7oCHVwd02Duy_l1FnUz2OTycXfyhLObraZrDr-ZHINJUDemQ/exec';
+  const $ = i => document.getElementById(i);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const qs = new URLSearchParams(location.search);
+  const id = (qs.get('id') || '').trim().toUpperCase();
+  let pin = ''; try { pin = localStorage.getItem('kmStaffPin') || ''; } catch(e) {}
+
+  function jsonp(params){
+    return new Promise((res, rej) => {
+      const cb = 'kp_' + Date.now() + '_' + Math.floor(Math.random()*1e6), sc = document.createElement('script');
+      const t = setTimeout(() => { cleanup(); rej(new Error('timeout')); }, 15000);
+      function cleanup(){ clearTimeout(t); try { delete window[cb]; } catch(e) {} sc.remove(); }
+      window[cb] = d => { cleanup(); res(d); };
+      sc.onerror = () => { cleanup(); rej(new Error('network')); };
+      sc.src = SCRIPT + '?' + new URLSearchParams(Object.assign({}, params, {callback: cb})).toString();
+      document.head.appendChild(sc);
+    });
+  }
+
+  function staffFoot(){
+    $('foot').innerHTML = pin
+      ? 'Gate volunteer mode is on for this phone. <a href="#" id="off">Turn it off</a>'
+      : '<a href="#" id="vol">Gate volunteer? Tap here</a>';
+    const off = $('off'), vol = $('vol');
+    if (off) off.onclick = e => { e.preventDefault(); try { localStorage.removeItem('kmStaffPin'); } catch(x) {} pin = ''; run(); };
+    if (vol) vol.onclick = e => { e.preventDefault(); askPin(); };
+  }
+
+  function askPin(msg){
+    $('card').innerHTML = `<p class="big">Gate volunteer</p><p>Type the staff PIN once. After that, scanning a guest's QR checks them in.</p>
+      ${msg ? `<div class="state bad">${esc(msg)}</div>` : ''}
+      <input id="pin" inputmode="numeric" autocomplete="off" aria-label="Staff PIN" placeholder="PIN">
+      <button id="save">Turn on check-in</button><button class="ghost" id="cancel">Back</button>`;
+    $('pin').focus();
+    $('save').onclick = () => { const v = $('pin').value.trim(); if (!v) return; pin = v; try { localStorage.setItem('kmStaffPin', v); } catch(e) {} run(); };
+    $('cancel').onclick = run;
+  }
+
+  async function guestView(){
+    const d = await jsonp({action:'check', id});
+    if (!d || !d.ok){ $('card').innerHTML = `<div class="state bad">${esc((d && d.error) || 'Pass not found.')}</div><p class="id">${esc(id)}</p>`; return; }
+    const ok = /confirm/i.test(d.status);
+    $('card').innerHTML = `<p>Your pass</p><p class="id">${esc(d.id)}</p>
+      <div class="state ${d.checkedIn ? 'ok' : ok ? 'ok' : 'info'}">${d.checkedIn ? '✅ Checked in. Enjoy the Mela!' : ok ? '✅ Confirmed. Show this QR at the gate.' : 'Reply received. Show this QR at the gate.'}</div>
+      <p class="meta">Saturday, 28 November 2026 · 10:00 AM onwards<br>Army Public School Jorhat</p>`;
+  }
+
+  async function staffView(){
+    $('card').innerHTML = '<p>Checking in…</p>';
+    const d = await jsonp({action:'checkin', id, pin});
+    if (d && d.pin === false){ try { localStorage.removeItem('kmStaffPin'); } catch(e) {} pin = ''; askPin('Wrong PIN. Try again.'); return; }
+    if (!d || !d.ok){ $('card').innerHTML = `<div class="state bad">❌ ${esc((d && d.error) || 'Not found')}</div><p class="id">${esc(id)}</p><p>Send the guest to the help desk.</p>`; return; }
+    const who = `<p class="big">${esc(d.name)}</p><p class="meta">${esc(d.invite)} · ${d.guests} guest${d.guests === 1 ? '' : 's'}${d.attending ? '' : ' · replied "not attending"'}</p>`;
+    $('card').innerHTML = d.already
+      ? `<div class="state warn">⚠️ Already checked in at ${esc(d.checkTime)}</div>${who}<p class="id">${esc(d.id)}</p>`
+      : `<div class="state ok">✅ Welcome! Checked in at ${esc(d.checkTime)}</div>${who}<p class="id">${esc(d.id)}</p>`;
+  }
+
+  async function run(){
+    staffFoot();
+    if (!id){
+      $('card').innerHTML = pin ? '<div class="state ok">Check-in is on.</div><p>Open the phone camera and scan a guest\'s e-pass QR.</p>'
+                                : '<p>Open this page by scanning the QR on your e-pass.</p>';
+      return;
+    }
+    try { await (pin ? staffView() : guestView()); }
+    catch(e){ $('card').innerHTML = '<div class="state bad">No connection. Please try again.</div><button id="retry">Try again</button>'; $('retry').onclick = run; }
+  }
+  run();
+})();
+</script>
+</body>
+</html>
