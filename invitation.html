@@ -901,6 +901,7 @@ const INVITE = {
   venueAddr: 'Jorhat, Assam',
   mapsQuery: 'Army Public School Jorhat',
   shareUrl:  'https://dsiaps.github.io/KAUSHAL-MELA/invitation.html',   // ← the invitation's real web address after upload (used by Share on WhatsApp)
+  showApp:   false,     // Mela App links in the card: false = hidden until items are final, true = show
   appUrl:    'app.html',
   trailerUrl:'kaushal-mela-2026-promo.mp4',          // the promo video in the website's media folder
   trailerWeb:'https://dsiaps.github.io/KAUSHAL-MELA/kaushal-mela-2026-promo.mp4',   // used when the card is opened as a forwarded file
@@ -1069,6 +1070,7 @@ const INVITE = {
   const onWeb = /^https?:$/.test(location.protocol) && !/claude|usercontent/.test(location.hostname);
   const appHref = onWeb ? INVITE.appUrl : INVITE.shareUrl.replace(/[^\/]*$/, '');   // as a phone file → official app address
   ['appBtn','appBtn2','menuApp'].forEach(id => { const el = $(id); if (el) el.href = appHref; });
+  if (INVITE.showApp === false){ ['appSec','appBtn2','menuApp'].forEach(id => { const el = $(id); if (el) el.style.display = 'none'; }); document.querySelectorAll('a[href="#appSec"]').forEach(a => a.style.display = 'none'); }
   $('awaitList').innerHTML = INVITE.awaits.map(a =>
     `<div class="aw rv"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24">${ICONS[a.ic]||''}</svg></div><h4>${esc(a.t)}</h4><p>${esc(a.d)}</p></div>`).join('');
 
