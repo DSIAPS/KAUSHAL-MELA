@@ -1178,7 +1178,7 @@ const INVITE = {
   /* ---------- gate (envelope) ---------- */
   const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
   let seen = false; try { seen = localStorage.getItem('kmCoverSeen') === '1'; } catch(e) {}
-  const skip = INVITE.showCover === 'never' || standalone || (INVITE.showCover !== 'always' && seen);
+  const skip = INVITE.showCover === 'never' || (INVITE.showCover !== 'always' && (seen || standalone));
   const audio = INVITE.music ? new Audio(INVITE.music) : (INVITE.builtInMusic && window.MelaMusic ? MelaMusic() : null);
   if (audio) audio.loop = true;
   function startMusic(){
