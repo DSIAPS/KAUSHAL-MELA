@@ -297,6 +297,22 @@ const EPS = [
    s:'KAVYA takes you from the main gate past the courtyard, auditorium and Herbal Garden, and along the colourful Mural Trail while preparations for Kaushal Mela 2026 are in full swing.'},
   {n:9, t:'Young Tech Minds · The Journey', m:'Dept. of Information Technology · Mentor: Akashdeep Saikia', g:'tech', d:97, f:'ep9.mp4', i:'ep9.jpg', yt:'',
    s:'From the Cyber Suraksha Bot on National Technology Day to Pratyuttar X at the Hack Fests (Mentor: Tapan Saikia), and now web apps, 3D games and AI experiments for Kaushal Mela 2026. Preparing for India 2047.'},
+  {n:10, t:'Game Zone: Throw · Aim · Win', m:'Department of Sports · Mentor: Leonerd Deuri', g:'fun', d:34, f:'ep10.mp4', i:'ep10.jpg', yt:'',
+   s:'Glass Toss, Ring the Bottle and Ring Toss. Our Sports team spreads the word across the campus. You don\'t have to play alone, welcome to the fun!'},
+  {n:11, t:'Hydroponics: Growing Without Soil', m:'Mentor: Punam Lingwal', g:'green', d:37, f:'ep11.mp4', i:'ep11.jpg', yt:'',
+   s:'Plants in jars, fresh microgreens and roots you can see. Our students recycle old jars and grow greens in water, no soil needed.'},
+  {n:12, t:'Kitchen Garden: Fresh From Our Campus', m:'Mentor: Ms Shenaj Ahmed', g:'green', d:37, f:'ep12.mp4', i:'ep12.jpg', yt:'',
+   s:'Our young farmers plant, water and care for rows of vegetables and chillies on campus, from garden to kitchen.'},
+  {n:13, t:'Food Court: Come Hungry!', m:'Mentors: Ms Nisha & Ms Manorama', g:'life', d:40, f:'ep13.mp4', i:'ep13.jpg', yt:'',
+   s:'Sweet Sips, Crunchy Craze, The Foodie Café and more: our student food counters invite you to come hungry and leave happy.'},
+  {n:14, t:'The Ad Makers: Stall Advertisement', m:'Mentor: Ms Sheetal Singh', g:'art', d:34, f:'ep14.mp4', i:'ep14.jpg', yt:'',
+   s:'Ideas, slogans, scripts and hand-made posters: our Stall Advertisement team gives every stall at the Mela its own story.'},
+  {n:15, t:'Dance & Drama: Live Performances', m:'Mentors: Ms Hema, Ms Rashmi, Ms Monsoon, Ms Prerona & Ms Geetarthi', g:'art', d:37, f:'ep15.mp4', i:'ep15.jpg', yt:'',
+   s:'Rehearsals in the hall and in the open air: dance in sync, drama taking shape and rhythm you can feel. Watch it live at the Mela.'},
+  {n:16, t:'Live Music: From Rock to Raag', m:'Mentor: Ms Parishmita', g:'art', d:43, f:'ep16.mp4', i:'ep16.jpg', yt:'',
+   s:'Guitars, drums and keys meet tabla and strings: our young musicians rehearse live, from rock to raag. Hear them at the Mela.'},
+  {n:17, t:'Farm to Future: Agricultural Practices', m:'Mentors: Ms Smriti & Ms Archita', g:'green', d:37, f:'ep17.mp4', i:'ep17.jpg', yt:'',
+   s:'From banana-stem compost to soil testing in the lab: our young farmers learn how healthy soil grows healthy crops.'},
 ];
 const ROWS = [
   ['r-new', 'New on Kaushal Play', '', e => true, 'new'],
@@ -305,6 +321,7 @@ const ROWS = [
   ['r-tech', 'Tech & Innovation', 'Young Tech Minds', e => e.g === 'tech'],
   ['r-green', 'Green Skills', 'Grow · Nurture · Sustain', e => e.g === 'green'],
   ['r-art', 'Art & Craft', 'Made by hand, with heart', e => e.g === 'art'],
+  ['r-fun', 'Sports & Fun', 'Throw · Aim · Win', e => e.g === 'fun'],
   ['r-life', 'Health & Life Skills', '', e => e.g === 'life'],
   ['r-list', 'My List', '', null, 'list'],
   ['r-kavya', 'Behind the Scenes', 'KAVYA and the campus', e => e.g === 'kavya'],
@@ -371,7 +388,7 @@ function render(filter = ''){
     html = `<section class="row" style="padding-top:90px"><h2>Results for “${esc(filter)}”</h2><div class="track">${r.length ? r.map(e => card(e)).join('') : '<p style="color:var(--mute)">No stories match. Try a stall or mentor name.</p>'}</div></section>`;
   } else for (const [id, title, sub, fn, kind] of ROWS){
     let items = [], extra = '', cls = '';
-    if (kind === 'top'){ cls = 'top'; items = [9, 8, 7, 6, 5].map(n => EPS.find(e => e.n === n)).filter(Boolean); extra = items.map((e, i) => card(e, {num: i + 1})).join(''); }
+    if (kind === 'top'){ cls = 'top'; items = [17, 16, 15, 14, 13].map(n => EPS.find(e => e.n === n)).filter(Boolean); extra = items.map((e, i) => card(e, {num: i + 1})).join(''); }
     else if (kind === 'cont'){ items = EPS.filter((e, k) => prog[k] > .02 && prog[k] < .97); if (!items.length) continue; }
     else if (kind === 'list'){ items = list.map(k => EPS[k]).filter(Boolean); if (!items.length) continue; }
     else items = EPS.filter(fn);
