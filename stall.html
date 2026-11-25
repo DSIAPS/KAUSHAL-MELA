@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meet KAVYA · Kaushal Mela 2026</title>
+<meta name="theme-color" content="#B71C2B">
+<meta name="robots" content="noindex">
+<style>
+  :root{--ink:#3B2416;--muted:#866650;--cream:#FFF8EC;--red:#B71C2B;--gold:#C9962E;--c:#B71C2B;--t:#FBE3E3}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);
+       background:linear-gradient(180deg,var(--t) 0%,var(--cream) 46%);padding-bottom:40px}
+  header{display:flex;align-items:center;gap:10px;padding:12px 16px}
+  header img{width:40px;height:40px}
+  header a{margin-left:auto;font-size:14px;color:var(--ink);text-decoration:none;border:1.5px solid rgba(59,36,22,.25);border-radius:99px;padding:6px 12px;background:#fff}
+  header b{font-size:15px;line-height:1.15}
+  header small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+
+  .stage{position:relative;max-width:440px;margin:0 auto;padding:4px 16px 0;text-align:center}
+  .num{display:inline-block;background:var(--c);color:#fff;font-weight:800;border-radius:99px;padding:5px 14px;font-size:14px}
+  h1{font-size:28px;line-height:1.1;margin:10px 0 2px}
+  .team{color:var(--muted);margin:0 0 6px;font-size:14px}
+  .role{display:inline-block;font-size:13px;font-weight:700;color:var(--c);background:#fff;border-radius:99px;padding:4px 12px;margin-top:4px}
+
+  .bot{position:relative;width:min(78vw,300px);margin:6px auto 0}
+  .bot svg{width:100%;height:auto;display:block;overflow:visible}
+  .bob{animation:bob 3.2s ease-in-out infinite;transform-origin:50% 60%}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .lid{transform-box:fill-box;transform-origin:center;transform:scaleY(0);animation:blink 4.6s infinite}
+  @keyframes blink{0%,94%,100%{transform:scaleY(0)}96%{transform:scaleY(1)}}
+  .halo{animation:halo 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes halo{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.9);opacity:.7}}
+  .mouth.talk{animation:talk .22s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+  @keyframes talk{from{transform:scaleY(1)}to{transform:scaleY(3.2)}}
+
+  .bubble{position:relative;max-width:440px;margin:4px auto 0;background:#fff;border-radius:22px;padding:16px 18px;text-align:left;
+          box-shadow:0 10px 28px rgba(59,36,22,.12);font-size:17px;line-height:1.5}
+  .bubble:before{content:"";position:absolute;top:-12px;left:50%;margin-left:-12px;border:12px solid transparent;border-top:0;border-bottom-color:#fff}
+  .bubble .as{display:block;color:var(--muted);font-size:15px;margin-top:6px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  button,.btn{font:inherit;font-weight:700;border:0;border-radius:14px;padding:11px 14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  .btn.main{background:var(--c);color:#fff}
+  .btn.line{background:#fff;color:var(--ink);border:1.5px solid rgba(59,36,22,.2)}
+
+  section{max-width:440px;margin:18px auto 0;padding:0 16px}
+  h2{font-size:18px;margin:0 0 10px}
+  .items{display:grid;gap:8px}
+  .it{display:flex;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:10px 14px;box-shadow:0 3px 10px rgba(59,36,22,.06)}
+  .it .ic{font-size:24px;width:32px;text-align:center}
+  .it b{display:block;font-size:15px}
+  .it small{color:var(--muted)}
+  .it .pr{margin-left:auto;font-weight:800;white-space:nowrap;color:var(--c)}
+  .it.out{opacity:.5}
+  .note{background:#fff;border-radius:16px;padding:12px 14px;font-size:14px;line-height:1.5;border-left:6px solid var(--gold)}
+  .map{position:relative;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 3px 10px rgba(59,36,22,.08)}
+  .map img{display:block;width:100%;height:auto}
+  .map i{position:absolute;border:4px solid var(--red);border-radius:8px;box-shadow:0 0 0 9999px rgba(0,0,0,.28);animation:pulse 1.4s ease-in-out infinite}
+  @keyframes pulse{50%{border-color:#FFC93C}}
+  .foot{text-align:center;color:var(--muted);font-size:13px;margin-top:22px}
+  .foot a{color:var(--ink)}
+  dialog{border:0;border-radius:18px;padding:0;width:min(94vw,440px);background:#000}
+  dialog::backdrop{background:rgba(0,0,0,.75)}
+  dialog video{display:block;width:100%;max-height:80vh}
+  dialog button{position:absolute;top:8px;right:8px;background:#fff;color:#000;padding:6px 12px;border-radius:99px;z-index:2}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){.bob,.lid,.halo,.mouth.talk,.map i{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <img src="km-logo.png" alt="Kaushal Mela 2026">
+  <b>Kaushal Mela 2026<small>Army Public School Jorhat</small></b>
+  <a href="app.html">🛍️ All stalls</a>
+</header>
+
+<div class="stage">
+    <h1 id="name"></h1>
+  <p class="team" id="team"></p>
+  <div class="bot" id="bot" aria-hidden="true"></div>
+  <span class="role" id="role"></span>
+</div>
+
+<div class="bubble" id="bubble" aria-live="polite">
+  <span id="say"></span>
+  <span class="as" id="sayAs" lang="as"></span>
+  <div class="row">
+    <button class="btn main" id="hear" type="button">🔊 Hear KAVYA</button>
+    <a class="btn line" id="storyBtn" href="#" hidden>🎬 Watch our story</a>
+  </div>
+</div>
+
+<section id="itemsBox">
+  <h2 id="itemsH">What you can get here</h2>
+  <div class="items" id="items"></div>
+</section>
+
+<section>
+  <div class="note">🎟️ Pay with <b>Mela coupons</b> (₹10, ₹20, ₹50, ₹100). Buy them with cash at the <b>Coupon Counter</b> near the entry gate. No UPI.</div>
+</section>
+
+<section id="mapBox">
+  <h2>You are here</h2>
+  <div class="map"><img src="mela-map.jpg" alt="Kaushal Mela stall layout" id="mapImg"><i id="hl" hidden></i></div>
+</section>
+
+<p class="foot"><a href="app.html">Open the Mela App</a> · <a href="play.html">Kaushal Play</a><br>Hosted by KAVYA · A Department of Skill and Innovation Initiative</p>
+
+<dialog id="vd"><button type="button" id="vdX">Close ✕</button><video id="vdV" controls playsinline></video></dialog>
+
+<script>
+const SCRIPT = 'https://script.google.com/macros/s/AKfycbwU9G8D8idXBm9SCi_snA7oCHVwd02Duy_l1FnUz2OTycXfyhLObraZrDr-ZHINJUDemQ/exec';
+const STALLS = [{"no": 1, "name": "Healthcare Hub", "cls": "Family Health Handbook", "look": "nurse", "ep": 2, "say": "Namaskar! I am Nurse KAVYA today. At the Healthcare Hub our students share healthy drinks, hygiene kits, a little life saver kit and free height and weight checks. Stay healthy, stay happy!", "box": [63.41, 70.26, 17.93, 6.03], "display": false, "id": "healthcare-hub"}, {"no": 2, "name": "Food Court", "cls": "Eight student food counters", "look": "chef", "ep": null, "say": "Namaskar! Chef KAVYA here. Welcome to the Food Court: eight student counters, from momo and chowmein to puchka, nachos and mojito. Come hungry!", "box": [55.61, 20.34, 30.98, 7.24], "display": false, "id": "food-court"}, {"no": 3, "name": "Zero Heat Cafe", "cls": "Non-Fire Cooking", "look": "chef", "ep": 7, "say": "Namaskar! Chef KAVYA here. At the Zero Heat Cafe our young chefs cook without fire. They have been practising for weeks, because cooking is a skill that grows with practice!", "box": [56.34, 49.57, 5.61, 7.33], "display": false, "id": "zero-heat-cafe"}, {"no": 4, "name": "Canteen", "cls": "", "look": "chef", "ep": null, "say": "Namaskar! Chef KAVYA here. Welcome to the Canteen. Grab a snack and take a short break before you explore more stalls.", "box": [55.12, 42.84, 8.9, 5.86], "display": false, "id": "canteen"}, {"no": 5, "name": "Handmade Wonders", "cls": "Shaping Materials & Apparel", "look": "artist", "ep": 6, "say": "Namaskar! I am Artist KAVYA today. At Handmade Wonders our students shape everyday materials into bouquets, keychains, diyas and wall hangings, all made by hand.", "box": [35.12, 17.24, 11.22, 2.76], "display": false, "id": "handmade-wonders"}, {"no": 6, "name": "Tie & Dye and Art & Craft", "cls": "Art and Craft Department", "look": "artist", "ep": 3, "say": "Namaskar! I am Artist KAVYA today. Welcome to Tie & Dye and Art & Craft: watercolours, canvas paintings, pencil shading, tie and dye, and clay Assamese Jolpan, all made by our young artists.", "box": [30.49, 62.24, 14.63, 3.1], "display": false, "id": "tie-and-dye-and-art-and-craft"}, {"no": 7, "name": "Mehendi", "cls": "", "look": "artist", "ep": null, "say": "Namaskar! I am Artist KAVYA today. Welcome to the Mehendi stall. Let our students draw beautiful designs on your hands.", "box": [36.1, 24.83, 7.8, 2.24], "display": false, "id": "mehendi"}, {"no": 8, "name": "Vocational Hub", "cls": "", "look": "engineer", "ep": 4, "say": "Namaskar! I am Engineer KAVYA today. The Vocational Hub shows the hands-on skills our students are learning for the world of work.", "box": [55.49, 57.59, 22.56, 3.62], "display": false, "id": "vocational-hub"}, {"no": 9, "name": "Herbal Garden", "cls": "Hydroponics & Animal Care", "look": "farmer", "ep": 5, "say": "Namaskar! I am Farmer KAVYA today. Our Herbal Garden has 19 medicinal plants, planted, labelled and cared for by students. Grow health, live healthy!", "box": [34.76, 74.14, 7.56, 4.48], "display": false, "id": "herbal-garden"}, {"no": 10, "name": "Farm to Future Hub", "cls": "Agricultural Practices", "look": "farmer", "ep": null, "say": "Namaskar! I am Farmer KAVYA today. At the Farm to Future Hub our students bring you indoor plants, seed balls, sprouts chaat, fruit jam and fresh saag.", "box": [30.73, 69.31, 5.73, 4.83], "display": false, "id": "farm-to-future-hub"}, {"no": 11, "name": "Hydroponics", "cls": "Hydroponics & Animal Care", "look": "farmer", "ep": 5, "say": "Namaskar! I am Farmer KAVYA today. Here plants grow without soil, in water full of nutrients. Ask our students how hydroponics works!", "box": [23.17, 62.93, 5.12, 6.29], "display": false, "id": "hydroponics"}, {"no": 12, "name": "Leafylicious", "cls": "School Kitchen Garden", "look": "farmer", "ep": null, "say": "Namaskar! I am Farmer KAVYA today. Leafylicious brings fresh greens from our school kitchen garden: spinach, red amaranth, mustard greens, coriander and more.", "box": [6.34, 61.38, 7.32, 7.59], "display": false, "id": "leafylicious"}, {"no": 13, "name": "Mushroom Garden", "cls": "School Kitchen Garden", "look": "farmer", "ep": null, "say": "Namaskar! I am Farmer KAVYA today. Welcome to the Mushroom Garden. See how our students grow mushrooms right here at school.", "box": [14.63, 69.83, 7.56, 1.47], "display": false, "id": "mushroom-garden"}, {"no": 14, "name": "The Nature Buzz", "cls": "Plant Nursery & Habitat Garden", "look": "farmer", "ep": 1, "say": "Namaskar! I am Farmer KAVYA today. The Nature Buzz has saplings, seed balls, bird feeders, pickles and plant-based sprays from our plant nursery and habitat garden.", "box": [54.27, 62.24, 8.29, 5.26], "display": false, "id": "the-nature-buzz"}, {"no": 15, "name": "Aesthetic Garden", "cls": "", "look": "farmer", "ep": null, "say": "Namaskar! I am Farmer KAVYA today. Welcome to the Aesthetic Garden. Take a slow walk and enjoy what our students have grown and designed.", "box": [35.61, 29.31, 8.29, 8.62], "display": false, "id": "aesthetic-garden"}, {"no": 16, "name": "Game Zone", "cls": "", "look": "gamer", "ep": null, "say": "Namaskar! I am Gamer KAVYA today. Welcome to the Game Zone! Try Velocity Horizon, the car racing game, or test your brain in Brain Battle, the quiz game.", "box": [55.61, 28.02, 8.41, 12.16], "display": false, "id": "game-zone"}, {"no": 17, "name": "Selfie Booth", "cls": "", "look": "gamer", "ep": null, "say": "Namaskar! Welcome to the Selfie Booth. Strike a pose and take home a Kaushal Mela memory!", "box": [40.0, 39.22, 5.37, 2.84], "display": false, "id": "selfie-booth"}, {"no": 18, "name": "Gateways to Northeast", "cls": "Tourism Stall", "look": "traveller", "ep": null, "say": "Namaskar! I am Traveller KAVYA today. Gateways to Northeast takes you on a journey through the places, people and culture of our beautiful Northeast.", "box": [46.59, 17.24, 6.46, 3.1], "display": true, "id": "gateways-to-northeast"}, {"no": 19, "name": "Live Concert", "cls": "Music Department", "look": "performer", "ep": null, "say": "Namaskar! I am your host KAVYA. Welcome to the Live Concert. Sit back and enjoy music by our talented students.", "box": [14.63, 63.97, 7.56, 5.69], "display": false, "id": "live-concert"}, {"no": 20, "name": "Podcast Room", "cls": "", "look": "performer", "ep": null, "say": "Namaskar! I am your host KAVYA. Welcome to the Podcast Room, where our students talk, interview and record their own shows.", "box": [19.51, 23.28, 6.71, 2.76], "display": false, "id": "podcast-room"}, {"no": 21, "name": "Maker Skills & Digital Animation Hub", "cls": "DSI Command Centre", "look": "engineer", "ep": 9, "say": "Namaskar! I am Engineer KAVYA today, and this is my home! The Maker Skills and Digital Animation Hub is where our young tech minds build robots, bots and animations.", "box": [38.54, 43.36, 7.8, 3.62], "display": false, "id": "maker-skills-and-digital-animation-hub"}, {"no": 22, "name": "Coupon Counter", "cls": "", "look": "cashier", "ep": null, "say": "Namaskar! I am Coupon KAVYA. Every stall takes Mela coupons only. Buy them here with cash: 10, 20, 50 and 100 rupee coupons. Sorry, no UPI.", "box": [22.32, 85.52, 11.59, 5.34], "display": false, "id": "coupon-counter"}, {"no": 23, "name": "Vegetable Stall", "cls": "", "look": "farmer", "ep": null, "say": "Namaskar! I am Farmer KAVYA today. Welcome to the Vegetable Stall. Take home fresh vegetables grown by our students.", "box": null, "display": false, "id": "vegetable-stall"}, {"no": 24, "name": "Pineapple Selfie Stand", "cls": "", "look": "farmer", "ep": null, "say": "Namaskar! I am Farmer KAVYA today. Say cheese at the Pineapple Selfie Stand, our sweet salute to Assam's famous pineapples!", "box": null, "display": false, "id": "pineapple-selfie-stand"}];
+const ITEMS = [{"id": "H1", "stall": 1, "name": "Iron Boost Mixer", "price": 20, "icon": "🥤", "desc": "", "stock": 20, "sold": 0}, {"id": "H2", "stall": 1, "name": "Healthy Breakfast", "price": 80, "icon": "🥣", "desc": "", "stock": 80, "sold": 0}, {"id": "H3", "stall": 1, "name": "Detox Water", "price": 20, "icon": "💧", "desc": "", "stock": 30, "sold": 0}, {"id": "H4", "stall": 1, "name": "Rainbow Fruit Delight", "price": 20, "icon": "🍓", "desc": "", "stock": 30, "sold": 0}, {"id": "H5", "stall": 1, "name": "Little Life Saver Kit", "price": 100, "icon": "🩹", "desc": "20% off on Mela day", "stock": 10, "sold": 0}, {"id": "H6", "stall": 1, "name": "Happy Hygiene Kit", "price": 30, "icon": "🧼", "desc": "", "stock": 10, "sold": 0}, {"id": "H7", "stall": 1, "name": "Pink Comfort Kit", "price": 30, "icon": "🎀", "desc": "", "stock": 15, "sold": 0}, {"id": "H8", "stall": 1, "name": "Habit Bloom", "price": 20, "icon": "🌸", "desc": "", "stock": 10, "sold": 0}, {"id": "H9", "stall": 1, "name": "Height & Weight check", "price": "Free", "icon": "📏", "desc": "Free health check", "stock": 0, "sold": 0}, {"id": "H10", "stall": 1, "name": "BP & RBS check", "price": "At stall", "icon": "🩺", "desc": "Blood pressure and blood sugar check", "stock": 0, "sold": 0}, {"id": "H11", "stall": 1, "name": "Priority Protection", "price": 20, "icon": "🛡️", "desc": "", "stock": 20, "sold": 0}, {"id": "G1", "stall": 10, "name": "Indoor plants", "price": 20, "icon": "🪴", "desc": "", "stock": 0, "sold": 0}, {"id": "G2", "stall": 10, "name": "Seed balls", "price": 50, "icon": "🌱", "desc": "", "stock": 0, "sold": 0}, {"id": "G3", "stall": 10, "name": "Sprouts chaat", "price": 50, "icon": "🥗", "desc": "", "stock": 0, "sold": 0}, {"id": "G4", "stall": 10, "name": "Fruit jam", "price": 50, "icon": "🍯", "desc": "", "stock": 0, "sold": 0}, {"id": "G5", "stall": 10, "name": "Bamboo shoot & fermented mustard chutney", "price": 10, "icon": "🫙", "desc": "", "stock": 0, "sold": 0}, {"id": "G6", "stall": 10, "name": "Seeds", "price": "10–30", "icon": "🌾", "desc": "₹10, ₹20 and ₹30 packets", "stock": 0, "sold": 0}, {"id": "G7", "stall": 10, "name": "Saag", "price": "10–50", "icon": "🥬", "desc": "₹10, ₹15, ₹25 and ₹50 bunches", "stock": 0, "sold": 0}, {"id": "K1", "stall": 12, "name": "Spinach", "price": 20, "icon": "🥬", "desc": "Fresh from the school kitchen garden", "stock": 0, "sold": 0}, {"id": "K2", "stall": 12, "name": "Green chillies", "price": 10, "icon": "🌶️", "desc": "", "stock": 0, "sold": 0}, {"id": "K3", "stall": 12, "name": "Red amaranth", "price": 20, "icon": "🥬", "desc": "", "stock": 0, "sold": 0}, {"id": "K4", "stall": 12, "name": "Mustard greens", "price": 20, "icon": "🥬", "desc": "", "stock": 0, "sold": 0}, {"id": "K5", "stall": 12, "name": "Coriander", "price": 10, "icon": "🌿", "desc": "", "stock": 0, "sold": 0}, {"id": "K6", "stall": 12, "name": "Cluster Melon", "price": 20, "icon": "🍈", "desc": "", "stock": 0, "sold": 0}, {"id": "K7", "stall": 12, "name": "Mushroom", "price": "50 per 200 g", "icon": "🍄", "desc": "", "stock": 0, "sold": 0}, {"id": "N1", "stall": 14, "name": "Saplings", "price": "10–40", "icon": "🌱", "desc": "", "stock": 0, "sold": 0}, {"id": "N2", "stall": 14, "name": "Seed balls", "price": 10, "icon": "🟤", "desc": "", "stock": 0, "sold": 0}, {"id": "N3", "stall": 14, "name": "Bird feeder", "price": "100–200", "icon": "🐦", "desc": "", "stock": 0, "sold": 0}, {"id": "N4", "stall": 14, "name": "Pickle", "price": "50–150", "icon": "🫙", "desc": "", "stock": 0, "sold": 0}, {"id": "N5", "stall": 14, "name": "Plant-based spray", "price": "10–20", "icon": "🧴", "desc": "", "stock": 0, "sold": 0}, {"id": "A1", "stall": 6, "name": "Watercolour painting", "price": 600, "icon": "🎨", "desc": "", "stock": 0, "sold": 0}, {"id": "A2", "stall": 6, "name": "Canvas painting (small)", "price": "300–500", "icon": "🖼️", "desc": "", "stock": 0, "sold": 0}, {"id": "A3", "stall": 6, "name": "Pencil shading painting", "price": "600–1000", "icon": "✏️", "desc": "", "stock": 0, "sold": 0}, {"id": "A4", "stall": 6, "name": "Flower bouquet", "price": 500, "icon": "💐", "desc": "", "stock": 0, "sold": 0}, {"id": "A5", "stall": 6, "name": "Flower stick", "price": 50, "icon": "🌷", "desc": "", "stock": 0, "sold": 0}, {"id": "A6", "stall": 6, "name": "Flower pot", "price": "200–500", "icon": "🏺", "desc": "", "stock": 0, "sold": 0}, {"id": "A7", "stall": 6, "name": "Bottle decoration show piece", "price": 200, "icon": "🍾", "desc": "", "stock": 0, "sold": 0}, {"id": "A8", "stall": 6, "name": "Key chain", "price": "50–100", "icon": "🔑", "desc": "", "stock": 0, "sold": 0}, {"id": "A9", "stall": 6, "name": "Tie & Dye", "price": "300–500", "icon": "👕", "desc": "", "stock": 0, "sold": 0}, {"id": "A10", "stall": 6, "name": "Clay modelling (Assamese Jolpan)", "price": "500–1000", "icon": "🍚", "desc": "", "stock": 0, "sold": 0}, {"id": "Z1", "stall": 16, "name": "Velocity Horizon (car racing game)", "price": 10, "icon": "🏎️", "desc": "Per game", "stock": 0, "sold": 0}, {"id": "Z2", "stall": 16, "name": "Brain Battle (quiz game)", "price": 10, "icon": "🧠", "desc": "Per game", "stock": 0, "sold": 0}, {"id": "F1", "stall": 2, "name": "Chowmein", "price": "At counter", "icon": "🍽️", "desc": "Counter: The Foodie Stop", "stock": 0, "sold": 0}, {"id": "F2", "stall": 2, "name": "Momo", "price": "At counter", "icon": "🍽️", "desc": "Counter: The Foodie Stop", "stock": 0, "sold": 0}, {"id": "F3", "stall": 2, "name": "Pani puri", "price": "At counter", "icon": "🍽️", "desc": "Counter: The Foodie Stop", "stock": 0, "sold": 0}, {"id": "F4", "stall": 2, "name": "Chips chaat", "price": "At counter", "icon": "🍽️", "desc": "Counter: Crunchy Craze", "stock": 0, "sold": 0}, {"id": "F5", "stall": 2, "name": "Pizza", "price": "At counter", "icon": "🍽️", "desc": "Counter: Crunchy Craze", "stock": 0, "sold": 0}, {"id": "F6", "stall": 2, "name": "Masala muri", "price": "At counter", "icon": "🍽️", "desc": "Counter: Crunchy Craze", "stock": 0, "sold": 0}, {"id": "F7", "stall": 2, "name": "Juices", "price": "At counter", "icon": "🍽️", "desc": "Counter: Sweet Sips", "stock": 0, "sold": 0}, {"id": "F8", "stall": 2, "name": "Water bottle", "price": "At counter", "icon": "🍽️", "desc": "Counter: Sweet Sips", "stock": 0, "sold": 0}, {"id": "F9", "stall": 2, "name": "Chaat", "price": "At counter", "icon": "🍽️", "desc": "Counter: Happy Cafe", "stock": 0, "sold": 0}, {"id": "F10", "stall": 2, "name": "Mojito", "price": "At counter", "icon": "🍽️", "desc": "Counter: Happy Cafe", "stock": 0, "sold": 0}, {"id": "F11", "stall": 2, "name": "Bada pav", "price": "At counter", "icon": "🍽️", "desc": "Counter: Happy Cafe", "stock": 0, "sold": 0}, {"id": "F12", "stall": 2, "name": "Cheesecake", "price": "At counter", "icon": "🍽️", "desc": "Counter: Savore", "stock": 0, "sold": 0}, {"id": "F13", "stall": 2, "name": "Pastry", "price": "At counter", "icon": "🍽️", "desc": "Counter: Savore", "stock": 0, "sold": 0}, {"id": "F14", "stall": 2, "name": "Puchka", "price": "At counter", "icon": "🍽️", "desc": "Counter: Munch Mania", "stock": 0, "sold": 0}, {"id": "F15", "stall": 2, "name": "Tea", "price": "At counter", "icon": "🍽️", "desc": "Counter: Munch Mania", "stock": 0, "sold": 0}, {"id": "F16", "stall": 2, "name": "Nachos", "price": "At counter", "icon": "🍽️", "desc": "Counter: Munch Mania", "stock": 0, "sold": 0}, {"id": "F17", "stall": 2, "name": "Tacos", "price": "At counter", "icon": "🍽️", "desc": "Counter: Munch Mania", "stock": 0, "sold": 0}, {"id": "F18", "stall": 2, "name": "Momo", "price": "At counter", "icon": "🍽️", "desc": "Counter: Delightful Bite", "stock": 0, "sold": 0}, {"id": "F19", "stall": 2, "name": "Tea", "price": "At counter", "icon": "🍽️", "desc": "Counter: Delightful Bite", "stock": 0, "sold": 0}, {"id": "F20", "stall": 2, "name": "Cake", "price": "At counter", "icon": "🍽️", "desc": "Counter: Delightful Bite", "stock": 0, "sold": 0}, {"id": "F21", "stall": 2, "name": "Whole cake", "price": "At counter", "icon": "🍽️", "desc": "Counter: Delightful Bite", "stock": 0, "sold": 0}, {"id": "F22", "stall": 2, "name": "Mojito", "price": "At counter", "icon": "🍽️", "desc": "Counter: The OG Mojito", "stock": 0, "sold": 0}, {"id": "F23", "stall": 2, "name": "Bread pizza", "price": "At counter", "icon": "🍽️", "desc": "At the Food Court", "stock": 0, "sold": 0}, {"id": "F24", "stall": 2, "name": "Boba tea", "price": "At counter", "icon": "🍽️", "desc": "At the Food Court", "stock": 0, "sold": 0}, {"id": "F25", "stall": 2, "name": "Corn chaat", "price": "At counter", "icon": "🍽️", "desc": "At the Food Court", "stock": 0, "sold": 0}, {"id": "F26", "stall": 2, "name": "Sandwich", "price": "At counter", "icon": "🍽️", "desc": "At the Food Court", "stock": 0, "sold": 0}];
+
+/* --- costumes: SVG layers drawn over KAVYA (viewBox 0 0 587 734) --- */
+const LOOKS = {
+  nurse:{ c:'#D6336C', t:'#FDE2EC', role:'Nurse KAVYA',
+    hat:`<path d="M150 190 Q160 95 293 88 Q426 95 436 190 Z" fill="#fff" stroke="#E9D3DC" stroke-width="6"/>
+         <rect x="263" y="112" width="60" height="18" rx="4" fill="#E0314B"/><rect x="284" y="91" width="18" height="60" rx="4" fill="#E0314B"/>`,
+    prop:`<path d="M120 560 Q130 640 230 650 Q330 655 360 600" fill="none" stroke="#4F5B6B" stroke-width="14" stroke-linecap="round"/>
+          <path d="M470 560 Q470 630 400 640" fill="none" stroke="#4F5B6B" stroke-width="14" stroke-linecap="round"/>
+          <circle cx="370" cy="612" r="30" fill="#C9D3DE" stroke="#4F5B6B" stroke-width="10"/>` },
+  farmer:{ c:'#3E8E3A', t:'#E1F3DA', role:'Farmer KAVYA',
+    hat:`<ellipse cx="293" cy="190" rx="300" ry="44" fill="#B8742A"/>
+         <path d="M8 190 Q293 -40 578 190 Z" fill="#D99A3A"/>
+         <path d="M70 165 Q293 10 516 165" fill="none" stroke="#B71C2B" stroke-width="14"/>
+         <path d="M120 140 Q293 30 466 140" fill="none" stroke="#2D6A2B" stroke-width="8"/>
+         <g fill="#B71C2B"><circle cx="293" cy="62" r="12"/><circle cx="200" cy="96" r="9"/><circle cx="386" cy="96" r="9"/></g>
+         <ellipse cx="293" cy="190" rx="300" ry="44" fill="none" stroke="#8A5418" stroke-width="8"/>`,
+    prop:`<path d="M90 560 Q293 640 500 560 L520 600 Q293 690 70 600 Z" fill="#fff" stroke="#E5DCCF" stroke-width="4"/>
+          <path d="M84 590 Q293 672 506 590" fill="none" stroke="#C8102E" stroke-width="12"/>
+          <path d="M380 610 L420 700 L460 610" fill="#fff" stroke="#E5DCCF" stroke-width="4"/><path d="M394 640 L446 640" stroke="#C8102E" stroke-width="8"/>` },
+  chef:{ c:'#E07A1F', t:'#FFEBD6', role:'Chef KAVYA',
+    hat:`<rect x="170" y="128" width="246" height="76" rx="10" fill="#fff" stroke="#E7E1D8" stroke-width="6"/>
+         <path d="M170 140 C110 120 115 30 200 40 C215 -20 300 -25 320 25 C370 -15 470 20 430 100 C470 120 440 150 416 140 Z" fill="#fff" stroke="#E7E1D8" stroke-width="6"/>
+         <path d="M220 130 L220 75 M293 130 L293 65 M366 130 L366 75" stroke="#EDE7DE" stroke-width="6"/>`,
+    prop:`<path d="M150 560 L436 560 L410 640 L293 700 L176 640 Z" fill="#E0314B"/><circle cx="293" cy="585" r="16" fill="#A31226"/>` },
+  artist:{ c:'#7B3FB8', t:'#EEE2FA', role:'Artist KAVYA',
+    hat:`<path d="M120 200 Q100 110 260 100 Q470 90 460 175 Q455 205 300 210 Q170 214 120 200 Z" fill="#C8102E"/>
+         <circle cx="300" cy="96" r="14" fill="#C8102E"/><path d="M300 84 L306 60" stroke="#C8102E" stroke-width="8" stroke-linecap="round"/>`,
+    prop:`<g transform="translate(440 560) rotate(-12)"><path d="M0 40 C0 -20 130 -30 140 30 C148 70 100 60 92 80 C84 110 0 110 0 40 Z" fill="#F3D9A4" stroke="#C9A060" stroke-width="5"/>
+          <circle cx="35" cy="30" r="12" fill="#E0314B"/><circle cx="70" cy="15" r="12" fill="#2F7DE1"/><circle cx="105" cy="28" r="12" fill="#2DB34A"/><circle cx="40" cy="70" r="12" fill="#FFC93C"/></g>
+          <path d="M70 690 L190 560" stroke="#8A5A2B" stroke-width="12" stroke-linecap="round"/><path d="M190 560 L206 540" stroke="#7B3FB8" stroke-width="16" stroke-linecap="round"/>` },
+  gamer:{ c:'#2F6FE0', t:'#DDE8FC', role:'Gamer KAVYA',
+    hat:`<path d="M40 330 Q40 70 293 70 Q546 70 546 330" fill="none" stroke="#1F2A44" stroke-width="30" stroke-linecap="round"/>
+         <rect x="0" y="290" width="70" height="120" rx="26" fill="#2F6FE0" stroke="#1F2A44" stroke-width="8"/>
+         <rect x="517" y="290" width="70" height="120" rx="26" fill="#2F6FE0" stroke="#1F2A44" stroke-width="8"/>
+         <path d="M40 400 Q60 520 170 500" fill="none" stroke="#1F2A44" stroke-width="10"/><circle cx="175" cy="500" r="14" fill="#1F2A44"/>`,
+    prop:`<g transform="translate(193 580)"><rect x="0" y="0" width="200" height="90" rx="45" fill="#1F2A44"/>
+          <rect x="38" y="38" width="44" height="14" rx="4" fill="#fff"/><rect x="53" y="23" width="14" height="44" rx="4" fill="#fff"/>
+          <circle cx="140" cy="32" r="10" fill="#FFC93C"/><circle cx="162" cy="54" r="10" fill="#E0314B"/></g>` },
+  engineer:{ c:'#D9A400', t:'#FFF4CC', role:'Engineer KAVYA',
+    hat:`<path d="M110 200 Q110 70 293 70 Q476 70 476 200 Z" fill="#FFC21A" stroke="#C98F00" stroke-width="6"/>
+         <rect x="80" y="186" width="426" height="30" rx="14" fill="#FFB000" stroke="#C98F00" stroke-width="6"/>
+         <rect x="278" y="66" width="30" height="130" rx="10" fill="#FFD95A"/>`,
+    prop:`<g transform="translate(420 560) rotate(30)"><rect x="0" y="0" width="26" height="140" rx="10" fill="#8C96A6"/>
+          <path d="M-22 -40 L48 -40 L48 -10 L30 0 L-4 0 L-22 -10 Z" fill="#8C96A6"/></g>
+          <g transform="translate(110 600)"><rect width="90" height="60" rx="10" fill="#2F6FE0"/><circle cx="45" cy="30" r="16" fill="#9FE7F0"/></g>` },
+  traveller:{ c:'#0E8C8C', t:'#D7F2F0', role:'Traveller KAVYA',
+    hat:`<ellipse cx="293" cy="196" rx="250" ry="34" fill="#C88A3A"/>
+         <path d="M60 196 Q293 0 526 196 Z" fill="#E1A64B"/>
+         <path d="M110 170 Q293 50 476 170" fill="none" stroke="#B71C2B" stroke-width="12"/>`,
+    prop:`<g transform="translate(400 560)"><rect width="130" height="120" rx="20" fill="#0E8C8C"/><rect x="18" y="20" width="94" height="34" rx="8" fill="#0A6B6B"/>
+          <path d="M30 0 Q65 -40 100 0" fill="none" stroke="#0A6B6B" stroke-width="10"/></g>
+          <g transform="translate(70 590)"><rect width="130" height="90" rx="10" fill="#F6EED9" stroke="#C9A060" stroke-width="5"/>
+          <path d="M44 0 L44 90 M88 0 L88 90" stroke="#C9A060" stroke-width="4"/><circle cx="66" cy="45" r="9" fill="#E0314B"/></g>` },
+  performer:{ c:'#C2185B', t:'#FCE0EC', role:'Host KAVYA',
+    hat:`<g fill="#C2185B"><path d="M90 120 l0 -70 l40 -10 l0 60" stroke="#C2185B" stroke-width="10" fill="none"/><circle cx="76" cy="122" r="18"/><circle cx="116" cy="112" r="18"/>
+         <path d="M480 100 l0 -60" stroke="#7B3FB8" stroke-width="10"/><circle cx="466" cy="102" r="18" fill="#7B3FB8"/></g>`,
+    prop:`<g transform="translate(420 540) rotate(20)"><rect x="-12" y="40" width="24" height="120" rx="10" fill="#333"/><circle cx="0" cy="30" r="38" fill="#9AA3AF"/>
+          <path d="M-30 20 L30 20 M-34 34 L34 34 M-30 48 L30 48" stroke="#6B7380" stroke-width="5"/></g>` },
+  cashier:{ c:'#2E7D32', t:'#DFF2E0', role:'Coupon KAVYA',
+    hat:`<path d="M120 200 Q293 120 466 200 L466 214 L120 214 Z" fill="#2E7D32"/><path d="M110 212 Q293 270 476 212" fill="#43A047" stroke="#2E7D32" stroke-width="6"/>`,
+    prop:`<g transform="translate(160 560)"><g transform="rotate(-20 130 120)"><rect x="40" y="20" width="160" height="80" rx="10" fill="#FFC93C" stroke="#C98F00" stroke-width="5"/><text x="120" y="72" text-anchor="middle" font-size="40" font-weight="800" fill="#7A5600" font-family="system-ui">₹10</text></g>
+          <g transform="rotate(0 130 120)"><rect x="50" y="34" width="160" height="80" rx="10" fill="#7FD3F7" stroke="#2F8FBF" stroke-width="5"/><text x="130" y="86" text-anchor="middle" font-size="40" font-weight="800" fill="#16577A" font-family="system-ui">₹50</text></g>
+          <g transform="rotate(20 130 120)"><rect x="60" y="48" width="160" height="80" rx="10" fill="#F7A6C2" stroke="#C2185B" stroke-width="5"/><text x="140" y="100" text-anchor="middle" font-size="40" font-weight="800" fill="#7A0F3A" font-family="system-ui">₹100</text></g></g>` },
+  guide:{ c:'#B71C2B', t:'#FBE3E3', role:'Guide KAVYA', hat:'', prop:'' }
+};
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const PR = p => /^\d/.test(String(p)) ? '₹' + p : String(p);
+const sid = (new URLSearchParams(location.search).get('s') || '').toLowerCase();
+const st = STALLS.find(x => x.id === sid) || STALLS.find(x => String(x.no) === sid);
+let sheetNo = st ? st.no : null;   // the sheet's number for this stall, matched by name
+
+function drawBot(look){
+  const L = LOOKS[look] || LOOKS.guide;
+  $('bot').innerHTML = `<svg viewBox="-20 -60 627 794" role="img">
+        <g class="bob">
+      <image href="kavya.png" x="0" y="0" width="587" height="734"/>
+      <rect class="lid" x="118" y="305" width="80" height="102" rx="10" fill="#02030F"/>
+      <rect class="lid" x="291" y="301" width="82" height="102" rx="10" fill="#02030F"/>
+      <rect class="mouth" id="mouth" x="194" y="447" width="113" height="26" rx="9" fill="#A9E6EE"/>
+      ${L.hat}${L.prop}
+    </g></svg>`;
+  document.documentElement.style.setProperty('--c', L.c);
+  document.documentElement.style.setProperty('--t', L.t);
+  $('role').textContent = L.role;
+}
+
+function render(items){
+  if (!st){
+    drawBot('guide');
+    $('name').textContent = 'Welcome to Kaushal Mela!';
+    $('say').textContent = 'Namaskar! I am KAVYA. Scan the QR at any stall and I will tell you all about it.';
+    $('itemsBox').hidden = true; $('mapBox').hidden = true; return;
+  }
+  drawBot(st.look);
+  document.title = `${st.name} · Meet KAVYA`;
+  $('name').textContent = st.name;
+  $('team').textContent = st.cls || '';
+  $('say').textContent = st.say;
+  $('sayAs').textContent = 'নমস্কাৰ! ' + st.name + 'লৈ আপোনাক স্বাগতম।';
+  const mine = items.filter(i => String(i.stall) === String(sheetNo));
+  if (st.display){ $('itemsH').textContent = 'Come and explore'; $('items').innerHTML = '<div class="note">This is a display stall: nothing for sale, everything to discover!</div>'; }
+  else if (!mine.length){ $('items').innerHTML = '<div class="note">Come and see what our students are making! Items and prices will be shown here soon.</div>'; }
+  else {
+    $('items').innerHTML = mine.map(i => {
+      const left = (Number(i.stock) || 0) - (Number(i.sold) || 0), out = Number(i.stock) > 0 && left <= 0;
+      const extra = out ? 'Sold out' : (Number(i.stock) > 0 && left <= 5 ? `Only ${left} left` : (i.desc || ''));
+      return `<div class="it${out ? ' out' : ''}"><span class="ic">${esc(i.icon || '🛍️')}</span><span><b>${esc(i.name)}${i.hot ? ' 🔥' : ''}</b>${extra ? `<small>${esc(extra.replace('Counter: ', 'at '))}</small>` : ''}</span><span class="pr">${esc(PR(i.price))}</span></div>`;
+    }).join('');
+  }
+  if (st.box){ const h = $('hl'); h.hidden = false; const [l, t, w, hh] = st.box; Object.assign(h.style, {left: l + '%', top: t + '%', width: w + '%', height: hh + '%'}); }
+  else $('mapBox').hidden = true;
+  if (st.ep != null){ const b = $('storyBtn'); b.hidden = false; b.onclick = e => { e.preventDefault(); stopTalk(); $('vdV').src = 'ep' + st.ep + '.mp4'; $('vd').showModal(); $('vdV').play().catch(() => {}); }; }
+}
+$('vdX').onclick = () => { $('vdV').pause(); $('vd').close(); };
+
+/* --- voice --- */
+function stopTalk(){ try { speechSynthesis.cancel(); } catch(e) {} const m = document.getElementById('mouth'); if (m) m.classList.remove('talk'); }
+$('hear').onclick = () => {
+  if (!('speechSynthesis' in window)) return;
+  stopTalk();
+  const u = new SpeechSynthesisUtterance($('say').textContent);
+  const v = speechSynthesis.getVoices().find(v => /en[-_]IN/i.test(v.lang)) || speechSynthesis.getVoices().find(v => /^en/i.test(v.lang));
+  if (v) u.voice = v; u.lang = v ? v.lang : 'en-IN'; u.rate = 1; u.pitch = 1.25;
+  const m = document.getElementById('mouth');
+  u.onstart = () => m && m.classList.add('talk'); u.onend = u.onerror = () => m && m.classList.remove('talk');
+  speechSynthesis.speak(u);
+};
+
+/* --- live items from the Google Sheet, with built-in fallback --- */
+render(ITEMS);
+(function live(){
+  if (!SCRIPT || !st) return;
+  const cb = 'kv' + Date.now(), sc = document.createElement('script');
+  window[cb] = d => { try { if (d && d.ok && d.items && d.items.length) { const m = (d.stalls || []).find(x => String(x.name).trim().toLowerCase() === st.name.toLowerCase()); if (m) sheetNo = m.no; } if (d && d.ok && d.items && d.items.length) render(d.items.map(i => Object.assign({ icon: (ITEMS.find(x => x.id === i.id) || {}).icon }, i))); } finally { delete window[cb]; sc.remove(); } };
+  sc.src = SCRIPT + '?action=catalogue&callback=' + cb; sc.onerror = () => sc.remove();
+  document.head.appendChild(sc);
+  try { const img = new Image(); img.src = SCRIPT + '?action=scan&s=' + encodeURIComponent(st.id) + '&t=' + Date.now(); } catch(e) {}
+})();
+</script>
+</body>
+</html>
