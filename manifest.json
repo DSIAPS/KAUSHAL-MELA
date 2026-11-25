@@ -1,0 +1,24 @@
+{
+  "name": "Kaushal Mela 2026 — APS Jorhat",
+  "short_name": "Kaushal Mela",
+  "description": "Kaushal Mela 2026 at Army Public School Jorhat: shop, stall map, programme, live offers and Ask Sahayak.",
+  "start_url": "./app.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FBF6EC",
+  "theme_color": "#B71C2B",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
