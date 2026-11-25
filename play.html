@@ -313,6 +313,8 @@ const EPS = [
    s:'Guitars, drums and keys meet tabla and strings: our young musicians rehearse live, from rock to raag. Hear them at the Mela.'},
   {n:17, t:'Farm to Future: Agricultural Practices', m:'Mentors: Ms Smriti & Ms Archita', g:'green', d:37, f:'ep17.mp4', i:'ep17.jpg', yt:'',
    s:'From banana-stem compost to soil testing in the lab: our young farmers learn how healthy soil grows healthy crops.'},
+  {n:18, t:'Northeast Calling: Tourism', m:'Mentor: Ms Sunita', g:'life', d:50, f:'ep18.mp4', i:'ep18.jpg', yt:'',
+   s:'Gateways to Northeast: our student guides speak in the languages of different tribes and show the places and culture of the Northeast.'},
 ];
 const ROWS = [
   ['r-new', 'New on Kaushal Play', '', e => true, 'new'],
@@ -396,7 +398,7 @@ function render(filter = ''){
     html = `<section class="row" style="padding-top:90px"><h2>Results for “${esc(filter)}”</h2><div class="track">${r.length ? r.map(e => card(e)).join('') : '<p style="color:var(--mute)">No stories match. Try a stall or mentor name.</p>'}</div></section>`;
   } else for (const [id, title, sub, fn, kind] of ROWS){
     let items = [], extra = '', cls = '';
-    if (kind === 'top'){ cls = 'top'; items = [17, 16, 15, 14, 13].map(n => EPS.find(e => e.n === n)).filter(Boolean); extra = items.map((e, i) => card(e, {num: i + 1})).join(''); }
+    if (kind === 'top'){ cls = 'top'; items = [18, 17, 16, 15, 14].map(n => EPS.find(e => e.n === n)).filter(Boolean); extra = items.map((e, i) => card(e, {num: i + 1})).join(''); }
     else if (kind === 'cont'){ items = EPS.filter((e, k) => prog[k] > .02 && prog[k] < .97); if (!items.length) continue; }
     else if (kind === 'list'){ items = list.map(k => EPS[k]).filter(Boolean); if (!items.length) continue; }
     else items = EPS.filter(fn);

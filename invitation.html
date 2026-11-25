@@ -584,7 +584,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 </div>
 <div id="ksModal" role="dialog" aria-modal="true" aria-label="Kaushal Stories player"><video id="ksVid" controls playsinline></video><div class="tt" id="ksTt"></div><div class="bar"><button id="ksPrev">◀ Previous</button><button id="ksNext">Next ▶</button><button id="ksClose">Close ✕</button></div></div>
 <script>(function(){
-var B='', E=[{"n": 0, "t": "Meet KAVYA", "m": "Our robot host, created by the DSI student team"}, {"n": 1, "t": "Plant Nursery & Habitat Garden", "m": "Mentor: Mr Juel Sheikh"}, {"n": 2, "t": "Family Health Handbook", "m": "Mentors: Ms Pranakshi Hazarika & Mr Ayushman Hazarika"}, {"n": 3, "t": "Art Gallery", "m": "Mentor: Mr Rajen Borah"}, {"n": 4, "t": "Colours on Our Walls", "m": "Mentor: Mr Rajen Borah"}, {"n": 5, "t": "Hydroponics & Animal Care", "m": "Mentor: Punam Lingwal"}, {"n": 6, "t": "Shaping Material & Apparel", "m": "Mentor: Purnima Mishra"}, {"n": 7, "t": "Cooking Without Fire", "m": "Mentor: Masum Bharadwaj"}, {"n": 8, "t": "APS Jorhat Gearing Up", "m": "A campus tour with KAVYA"}, {"n": 9, "t": "Young Tech Minds \u00b7 The Journey", "m": "Dept. of Information Technology"}, {"n": 10, "t": "Game Zone \u00b7 Throw, Aim, Win", "m": "Department of Sports \u00b7 Mentor: Leonerd Deuri"}, {"n": 11, "t": "Hydroponics \u00b7 Growing Without Soil", "m": "Mentor: Punam Lingwal"}, {"n": 12, "t": "Kitchen Garden \u00b7 Fresh From Our Campus", "m": "Mentor: Ms Shenaj Ahmed"}, {"n": 13, "t": "Food Court \u00b7 Come Hungry!", "m": "Mentors: Ms Nisha & Ms Manorama"}, {"n": 14, "t": "The Ad Makers \u00b7 Stall Advertisement", "m": "Mentor: Ms Sheetal Singh"}, {"n": 15, "t": "Dance & Drama \u00b7 Live Performances", "m": "Mentors: Ms Hema, Ms Rashmi, Ms Monsoon, Ms Prerona & Ms Geetarthi"}, {"n": 16, "t": "Live Music \u00b7 From Rock to Raag", "m": "Mentor: Ms Parishmita"}, {"n": 17, "t": "Farm to Future \u00b7 Agricultural Practices", "m": "Mentors: Ms Smriti & Ms Archita"}], cur=0, el=function(i){return document.getElementById(i)};
+var B='', E=[{"n": 0, "t": "Meet KAVYA", "m": "Our robot host, created by the DSI student team"}, {"n": 1, "t": "Plant Nursery & Habitat Garden", "m": "Mentor: Mr Juel Sheikh"}, {"n": 2, "t": "Family Health Handbook", "m": "Mentors: Ms Pranakshi Hazarika & Mr Ayushman Hazarika"}, {"n": 3, "t": "Art Gallery", "m": "Mentor: Mr Rajen Borah"}, {"n": 4, "t": "Colours on Our Walls", "m": "Mentor: Mr Rajen Borah"}, {"n": 5, "t": "Hydroponics & Animal Care", "m": "Mentor: Punam Lingwal"}, {"n": 6, "t": "Shaping Material & Apparel", "m": "Mentor: Purnima Mishra"}, {"n": 7, "t": "Cooking Without Fire", "m": "Mentor: Masum Bharadwaj"}, {"n": 8, "t": "APS Jorhat Gearing Up", "m": "A campus tour with KAVYA"}, {"n": 9, "t": "Young Tech Minds \u00b7 The Journey", "m": "Dept. of Information Technology"}, {"n": 10, "t": "Game Zone \u00b7 Throw, Aim, Win", "m": "Department of Sports \u00b7 Mentor: Leonerd Deuri"}, {"n": 11, "t": "Hydroponics \u00b7 Growing Without Soil", "m": "Mentor: Punam Lingwal"}, {"n": 12, "t": "Kitchen Garden \u00b7 Fresh From Our Campus", "m": "Mentor: Ms Shenaj Ahmed"}, {"n": 13, "t": "Food Court \u00b7 Come Hungry!", "m": "Mentors: Ms Nisha & Ms Manorama"}, {"n": 14, "t": "The Ad Makers \u00b7 Stall Advertisement", "m": "Mentor: Ms Sheetal Singh"}, {"n": 15, "t": "Dance & Drama \u00b7 Live Performances", "m": "Mentors: Ms Hema, Ms Rashmi, Ms Monsoon, Ms Prerona & Ms Geetarthi"}, {"n": 16, "t": "Live Music \u00b7 From Rock to Raag", "m": "Mentor: Ms Parishmita"}, {"n": 17, "t": "Farm to Future \u00b7 Agricultural Practices", "m": "Mentors: Ms Smriti & Ms Archita"}, {"n": 18, "t": "Northeast Calling \u00b7 Tourism", "m": "Mentor: Ms Sunita"}], cur=0, el=function(i){return document.getElementById(i)};
 var lab=function(e){return e.n===0?'Trailer':'Episode '+e.n};
 el('ksTrack').innerHTML=E.slice().reverse().map(function(e){return '<button class="kscard" data-ks="'+e.n+'"><span class="po"><img loading="lazy" src="'+B+'ep'+e.n+'.jpg" alt=""><span class="ep">'+lab(e)+'</span><span class="pl"></span></span><b>'+e.t+'</b><i>'+e.m+'</i></button>'}).join('');
 function open(n){cur=n;var e=E[n],v=el('ksVid');v.src=B+'ep'+e.n+'.mp4';v.poster=B+'ep'+e.n+'.jpg';el('ksTt').textContent=lab(e)+' · '+e.t;el('ksModal').classList.add('on');try{if(window.__pauseMusic)window.__pauseMusic()}catch(x){};v.play().catch(function(){})}
@@ -907,7 +907,7 @@ const INVITE = {
   music:     'theme.mp3',                // optional: 'music.mp3' uploaded next to this file. Leave empty to use the built-in instrumental
   builtInMusic: true,           // original flute + tanpura + dhol instrumental, made in the browser (set false for silence)
   showCover: 'always',          // 'always' = envelope every time (recommended); 'first' = only on first visit; 'never'
-  timingsTentative: true,
+  timingsTentative: false,
   counterMin: 5,                // show "N families have confirmed" only once at least this many have replied
 
   rsvpScript:'https://script.google.com/macros/s/AKfycbwU9G8D8idXBm9SCi_snA7oCHVwd02Duy_l1FnUz2OTycXfyhLObraZrDr-ZHINJUDemQ/exec',                // Web app URL from rsvp-sheet.gs (saves replies + gives confirmation no.)
@@ -948,7 +948,7 @@ const INVITE = {
 
   awaits: [
     { ic:'robot',  t:'Meet KAVYA',             d:'Our robot host, built in-house, greets every guest in English and Hindi.' },
-    { ic:'stall',  t:'Stalls run by students', d:'Healthcare Hub, Tie & Dye, Art & Craft, Hydroponics, Kitchen Garden, Cooking Without Fire, Game Stall, Food Court and more.' },
+    { ic:'stall',  t:'Stalls run by students', d:'Healthcare Hub, Tie & Dye and Art & Craft, Hydroponics, Kitchen Garden, Zero Heat Cafe, Game Zone, Food Court, Tourism and more.' },
     { ic:'leaf',   t:'Herbal garden & nursery', d:'Our Herbal Garden of 19 medicinal plants, plus the Plant Nursery and Habitat Garden.' },
     { ic:'shield', t:'Digital Garrison',       d:'A cyber safety game for players of every age.' },
     { ic:'stall',  t:'Pay with Mela coupons',  d:'Stalls accept coupons only (₹10, ₹20, ₹50, ₹100). Buy them with cash at the Coupon Counter near the entry gate.' },
@@ -956,20 +956,20 @@ const INVITE = {
   ],
   schedule: [
     { time:'10:00 AM', what:'Arrival and welcome',              note:'KAVYA, our robot host, greets you' },
-    { time:'10:05 AM', what:'Ribbon cutting and inauguration',  note:'Opening of Kaushal Mela 2026' },
-    { time:'10:10 AM', what:'Stalls open',                      note:'Healthcare Hub, Tie & Dye, Art & Craft, Herbal Garden, Hydroponics and more' },
-    { time:'10:34 AM', what:'Cultural programme',               note:'Music concert and dance drama' },
-    { time:'10:50 AM', what:'Stalls and food court',            note:'Cooking Without Fire, Game Stall, Food Court, Shaping Materials and more' },
-    { time:'11:11 AM', what:'Podcast',                          note:'A special conversation on skills' }
+    { time:'10:05 AM', what:'Inauguration of Kaushal Mela',     note:'Ribbon cutting ceremony' },
+    { time:'10:10 AM', what:'Stalls open',                      note:'Healthcare Hub, Tie & Dye and Art & Craft, Herbal Garden, Hydroponics, Farm to Future Hub, Kitchen Garden and more' },
+    { time:'10:31 AM', what:'Cultural programme',               note:'Music concert and dance drama' },
+    { time:'10:50 AM', what:'Stalls and food court',            note:'Plant Nursery & Habitat Garden, Vocational Hub, Zero Heat Cafe, Game Zone, Food Court, Tourism, Handmade Wonders and the Maker Skills & Digital Animation Hub' },
+    { time:'11:14 AM', what:'Podcast',                          note:'In the Podcast Room' }
   ],
   vipSchedule: [
     { time:'10:00 AM', what:'Arrival and welcome of esteemed guests', note:'' },
-    { time:'10:05 AM', what:'Ribbon cutting ceremony',          note:'Inauguration of Kaushal Mela 2026' },
-    { time:'10:10 AM', what:'Guided visit to the stalls',       note:'Entry Detail Booth, Healthcare Hub, Tie & Dye, Art & Craft, Herbal Garden, Hydroponics, Agricultural Practices, Kitchen Garden and Vegetable stalls' },
-    { time:'10:34 AM', what:'Cultural programme',               note:'Music concert and dance drama' },
-    { time:'10:50 AM', what:'Guided visit continues',           note:'Plant Nursery & Habitat Garden, Vocational Hub, Cooking Without Fire, Game Stall, Food Court and Shaping Materials' },
-    { time:'11:11 AM', what:'Podcast',                          note:'' },
-    { time:'11:22 AM', what:'Skill and innovation showcase',    note:'Student technology projects' }
+    { time:'10:05 AM', what:'Inauguration of Kaushal Mela',     note:'Ribbon cutting ceremony' },
+    { time:'10:10 AM', what:'Guided visit to the stalls',       note:'Entry Detail Booth, Healthcare Hub, Tie & Dye and Art & Craft, Herbal Garden, Hydroponics, Farm to Future Hub and Kitchen Garden' },
+    { time:'10:31 AM', what:'Cultural programme',               note:'Music concert and dance drama' },
+    { time:'10:50 AM', what:'Guided visit continues',           note:'Plant Nursery & Habitat Garden, Vocational Hub, Zero Heat Cafe, Game Zone, Food Court, Tourism Stall, Handmade Wonders and the Maker Skills & Digital Animation Hub' },
+    { time:'11:14 AM', what:'Podcast',                          note:'' },
+    { time:'11:25 AM', what:'Departure',                        note:'' }
   ]
 };
 /* ======================================================================== */
