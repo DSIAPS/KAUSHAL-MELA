@@ -60,10 +60,12 @@
   @keyframes pulse{50%{border-color:#FFC93C}}
   .foot{text-align:center;color:var(--muted);font-size:13px;margin-top:22px}
   .foot a{color:var(--ink)}
-  dialog{border:0;border-radius:18px;padding:0;width:min(94vw,440px);background:#000}
-  dialog::backdrop{background:rgba(0,0,0,.75)}
-  dialog video{display:block;width:100%;max-height:80vh}
-  dialog button{position:absolute;top:8px;right:8px;background:#fff;color:#000;padding:6px 12px;border-radius:99px;z-index:2}
+  #vd{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px}
+  #vd[hidden]{display:none}
+  .vbox{position:relative;width:min(94vw,440px)}
+  .vbox video{display:block;width:100%;max-height:78vh;border-radius:14px;background:#000}
+  .vbox button{display:block;margin:0 0 10px auto;background:#fff;color:#000;padding:8px 14px;border-radius:99px}
+  .vbox a{display:block;text-align:center;color:#fff;margin-top:10px;font-size:14px}
   :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){.bob,.lid,.halo,.mouth.talk,.map i{animation:none}}
 </style>
@@ -107,7 +109,7 @@
 
 <p class="foot"><a href="app.html">Open the Mela App</a> · <a href="play.html">Kaushal Play</a><br>Hosted by KAVYA · A Department of Skill and Innovation Initiative</p>
 
-<dialog id="vd"><button type="button" id="vdX">Close ✕</button><video id="vdV" controls playsinline></video></dialog>
+<div id="vd" role="dialog" aria-modal="true" aria-label="Kaushal Story" hidden><div class="vbox"><button type="button" id="vdX">Close ✕</button><video id="vdV" controls playsinline preload="metadata"></video><a id="vdA" href="#" target="_blank" rel="noopener">Video not playing? Open it directly</a></div></div>
 
 <script>
 const SCRIPT = 'https://script.google.com/macros/s/AKfycbwU9G8D8idXBm9SCi_snA7oCHVwd02Duy_l1FnUz2OTycXfyhLObraZrDr-ZHINJUDemQ/exec';
@@ -226,9 +228,9 @@ function render(items){
   }
   if (st.box){ const h = $('hl'); h.hidden = false; const [l, t, w, hh] = st.box; Object.assign(h.style, {left: l + '%', top: t + '%', width: w + '%', height: hh + '%'}); }
   else $('mapBox').hidden = true;
-  if (st.ep != null){ const b = $('storyBtn'); b.hidden = false; b.onclick = e => { e.preventDefault(); stopTalk(); $('vdV').src = 'ep' + st.ep + '.mp4'; $('vd').showModal(); $('vdV').play().catch(() => {}); }; }
+  if (st.ep != null){ const b = $('storyBtn'); b.hidden = false; b.href = 'ep' + st.ep + '.mp4'; b.onclick = e => { e.preventDefault(); stopTalk(); const v = $('vdV'); if (!v.getAttribute('src')) v.src = 'ep' + st.ep + '.mp4'; $('vdA').href = v.src; $('vd').hidden = false; document.body.style.overflow = 'hidden'; const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); }; }
 }
-$('vdX').onclick = () => { $('vdV').pause(); $('vd').close(); };
+$('vdX').onclick = () => { $('vdV').pause(); $('vd').hidden = true; document.body.style.overflow = ''; };
 
 /* --- voice --- */
 function stopTalk(){ try { speechSynthesis.cancel(); } catch(e) {} const m = document.getElementById('mouth'); if (m) m.classList.remove('talk'); }
