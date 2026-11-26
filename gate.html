@@ -200,7 +200,7 @@
   let voices = [];
   function loadVoices(){ try { voices = speechSynthesis.getVoices().filter(v => /^en|^hi/i.test(v.lang)); } catch(e) { voices = []; } fillVoices(); }
   function rank(v){ let s = 0; if (/en[-_]IN/i.test(v.lang)) s += 4; if (FEMALE.test(v.name)) s += 6; if (MALE.test(v.name) && !/female/i.test(v.name)) s -= 8; if (/natural|online|google/i.test(v.name)) s += 1; if (/^hi/i.test(v.lang)) s -= 3; return s; }
-  function bestVoice(){ const saved = store.get('kmGateVoice', ''); const sv = voices.find(v => v.name === saved); if (sv) return sv; return voices.slice().sort((a, b) => rank(b) - rank(a))[0] || null; }
+  function bestVoice(){ const saved = store.get('kmGateVoice', ''); const sv = voices.find(v => v.name === saved); if (sv && !(MALE.test(sv.name) && !/female/i.test(sv.name))) return sv; return voices.slice().sort((a, b) => rank(b) - rank(a))[0] || null; }
   function fillVoices(){ const sel = $('voiceSel'); if (!sel) return; const b = bestVoice();
     sel.innerHTML = voices.slice().sort((a, b) => rank(b) - rank(a)).map(v => `<option value="${esc(v.name)}" ${b && v.name === b.name ? 'selected' : ''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('') || '<option value="">Automatic (laptop voice)</option>'; }
   if ('speechSynthesis' in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
