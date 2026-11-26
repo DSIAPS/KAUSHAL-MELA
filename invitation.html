@@ -791,6 +791,8 @@ el('ksModal').addEventListener('click',function(ev){if(ev.target===el('ksModal')
         <label><input type="radio" name="att" value="yes" checked>Joyfully accept</label>
         <label><input type="radio" name="att" value="no">Regretfully decline</label>
       </div>
+      <label for="rCat">Attending as</label>
+      <select id="rCat"><option value="guest">Parent / family (11:15 AM)</option><option value="vip">Chief Guest / invited guest (10:00 AM)</option><option value="judge">Judge (12:00 noon)</option></select>
       <div id="countRow">
         <label for="rCount">Number of guests</label>
         <select id="rCount"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
@@ -895,12 +897,17 @@ window.MelaMusic = function(){
 <script>
 /* ===================== EDIT INVITATION DETAILS HERE ===================== */
 const INVITE = {
-  start: '2026-11-28T11:15:00+05:30',   // parents (default link)
+  start: '2026-11-28T10:00:00+05:30',   // Mela opens (countdown)
+  calStart: '2026-11-28T11:15:00+05:30', // 'Add to calendar' time (parents)
   end:   '2026-11-28T14:00:00+05:30',
   dateText:  'Saturday, 28 November 2026',
-  timeText:  '11:15 AM onwards',
+  timeText:  'Parents from 11:15 AM',
+  categories: [   // one link for all: arrival time by category (also chosen in the RSVP form)
+    { k:'vip',   label:'Chief Guest and invited guests', time:'10:00 AM' },
+    { k:'guest', label:'Parents and families',           time:'11:15 AM' },
+    { k:'judge', label:'Judges',                         time:'12:00 noon' }
+  ],
   times: {   // different arrival times: parents = normal link, Chief Guest = #vip, judges = #judge
-    guest: { start:'2026-11-28T11:15:00+05:30', timeText:'11:15 AM onwards' },
     vip:   { start:'2026-11-28T10:00:00+05:30', timeText:'10:00 AM' },
     judge: { start:'2026-11-28T12:00:00+05:30', timeText:'12:00 noon' }
   },
@@ -1134,10 +1141,9 @@ const INVITE = {
     $('rsvpTitle').textContent = M.rsvpTitle;
     $('rsvpSub').textContent = M.rsvpSub;
     $('bye').textContent = M.bye;
-    $('countRow').style.display = mode !== 'guest' ? 'none' : '';
     $('shareBtn').style.display = mode !== 'guest' ? 'none' : '';
-    const sched = mode === 'vip' ? INVITE.vipSchedule : mode === 'judge' ? INVITE.judgeSchedule : INVITE.schedule;
-    $('slots').innerHTML = sched.map(s => `<div class="slot"><b>${esc(s.time)}</b> · ${esc(s.what)}${s.note ? `<small>${esc(s.note)}</small>` : ''}</div>`).join('');
+    $('slots').innerHTML = '';   // planner not shown in the invitation; arrival times are shown above
+    if ($('rCat')) { $('rCat').value = mode; catChange(); }
     const here = location.href.split('#')[0].split('?')[0];
     const base = /^https?:/.test(location.protocol) && !/claude|usercontent/.test(location.hostname) ? here : INVITE.shareUrl;
     $('shareBtn').href = 'https://wa.me/?text=' + encodeURIComponent('You are invited to Kaushal Mela 2026 at Army Public School Jorhat on ' + INVITE.dateText + '. Open your invitation: ' + base);
@@ -1146,7 +1152,7 @@ const INVITE = {
   window.addEventListener('hashchange', render);
 
   $('eDate').textContent = INVITE.dateText;
-  $('eTime').textContent = INVITE.timeText;
+  $('eTime').innerHTML = INVITE.categories.map(c => `<b>${esc(c.time)}</b> ${esc(c.label)}`).join('<br>');
   $('eVenue').textContent = INVITE.venueName + ', ' + INVITE.venueAddr;
   $('tentative').hidden = !INVITE.timingsTentative;
   $('vName').textContent = INVITE.venueName;
@@ -1174,7 +1180,7 @@ const INVITE = {
 
   const gcal = d => new Date(d).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
   $('calBtn').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent('Kaushal Mela 2026, APS Jorhat') +
-    '&dates=' + gcal(INVITE.start) + '/' + gcal(INVITE.end) + '&location=' + encodeURIComponent(INVITE.venueName + ', ' + INVITE.venueAddr);
+    '&dates=' + gcal(INVITE.calStart || INVITE.start) + '/' + gcal(INVITE.end) + '&location=' + encodeURIComponent(INVITE.venueName + ', ' + INVITE.venueAddr);
 
   /* ---------- details expander ---------- */
   $('detailsBtn').onclick = () => {
@@ -1264,13 +1270,16 @@ const INVITE = {
   const qrSvg = t => { try { const q = qrcode(0,'M'); q.addData(t); q.make(); return q.createSvgTag(4,0); } catch(e) { return ''; } };
   const chip = st => { const ok = /confirm/i.test(st||''); return `<span class="status${ok?' ok':''}">${ok?'✓ ':''}${esc(st||'Received')}</span>`; };
   const gband = '<svg class="gband" viewBox="0 0 400 22" preserveAspectRatio="none" width="100%" height="22"><rect width="400" height="22" fill="url(#gamosaBand)"/><rect width="400" height="2" fill="#B71C2B"/><rect y="20" width="400" height="2" fill="#B71C2B"/></svg>';
+  function passTime(r){ const k = r.vip ? 'vip' : r.judge ? 'judge' : 'guest'; const c = INVITE.categories.find(x => x.k === k); return c ? 'arrive ' + c.time : INVITE.timeText; }
+  function catChange(){ const c = $('rCat'); if ($('countRow')) $('countRow').style.display = c && c.value !== 'guest' ? 'none' : ''; }
+  if ($('rCat')) $('rCat').addEventListener('change', catChange);
   function passHtml(r){
     const guests = r.count + ' guest' + (String(r.count) === '1' ? '' : 's');
     return `<div class="pass">${gband}<div class="pass-body">
       <div class="pass-ev">Kaushal Mela 2026</div>
       <div class="pass-no"><small>Confirmation no.</small><strong>${esc(r.id)}</strong></div>
       <div class="pass-name">${esc(r.name)}</div>
-      <div class="pass-meta">${r.vip ? 'Chief Guest' : r.judge ? 'Judge' : guests}<br>${esc(INVITE.dateText)}, ${esc(INVITE.timeText)}<br>${esc(INVITE.venueName)}</div>
+      <div class="pass-meta">${r.vip ? 'Chief Guest / invited guest' : r.judge ? 'Judge' : guests}<br>${esc(INVITE.dateText)}, ${esc(passTime(r))}<br>${esc(INVITE.venueName)}</div>
       <div class="qr" aria-label="QR code of your e-pass">${qrSvg(new URL('pass.html?id=' + encodeURIComponent(r.id), location.href).href)}</div>
       ${chip(r.status)}<div class="pass-kv"><img src="kavya.png" alt="">Show me this at the entry gate. KAVYA will scan you in! 📷</div></div>${gband}</div>`;
   }
@@ -1306,14 +1315,15 @@ const INVITE = {
     if (!name){ $('rErr').textContent = 'Please enter your name.'; return; }
     if (name.length > 60){ $('rErr').textContent = 'Please keep the name under 60 characters.'; return; }
     const yes = document.querySelector('input[name=att]:checked').value === 'yes';
-    const count = mode !== 'guest' ? '1' : $('rCount').value;
+    const cat = $('rCat') ? $('rCat').value : mode;
+    const count = cat !== 'guest' ? '1' : $('rCount').value;
     $('rErr').textContent = '';
     if (INVITE.rsvpScript){
       const b = $('rConfirm'); b.disabled = true; b.textContent = 'Saving your reply…';
       try {
-        const d = await jsonp(INVITE.rsvpScript + (INVITE.rsvpScript.includes('?') ? '&' : '?') + qs({action:'rsvp', name, att: yes?'yes':'no', count, mode}));
+        const d = await jsonp(INVITE.rsvpScript + (INVITE.rsvpScript.includes('?') ? '&' : '?') + qs({action:'rsvp', name, att: yes?'yes':'no', count, mode: cat}));
         if (!d || !d.ok) throw new Error('failed');
-        const r = { id:d.id, name, attending:yes, count, vip: mode === 'vip', judge: mode === 'judge', status:'Received' };
+        const r = { id:d.id, name, attending:yes, count, vip: cat === 'vip', judge: cat === 'judge', cat, status:'Received' };
         remember(r); showDone(r);
       } catch(e){ $('rErr').textContent = 'Your reply could not be saved. Check your internet connection and tap Confirm again.'; }
       finally { b.disabled = false; b.textContent = 'Confirm'; }
@@ -1322,11 +1332,11 @@ const INVITE = {
     // no Google Sheet connected yet: confirm on this phone, so guests always get their e-pass
     if (!INVITE.whatsapp && !INVITE.rsvpForm){
       const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; let tag = ''; for (let i = 0; i < 5; i++) tag += chars[Math.floor(Math.random()*chars.length)];
-      const r = { id:'KM26-' + tag, name, attending:yes, count, vip: mode === 'vip', judge: mode === 'judge', status:'Confirmed' };
+      const r = { id:'KM26-' + tag, name, attending:yes, count, vip: cat === 'vip', judge: cat === 'judge', cat, status:'Confirmed' };
       remember(r); showDone(r); return;
     }
-    const who = mode === 'vip' ? ' (Chief Guest invitation)' : mode === 'judge' ? ' (Judge invitation)' : '';
-    const msg = yes ? `Kaushal Mela 2026${who}: ${name} will attend` + (mode !== 'guest' ? '.' : `, with ${count} guest${count==='1'?'':'s'} in total.`)
+    const who = cat === 'vip' ? ' (Chief Guest invitation)' : cat === 'judge' ? ' (Judge invitation)' : '';
+    const msg = yes ? `Kaushal Mela 2026${who}: ${name} will attend` + (cat !== 'guest' ? '.' : `, with ${count} guest${count==='1'?'':'s'} in total.`)
                     : `Kaushal Mela 2026${who}: ${name} regrets being unable to attend.`;
     const link = $('sendLink');
     $('passBox').innerHTML = ''; $('doneTitle').textContent = 'Thank you!';
@@ -1581,19 +1591,19 @@ body.locked #kvHost,#appLayer.open~#kvHost{display:none}
     hideT = setTimeout(() => { host.classList.remove('say'); busy = false; }, ms || 6000); }
   $('kvSay').onclick = () => speak($('kvTxt').textContent);
   $('kvX').onclick = () => { host.classList.remove('say'); busy = false; clearTimeout(hideT); try { speechSynthesis.cancel(); } catch(e) {} };
-  const TAPS = [() => 'Namaskar! I\'m KAVYA, your Mela host. Tap Confirm your presence and I\'ll make your e-pass! 🎫', daysLine,
+  const TAPS = [() => 'Namaskar! I\'m KAVYA, your Mela host. Tap Confirm your presence and I\'ll make your e-pass! 🎫', () => 'Parents and families, please arrive at 11:15 AM. I\'ll be waiting at the gate! 🤖',
     () => 'At the Mela, stalls take coupons only. Buy them with cash at the Coupon Counter near the gate 🎟️', () => 'Everything at the Mela is made by our students. Come and cheer them on! 👏'];
   let tap = 0; $('kvBot').onclick = () => say(TAPS[tap++ % TAPS.length](), 7000);
   function hello(){ say('Namaskar! I\'m KAVYA, your Mela host. You\'re invited to Kaushal Mela 2026! 🎉', 7500); watch(); }
   const ob = $('openBtn'); if (ob) ob.addEventListener('click', () => setTimeout(hello, 5000));
   setTimeout(() => { if (!document.body.classList.contains('locked') && !host.classList.contains('in')) hello(); }, 1800);
   const LINES = { event:'Here\'s the plan for the day! 📅', awaits:'All of this is made by our students! 🛠️', appSec:'Peek inside the Mela App: stalls and prices are here! 📱',
-    venue:'Remember: coupons first! Cash only at the Coupon Counter 🎟️', count:daysLine, rsvp:'Tap Confirm and I\'ll make your e-pass for the gate! 🎫' };
+    venue:'Remember: coupons first! Cash only at the Coupon Counter 🎟️', rsvp:'Tap Confirm and I\'ll make your e-pass for the gate! 🎫' };
   function watch(){ if (!('IntersectionObserver' in window)) return;
     const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; const k = e.target.id || 'count'; if (said.has(k) || busy) return;
       said.add(k); const l = LINES[k]; say(typeof l === 'function' ? l() : l, 4500); }), { threshold: .45 });
     ['event','awaits','appSec','venue','rsvp'].forEach(id => { const el = $(id); if (el) io.observe(el); });
-    const c = document.querySelector('section.count'); if (c) io.observe(c); }
+    }
   const pb = $('passBox'); if (pb) new MutationObserver(() => { if (pb.querySelector('.pass')) setTimeout(() => say('Yay! Your e-pass is ready. See you on Saturday! 🎉', 6000), 400); }).observe(pb, { childList: true });
 })();
 </script>
