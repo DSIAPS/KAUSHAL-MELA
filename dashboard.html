@@ -157,7 +157,7 @@
     setNum('kPlay', d.views.plays); $('kPlaySub').textContent = `${d.views.opens} opens of Kaushal TV`;
     let rn = 0, rs = 0; Object.values(d.ratings).forEach(r => { rn += r.n; rs += r.sum; });
     setNum('kRate', rn ? (rs / rn).toFixed(1) + '★' : '–'); $('kRateSub').textContent = `${rn} rating${rn === 1 ? '' : 's'} from visitors`;
-    const hot = Object.entries(d.scans).sort((a, b) => b[1] - a[1]).slice(0, 6), mx = hot.length ? hot[0][1] : 1;
+    const hot = Object.entries(d.scans).filter(([id]) => !/^road-/.test(id)).sort((a, b) => b[1] - a[1]).slice(0, 6), mx = hot.length ? hot[0][1] : 1;
     $('hot').innerHTML = hot.length ? hot.map(([id, n], i) => `<div class="bar${i < 3 ? ' top' : ''}"><span class="e">${BADGE[id] || '🛍️'}</span><div class="t"><i style="width:${Math.max(6, n / mx * 100)}%"></i><span>${esc(nm(id))}</span></div><b>${n}</b></div>`).join('')
       : '<div class="empty">Waiting for the first KAVYA stall scan… 🤖</div>';
     const tl = Object.entries(d.timeline).sort(), tmx = Math.max(1, ...tl.map(x => x[1]));
@@ -210,7 +210,7 @@ function kavyaVoice(lang){
     if (big){ confetti(/chief|vip/i.test(t)); $('kav').classList.remove('cheer'); void $('kav').offsetWidth; $('kav').classList.add('cheer'); }
     busyUntil = Date.now() + Math.max(9000, t.length * 85);
   }, 1000);
-  const topOf = o => { const e = Object.entries(o).sort((a, b) => b[1] - a[1])[0]; return e ? e[0] : null; };
+  const topOf = o => { const e = Object.entries(o).filter(([id]) => !/^road-/.test(id)).sort((a, b) => b[1] - a[1])[0]; return e ? e[0] : null; };
   function idleLine(d){
     const lines = [];
     if (d.inn.guests) lines.push(`Right now ${d.inn.guests} guests are enjoying Kaushal Mela 2026! 🎉`);

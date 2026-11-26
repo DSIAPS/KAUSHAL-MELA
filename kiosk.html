@@ -154,7 +154,7 @@ function kavyaVoice(lang){
     const d = await jsonp({ action: 'kiosk' });
     if (d && d.ok){
       $('nIn').textContent = d.guestsIn || 0; $('nScan').textContent = d.scans || 0;
-      $('hot').innerHTML = (d.top && d.top.length ? d.top : []).map((id, i) => `<div><i>${BADGE[id] || '🛍️'}</i>${NAMES[id] || id}<em>${['🥇','🥈','🥉'][i]}</em></div>`).join('') || '<div>Scan a stall QR to start! 🤖</div>';
+      $('hot').innerHTML = (d.top || []).filter(id => !/^road-/.test(id)).map((id, i) => `<div><i>${BADGE[id] || '🛍️'}</i>${NAMES[id] || id}<em>${['🥇','🥈','🥉'][i]}</em></div>`).join('') || '<div>Scan a stall QR to start! 🤖</div>';
       if (d.msg && d.msg.id && d.msg.id !== lastId){ const fresh = lastId !== null; lastId = d.msg.id; try { localStorage.setItem('kmKioskLast', lastId); } catch(e) {} if (fresh || Date.now() - Number(d.msg.id) < 120000) say(d.msg.text, true); }
       else if (lastId === null) lastId = '';
     }
