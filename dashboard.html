@@ -21,7 +21,7 @@
   @keyframes blink{50%{opacity:.25}}
   .clock{font-size:4.2vh;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums;margin-left:1vw}
   .tb{background:var(--panel);border:1px solid var(--line);color:#fff;border-radius:99px;padding:.6vh .9vw;cursor:pointer;font-size:1.6vh}
-  .kpis{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;gap:1vw}
+  .kpis{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr 1fr;gap:.9vw}
   .kpi{background:var(--panel);border:1px solid var(--line);border-radius:2vh;padding:1.4vh 1.2vw;position:relative;overflow:hidden}
   .kpi span{font-size:1.7vh;color:var(--mute);letter-spacing:.06em;text-transform:uppercase}
   .kpi b{display:block;font-size:7vh;line-height:1.05;font-weight:900;font-variant-numeric:tabular-nums}
@@ -59,6 +59,18 @@
   .row:last-child{border-bottom:0}
   .row b{color:var(--gold)}
   .empty{color:var(--mute);font-size:1.9vh;margin:auto;text-align:center}
+  .kav{grid-column:1;grid-row:2;display:grid;grid-template-columns:38% 1fr;gap:1vw;align-items:center;background:linear-gradient(135deg,rgba(244,180,42,.16),rgba(54,197,240,.1));border-color:rgba(244,180,42,.45)}
+  .kav svg{width:100%;height:auto;overflow:visible;filter:drop-shadow(0 0 22px rgba(54,197,240,.5))}
+  .kbob{animation:kbob 3.2s ease-in-out infinite;transform-origin:50% 60%}@keyframes kbob{50%{transform:translateY(-10px)}}
+  .klid{transform-box:fill-box;transform-origin:center;transform:scaleY(0);animation:klid 4.6s infinite}@keyframes klid{0%,94%,100%{transform:scaleY(0)}96%{transform:scaleY(1)}}
+  .kmouth{transform-box:fill-box;transform-origin:center}.kav.talk .kmouth{animation:ktalk .2s ease-in-out infinite alternate}@keyframes ktalk{to{transform:scaleY(3.2)}}
+  .kav.cheer .kbob{animation:kjump .55s ease 2}@keyframes kjump{40%{transform:translateY(-30px) rotate(-6deg)}}
+  .kb{position:relative;background:#fff;color:#1c1430;border-radius:2vh;padding:1.6vh 1.2vw;font-size:2.35vh;font-weight:800;line-height:1.3;min-height:12vh;display:flex;align-items:center}
+  .kb:before{content:"";position:absolute;left:-1.6vh;top:50%;margin-top:-1.6vh;border:1.6vh solid transparent;border-left:0;border-right-color:#fff}
+  .kb.big{box-shadow:0 0 0 .5vh var(--gold),0 0 30px rgba(244,180,42,.55)}
+  .ktag{font-size:1.5vh;letter-spacing:.16em;color:var(--gold);margin-bottom:.8vh;display:flex;align-items:center;gap:.6vw}
+  .ktag button{margin-left:auto;background:rgba(255,255,255,.1);border:1px solid var(--line);color:#fff;border-radius:99px;padding:.3vh .7vw;font-size:1.4vh;cursor:pointer}
+  #fx{position:fixed;inset:0;z-index:8;pointer-events:none}
   .ticker{height:4.4vh;border-radius:1.2vh;background:rgba(200,32,47,.85);overflow:hidden;display:flex;align-items:center;font-size:2vh;font-weight:700}
   .ticker div{white-space:nowrap;animation:tick 45s linear infinite;padding-left:100%}
   @keyframes tick{to{transform:translateX(-100%)}}
@@ -84,6 +96,7 @@
 
   <section class="kpis">
     <div class="kpi big"><span class="ic">🎉</span><span>Guests inside</span><b id="kIn">0</b><em id="kInSub">of 0 expected</em></div>
+    <div class="kpi"><span class="ic">💰</span><span>Coupons sold</span><b id="kCoup">₹0</b><em id="kCoupSub">at the Coupon Counter</em></div>
     <div class="kpi"><span class="ic">🎫</span><span>E-passes checked in</span><b id="kPass">0</b><em id="kPassSub">of 0 RSVPs</em></div>
     <div class="kpi"><span class="ic">🤖</span><span>KAVYA stall scans</span><b id="kScan">0</b><em>today · skill badges unlocked</em></div>
     <div class="kpi"><span class="ic">📺</span><span>Kaushal TV plays</span><b id="kPlay">0</b><em id="kPlaySub">0 opens</em></div>
@@ -91,10 +104,20 @@
   </section>
 
   <section class="grid">
-    <div class="panel tall"><h2>🔥 Hot stalls right now <small>KAVYA QR scans</small></h2><div class="bars" id="hot"></div></div>
+    <div class="panel"><h2>🔥 Hot stalls right now <small>KAVYA QR scans</small></h2><div class="bars" id="hot"></div></div>
     <div class="panel"><h2>🚶 Arrivals <small>check-ins every 15 minutes</small></h2><div class="cols" id="tl"></div></div>
     <div class="panel"><h2>🚪 Smart Gates <small>passes checked in</small></h2><div class="chips" id="gates"></div>
       <div class="vip"><div id="vipBox"><span>🌟 Chief Guest & VIPs</span><b id="vipTxt">–</b></div><div id="jBox"><span>🏅 Judges</span><b id="jTxt">–</b></div></div></div>
+    <div class="panel kav" id="kav"><svg viewBox="-20 -60 627 794" role="img" aria-label="KAVYA presenter"><g class="kbob">
+      <image href="kavya.png" x="0" y="0" width="587" height="734"/>
+      <rect class="klid" x="118" y="305" width="80" height="102" rx="10" fill="#02030F"/><rect class="klid" x="291" y="301" width="82" height="102" rx="10" fill="#02030F"/>
+      <rect class="kmouth" x="194" y="447" width="113" height="26" rx="9" fill="#A9E6EE"/><path d="M60 320 Q50 120 160 90" fill="none" stroke="#1C1540" stroke-width="10"/><circle cx="162" cy="88" r="12" fill="#1C1540"/>
+         <path d="M52 330 Q60 420 150 460" fill="none" stroke="#1C1540" stroke-width="8"/><circle cx="156" cy="462" r="12" fill="#FFC93C" stroke="#1C1540" stroke-width="5"/><g transform="translate(355 520)"><path d="M60 0 L100 40 L140 0" fill="none" stroke="#1C1540" stroke-width="8" stroke-linecap="round"/>
+          <rect x="0" y="36" width="200" height="150" rx="24" fill="#1C1540"/><rect x="16" y="52" width="168" height="104" rx="12" fill="#FF7A00"/>
+          <text x="100" y="100" text-anchor="middle" font-size="30" font-weight="900" fill="#fff" font-family="system-ui">KAUSHAL</text>
+          <text x="100" y="138" text-anchor="middle" font-size="30" font-weight="900" fill="#FFE08A" font-family="system-ui">TV</text></g>
+          <g transform="translate(70 600)"><rect width="150" height="80" rx="8" fill="#2B2F3A"/><path d="M0 0 L150 0 L140 -34 L-6 -24 Z" fill="#fff"/><path d="M24 -26 L44 0 M62 -30 L82 0 M100 -32 L120 0" stroke="#2B2F3A" stroke-width="12"/></g></g></svg>
+      <div><div class="ktag">🎙️ KAVYA · LIVE UPDATE <button type="button" id="kVoice">🔊 Voice on</button></div><div class="kb" id="kb">Namaskar! I am KAVYA, your live presenter. Let's watch Kaushal Mela 2026 together!</div></div></div>
     <div class="panel"><h2>⭐ Top rated stalls <small>visitor stars</small></h2><div id="rated"></div></div>
     <div class="panel"><h2>📺 Kaushal TV <small>most watched</small></h2><div id="eps"></div></div>
   </section>
@@ -102,6 +125,7 @@
   <div class="ticker"><div>🎉 Welcome to Kaushal Mela 2026 &nbsp;✦&nbsp; 🤖 KAVYA Smart Gates check guests in with their e-pass &nbsp;✦&nbsp; 🏅 Scan the KAVYA QR at every stall to collect skill badges &nbsp;✦&nbsp; 📺 Kaushal TV: 18 student skill stories &nbsp;✦&nbsp; 🔒 All data stays in the school's own Google account &nbsp;✦&nbsp; Department of Skill and Innovation · Powered by Project TRINeTRA</div></div>
 </div>
 
+<canvas id="fx"></canvas>
 <div id="pinBox"><div class="b"><div style="font-size:42px">📊</div><h2 style="margin:6px 0;color:#C8202F">Live Command Centre</h2><div>Enter the staff PIN to show live data.</div>
   <input id="pin" type="password" inputmode="numeric" autocomplete="off" aria-label="Staff PIN"><button id="go" type="button">Show dashboard</button><div id="pinErr"></div></div></div>
 
@@ -127,12 +151,13 @@
 
   function draw(d){
     setNum('kIn', d.inn.guests); $('kInSub').textContent = `of ${d.rsvp.expected} expected · ${d.inn.passes} families`;
+    const cp = d.coupons || { total: 0 }; setNum('kCoup', '₹' + Number(cp.total || 0).toLocaleString('en-IN')); $('kCoupSub').textContent = d.items && d.items.out.length ? `⛔ ${d.items.out.length} item${d.items.out.length === 1 ? '' : 's'} sold out` : 'at the Coupon Counter';
     setNum('kPass', d.inn.passes); $('kPassSub').textContent = `of ${d.rsvp.yes} RSVPs`;
     setNum('kScan', d.scansToday);
-    setNum('kPlay', d.views.plays); $('kPlaySub').textContent = `${d.views.opens} people opened Kaushal TV`;
+    setNum('kPlay', d.views.plays); $('kPlaySub').textContent = `${d.views.opens} opens of Kaushal TV`;
     let rn = 0, rs = 0; Object.values(d.ratings).forEach(r => { rn += r.n; rs += r.sum; });
     setNum('kRate', rn ? (rs / rn).toFixed(1) + '★' : '–'); $('kRateSub').textContent = `${rn} rating${rn === 1 ? '' : 's'} from visitors`;
-    const hot = Object.entries(d.scans).sort((a, b) => b[1] - a[1]).slice(0, 10), mx = hot.length ? hot[0][1] : 1;
+    const hot = Object.entries(d.scans).sort((a, b) => b[1] - a[1]).slice(0, 6), mx = hot.length ? hot[0][1] : 1;
     $('hot').innerHTML = hot.length ? hot.map(([id, n], i) => `<div class="bar${i < 3 ? ' top' : ''}"><span class="e">${BADGE[id] || '🛍️'}</span><div class="t"><i style="width:${Math.max(6, n / mx * 100)}%"></i><span>${esc(nm(id))}</span></div><b>${n}</b></div>`).join('')
       : '<div class="empty">Waiting for the first KAVYA stall scan… 🤖</div>';
     const tl = Object.entries(d.timeline).sort(), tmx = Math.max(1, ...tl.map(x => x[1]));
@@ -150,12 +175,78 @@
     $('eps').innerHTML = eps.length ? eps.map(([e, n]) => `<div class="row"><span>🎬 ${esc(e)}</span><b>${n}</b></div>`).join('') : '<div class="empty">Plays appear as people watch Kaushal TV.</div>';
   }
 
+  /* ---------- KAVYA presenter ---------- */
+function kavyaVoice(lang){
+  let vs = []; try { vs = speechSynthesis.getVoices(); } catch(e) {}
+  try { const saved = localStorage.getItem('kmGateVoice'); if (saved && (!lang || lang === 'en')) { const sv = vs.find(v => v.name === saved); if (sv && !/ravi|prabhat|hemant|bashkar|david|mark|guy|george|james|richard|\bmale\b/i.test(sv.name.replace(/female/ig,''))) return sv; } } catch(e) {}
+  const want = { en:['en-IN','en-GB','en-US','en'], hi:['hi-IN'], as:['as-IN','bn-IN','bn'] }[lang || 'en'] || ['en'];
+  const F = /neerja|heera|swara|kalpana|tanishaa|veena|lekha|female|zira|aria|jenny|samantha|susan|hazel|libby|sonia|natasha|google/i, M = /ravi|prabhat|hemant|bashkar|david|mark|guy|george|james|richard|\bmale\b/i;
+  const score = v => { const l = v.lang.replace('_','-').toLowerCase(); const i = want.findIndex(t => l === t.toLowerCase() || l.startsWith(t.toLowerCase() + '-') || (t.length <= 3 && l.startsWith(t)));
+    if (i < 0) return -99; let s = 10 - i * 2; if (F.test(v.name)) s += 6; if (M.test(v.name) && !/female/i.test(v.name)) s -= 9; return s; };
+  return vs.filter(v => score(v) > -99).sort((a, b) => score(b) - score(a))[0] || null;
+}
+
+  let voiceOn = true; try { voiceOn = localStorage.getItem('kmDashVoice') !== 'off'; } catch(e) {}
+  const vb = () => { $('kVoice').textContent = voiceOn ? '🔊 Voice on' : '🔇 Voice off'; }; vb();
+  $('kVoice').onclick = () => { voiceOn = !voiceOn; try { localStorage.setItem('kmDashVoice', voiceOn ? 'on' : 'off'); } catch(e) {} vb(); if (!voiceOn) try { speechSynthesis.cancel(); } catch(e) {} };
+  function speak(t){ if (!voiceOn || !('speechSynthesis' in window)) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, ''));
+    const v = kavyaVoice('en'); if (v){ u.voice = v; u.lang = v.lang; } else u.lang = 'en-IN'; u.pitch = 1.15;
+    u.onstart = () => $('kav').classList.add('talk'); u.onend = u.onerror = () => $('kav').classList.remove('talk'); speechSynthesis.speak(u); } catch(e) {} }
+  const fx = $('fx'), fc = fx.getContext('2d'); let parts = [];
+  function confetti(gold){ fx.width = innerWidth; fx.height = innerHeight; const cols = gold ? ['#F4B42A','#FFE08A','#fff'] : ['#F4B42A','#E5383B','#36C5F0','#2EE6A6','#fff'];
+    for (let i = 0; i < 200; i++) parts.push({ x: innerWidth * .2, y: innerHeight * .7, vx: (Math.random() - .3) * 26, vy: -Math.random() * 22 - 6, r: Math.random() * 9 + 5, c: cols[i % cols.length], a: Math.random() * 6, life: 140 });
+    requestAnimationFrame(fxs); }
+  function fxs(){ fc.clearRect(0, 0, fx.width, fx.height); parts = parts.filter(p => p.life-- > 0);
+    parts.forEach(p => { p.vy += .45; p.x += p.vx; p.y += p.vy; p.a += .2; fc.save(); fc.translate(p.x, p.y); fc.rotate(p.a); fc.fillStyle = p.c; fc.globalAlpha = Math.min(1, p.life / 40); fc.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2); fc.restore(); });
+    if (parts.length) requestAnimationFrame(fxs); else fc.clearRect(0, 0, fx.width, fx.height); }
+  const queue = []; let busyUntil = 0, idleN = 0, prev = null, lastData = null;
+  function present(t, big){ queue.push([t, big]); }
+  setInterval(() => {
+    if (Date.now() < busyUntil) return;
+    let item = queue.shift();
+    if (!item && lastData && Date.now() - busyUntil > 45000) item = [idleLine(lastData), false];
+    if (!item) return;
+    const [t, big] = item; $('kb').textContent = t; $('kb').classList.toggle('big', !!big); speak(t);
+    if (big){ confetti(/chief|vip/i.test(t)); $('kav').classList.remove('cheer'); void $('kav').offsetWidth; $('kav').classList.add('cheer'); }
+    busyUntil = Date.now() + Math.max(9000, t.length * 85);
+  }, 1000);
+  const topOf = o => { const e = Object.entries(o).sort((a, b) => b[1] - a[1])[0]; return e ? e[0] : null; };
+  function idleLine(d){
+    const lines = [];
+    if (d.inn.guests) lines.push(`Right now ${d.inn.guests} guests are enjoying Kaushal Mela 2026! 🎉`);
+    const hot = topOf(d.scans); if (hot) lines.push(`The hottest stall right now is ${nm(hot)}! 🔥`);
+    const r = Object.entries(d.ratings).filter(([, x]) => x.n >= 3).map(([id, x]) => [id, x.sum / x.n]).sort((a, b) => b[1] - a[1])[0];
+    if (r) lines.push(`${nm(r[0])} is loved by visitors, with ${r[1].toFixed(1)} stars! ⭐`);
+    const ep = topOf(d.views.eps); if (ep) lines.push(`On Kaushal TV, the most watched story is ${ep.replace(/^Episode \d+ /, '')}. 📺`);
+    if (d.scansToday) lines.push(`Visitors have scanned my QR codes ${d.scansToday} times today. Keep collecting skill badges! 🏅`);
+    lines.push('Every stall today is run by our students. Coupons first, then shop! 🎟️');
+    return lines[idleN++ % lines.length];
+  }
+  const STEPS = [10, 25, 50, 100, 150, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500, 2000];
+  const crossed = (a, b) => STEPS.filter(x => a < x && b >= x).pop();
+  function react(d){
+    lastData = d;
+    if (!prev){ prev = d; present(d.inn.guests ? `Namaskar! ${d.inn.guests} guests are already inside, and ${d.scansToday} KAVYA scans so far today. Let's go! 🎉` : 'Namaskar! I am KAVYA, your live presenter. The gates are ready. Let us welcome our guests! 🎉'); return; }
+    let m;
+    if (d.inn.vip > prev.inn.vip) present('Our honoured Chief Guest has arrived! A very warm welcome to Kaushal Mela 2026! 🌟', true);
+    if (d.inn.judge > prev.inn.judge) present(`Our judges are here! ${d.inn.judge} of ${d.rsvp.judge || d.inn.judge} have checked in. Best of luck, young makers! 🏅`, true);
+    if (!prev.inn.passes && d.inn.passes) present('Our first family has checked in at the Smart Gate! Welcome! 🎉', true);
+    if ((m = crossed(prev.inn.guests, d.inn.guests))) present(`Wow! We just welcomed ${m} guests! Thank you for coming! 🎉`, true);
+    if ((m = crossed(prev.scansToday, d.scansToday))) present(`${m} KAVYA stall scans today! Our visitors love collecting skill badges! 🏅`, m >= 100);
+    if ((m = crossed(prev.views.plays, d.views.plays))) present(`Kaushal TV has crossed ${m} plays! Our students' stories are being watched! 📺`, m >= 500);
+    if (d.coupons && prev.coupons){ const steps = [1000, 2500, 5000, 10000, 15000, 20000, 30000, 40000, 50000, 75000, 100000]; const c = steps.filter(x => prev.coupons.total < x && d.coupons.total >= x).pop(); if (c) present(`₹${c.toLocaleString('en-IN')} in Mela coupons sold! Our young sellers are busy! 💰`, c >= 10000); }
+    if (d.items && prev.items){ const was = new Set(prev.items.out.map(o => o.item + '|' + o.stall)); d.items.out.filter(o => !was.has(o.item + '|' + o.stall)).slice(0, 2).forEach(o => present(`${o.item} is sold out at ${o.stall || 'its stall'}! Well done, team! ⛔`)); }
+    const h0 = topOf(prev.scans), h1 = topOf(d.scans); if (h1 && h0 && h1 !== h0 && d.scans[h1] >= 5) present(`New leader! ${nm(h1)} is now the hottest stall at the Mela! 🔥`);
+    const tl = Object.entries(d.timeline).sort().pop(); if (tl && tl[1] >= 30 && JSON.stringify(prev.timeline) !== JSON.stringify(d.timeline) && tl[1] > ((prev.timeline || {})[tl[0]] || 0) && !(prev._rush === tl[0])) { present(`Big rush at the gates! ${tl[1]} families in the last 15 minutes. Volunteers, stay ready! 🚶`); d._rush = tl[0]; } else d._rush = prev._rush;
+    prev = d;
+  }
+
   let timer = 0;
   async function poll(){
     clearTimeout(timer);
     const d = DEMO ? demo() : await jsonp({ action:'dash', pin });
     if (d && d.pin === false){ try { localStorage.removeItem('kmStaffPin'); } catch(e) {} pin = ''; $('pinBox').style.display = 'flex'; $('pinErr').textContent = 'Wrong PIN. Try again.'; return; }
-    if (d && d.ok){ draw(d); $('dot').className = 'ok'; $('upd').textContent = 'Live · updated ' + new Date().toLocaleTimeString('en-IN', { hour:'numeric', minute:'2-digit', second:'2-digit' }); }
+    if (d && d.ok){ draw(d); react(d); $('dot').className = 'ok'; $('upd').textContent = 'Live · updated ' + new Date().toLocaleTimeString('en-IN', { hour:'numeric', minute:'2-digit', second:'2-digit' }); }
     else { $('dot').className = ''; $('upd').textContent = 'Reconnecting… (check internet)'; }
     timer = setTimeout(poll, 20000);
   }
@@ -164,9 +255,10 @@
   $('pin').onkeydown = e => { if (e.key === 'Enter') $('go').click(); };
   if (pin || DEMO) start();
 
-  function demo(){ const ids = Object.keys(NAMES), sc = {}; ids.forEach((id, i) => { sc[id] = Math.max(0, Math.round(60 * Math.random() * (1 - i / 40))); });
-    return { ok:true, rsvp:{ replies:420, yes:398, expected:1180, vip:6, judge:4 }, inn:{ passes:312, guests:906, vip:5, judge:3 }, gates:{ 'VIP Gate':9, 'Gate 1':121, 'Gate 2':104, 'Gate 3':78 },
-      timeline:{ '10:00':8, '10:15':4, '10:30':2, '10:45':6, '11:00':40, '11:15':96, '11:30':78, '11:45':52, '12:00':26 }, scans:sc, scansToday:Object.values(sc).reduce((a, b) => a + b, 0),
+  let dn = 0;
+  function demo(){ dn++; const ids = Object.keys(NAMES), sc = {}; ids.forEach((id, i) => { sc[id] = Math.max(0, Math.round(60 * Math.random() * (1 - i / 40))); });
+    return { ok:true, rsvp:{ replies:420, yes:398, expected:1180, vip:6, judge:4 }, inn:{ passes:312 + dn * 20, guests:906 + dn * 60, vip:5 + (dn > 1 ? 1 : 0), judge:3 }, gates:{ 'VIP Gate':9, 'Gate 1':121, 'Gate 2':104, 'Gate 3':78 },
+      coupons:{ total: 14650 + dn * 900 }, items:{ sold: 0, out: dn > 1 ? [{ item: 'Momo', stall: 'Food Court' }] : [], low: [] }, timeline:{ '10:00':8, '10:15':4, '10:30':2, '10:45':6, '11:00':40, '11:15':96, '11:30':78, '11:45':52, '12:00':26 }, scans:sc, scansToday:Object.values(sc).reduce((a, b) => a + b, 0),
       ratings:{ 'leafylicious':{ n:18, sum:85 }, 'food-court':{ n:30, sum:139 }, 'hydroponics':{ n:12, sum:57 }, 'game-zone':{ n:25, sum:116 }, 'tie-and-dye-and-art-and-craft':{ n:9, sum:43 } },
       views:{ opens:530, plays:842, tv:3, who:{}, eps:{ 'Ep 13 Food Court: Come Hungry!':120, 'Ep 16 Live Music: From Rock to Raag':96, 'Ep 18 Northeast Calling: Tourism':88, 'Ep 10 Game Zone':74, 'Ep 11 Hydroponics':61 } } }; }
 })();

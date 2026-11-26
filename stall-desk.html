@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Stall Desk · Kaushal Mela 2026</title>
+<style>
+  :root{--red:#C8202F;--ink:#1c1430;--mute:#6b5a7a;--gold:#F4B42A;--ok:#18914F;--low:#E58A00}
+  *{box-sizing:border-box}
+  body{margin:0;background:#F4F1FA;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#1C1540;color:#fff;position:sticky;top:0;z-index:2}
+  header img{height:36px}header b{font-size:17px;line-height:1.15}header small{display:block;font-size:12px;opacity:.8;font-weight:400}
+  header button{margin-left:auto;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:6px 10px;font-size:13px}
+  main{max-width:640px;margin:0 auto;padding:12px}
+  .tip{background:#fff;border-left:6px solid var(--gold);border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.4;margin-bottom:12px}
+  .it{background:#fff;border-radius:16px;padding:12px;margin-bottom:10px;box-shadow:0 3px 10px rgba(0,0,0,.06);border-left:8px solid var(--ok)}
+  .it.low{border-left-color:var(--low)}.it.out{border-left-color:var(--red);opacity:.85}
+  .top{display:flex;align-items:center;gap:8px}
+  .top b{font-size:18px}.top .pr{margin-left:auto;font-weight:800;color:var(--mute)}
+  .chip{font-size:12px;font-weight:800;border-radius:99px;padding:3px 9px;background:#E3F5EA;color:var(--ok)}
+  .low .chip{background:#FFF0D6;color:var(--low)}.out .chip{background:#FDE2E3;color:var(--red)}
+  .acts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+  .acts button{border:2px solid #e5e0ee;background:#fff;border-radius:12px;padding:12px 4px;font-size:14px;font-weight:800;cursor:pointer}
+  .acts button.on{color:#fff}
+  .acts .a.on{background:var(--ok);border-color:var(--ok)}.acts .l.on{background:var(--low);border-color:var(--low)}.acts .o.on{background:var(--red);border-color:var(--red)}
+  .cnt{display:none;align-items:center;gap:10px;margin-top:10px;background:#F7F4FC;border-radius:12px;padding:8px 10px}
+  body.counting .cnt{display:flex}
+  .cnt button{border:0;border-radius:10px;padding:12px 16px;font-size:20px;font-weight:900;cursor:pointer}
+  .cnt .p{margin-left:auto;background:var(--ok);color:#fff;padding:12px 22px}
+  .cnt .m{background:#e8e3f0}
+  .cnt span{font-size:15px}.cnt span b{font-size:22px}
+  .pick a{display:block;background:#fff;border-radius:14px;padding:14px;margin-bottom:8px;text-decoration:none;color:var(--ink);font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+  .msg{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:#1C1540;color:#fff;border-radius:99px;padding:10px 18px;font-weight:700;display:none;z-index:5;max-width:92vw;text-align:center}
+  .empty{background:#fff;border-radius:14px;padding:16px;text-align:center;color:var(--mute)}
+  label.sw{display:flex;align-items:center;gap:8px;font-size:14px;margin:4px 0 12px}
+  #pinBox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(28,21,64,.92);z-index:9}
+  #pinBox .b{background:#fff;border-radius:20px;padding:24px;width:min(380px,92vw);text-align:center}
+  #pinBox input{width:100%;padding:12px;border-radius:12px;border:1px solid #ccc;font-size:18px;margin:10px 0}
+  #pinBox button{width:100%;padding:13px;border:0;border-radius:12px;background:#1C1540;color:#fff;font-size:17px;font-weight:800}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+</style>
+</head>
+<body>
+<header><img src="km-logo.png" alt=""><b id="hd">Stall Desk<small>Kaushal Mela 2026 · staff only</small></b><button id="refresh" type="button">↻ Refresh</button></header>
+<main id="main"><div class="empty">Loading…</div></main>
+<div class="msg" id="msg" role="status"></div>
+<div id="pinBox"><div class="b"><div style="font-size:40px">🛍️</div><h2 style="margin:4px 0">Stall Desk</h2><div>For the stall in-charge. Enter the staff PIN.</div><input id="pin" type="password" inputmode="numeric" autocomplete="off" aria-label="Staff PIN"><button id="go" type="button">Open</button><div id="pinErr" style="color:#C8202F;font-weight:700;min-height:20px;margin-top:8px"></div></div></div>
+<script>
+(function(){
+  const SCRIPT = 'https://script.google.com/macros/s/AKfycbwU9G8D8idXBm9SCi_snA7oCHVwd02Duy_l1FnUz2OTycXfyhLObraZrDr-ZHINJUDemQ/exec';
+  const NAMES = {"healthcare-hub": "Healthcare Hub", "food-court": "Food Court", "zero-heat-cafe": "Zero Heat Cafe", "canteen": "Canteen", "handmade-wonders": "Handmade Wonders", "tie-and-dye-and-art-and-craft": "Tie & Dye and Art & Craft", "mehendi": "Mehendi", "vocational-hub": "Vocational Hub", "herbal-garden": "Herbal Garden", "farm-to-future-hub": "Farm to Future Hub", "hydroponics": "Hydroponics", "leafylicious": "Leafylicious", "mushroom-garden": "Mushroom Garden", "the-nature-buzz": "The Nature Buzz", "aesthetic-garden": "Aesthetic Garden", "game-zone": "Game Zone", "selfie-booth": "Selfie Booth", "gateways-to-northeast": "Gateways to Northeast", "live-concert": "Live Concert", "podcast-room": "Podcast Room", "maker-skills-and-digital-animation-hub": "Maker Skills & Digital Animation Hub", "coupon-counter": "Coupon Counter", "vegetable-stall": "Vegetable Stall", "pineapple-selfie-stand": "Pineapple Selfie Stand", "digital-game-zone": "Digital Game Zone", "kaushal-tv": "Kaushal TV"};
+  const $ = i => document.getElementById(i);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const sid = (new URLSearchParams(location.search).get('s') || '').toLowerCase();
+  let pin = ''; try { pin = localStorage.getItem('kmStaffPin') || ''; } catch(e) {}
+  let counting = false; try { counting = localStorage.getItem('kmDeskCount') === '1'; } catch(e) {}
+  let items = [], stallNo = null;
+  function toast(t){ const m = $('msg'); m.textContent = t; m.style.display = 'block'; clearTimeout(m._t); m._t = setTimeout(() => m.style.display = 'none', 2600); }
+  function jsonp(params){ return new Promise(res => { const cb = 's' + Date.now() + Math.floor(Math.random() * 1e4), sc = document.createElement('script');
+    const t = setTimeout(() => { done(); res(null); }, 15000); function done(){ clearTimeout(t); delete window[cb]; sc.remove(); }
+    window[cb] = d => { done(); res(d); }; sc.onerror = () => { done(); res(null); };
+    sc.src = SCRIPT + '?' + new URLSearchParams(Object.assign({}, params, { callback: cb })).toString(); document.body.appendChild(sc); }); }
+
+  function pickList(){ $('main').innerHTML = '<div class="tip">Choose your stall. Bookmark the page it opens, or scan your stall\'s <b>Stall Desk QR</b>.</div><div class="pick">' +
+    Object.entries(NAMES).filter(([id]) => id !== 'kaushal-tv').map(([id, n]) => `<a href="?s=${esc(id)}">${esc(n)}</a>`).join('') + '</div>'; }
+
+  function draw(){
+    const name = NAMES[sid];
+    $('hd').innerHTML = `${esc(name)}<small>Stall Desk · staff only</small>`;
+    const mine = items.filter(i => String(i.stall) === String(stallNo));
+    if (!mine.length){ $('main').innerHTML = `<div class="empty">No items for <b>${esc(name)}</b> in the Sheet yet.<br><br>Ask the tech team to add your items in the <b>Items</b> tab with this stall's number.</div>`; return; }
+    $('main').innerHTML = `<div class="tip">Tap <b>Running low</b> or <b>Sold out</b> when it happens. Visitors see it on the Mela App and on KAVYA's stall page within a minute.</div>
+      <label class="sw"><input type="checkbox" id="cnt" ${counting ? 'checked' : ''}> Also count sales (+1 for each sale), optional</label>` +
+      mine.map(i => { const st = i.status || ''; return `<div class="it ${st}" data-id="${esc(i.id)}"><div class="top"><b>${esc(i.name)}</b><span class="chip">${st === 'out' ? 'SOLD OUT' : st === 'low' ? 'RUNNING LOW' : 'AVAILABLE'}</span><span class="pr">${/^\d/.test(String(i.price)) ? '₹' + esc(i.price) : esc(i.price)}</span></div>
+        <div class="acts"><button class="a ${st === '' ? 'on' : ''}" data-s="ok" type="button">✅ Available</button><button class="l ${st === 'low' ? 'on' : ''}" data-s="low" type="button">⏳ Running low</button><button class="o ${st === 'out' ? 'on' : ''}" data-s="out" type="button">⛔ Sold out</button></div>
+        <div class="cnt"><button class="m" data-n="-1" type="button" aria-label="Undo one sale">−</button><span><b>${Number(i.sold) || 0}</b> sold${Number(i.stock) ? ` of ${Number(i.stock)}` : ''}</span><button class="p" data-n="1" type="button">+1 sale</button></div></div>`; }).join('');
+    document.body.classList.toggle('counting', counting);
+    $('cnt').onchange = e => { counting = e.target.checked; try { localStorage.setItem('kmDeskCount', counting ? '1' : '0'); } catch(x) {} document.body.classList.toggle('counting', counting); };
+  }
+  $('main').addEventListener('click', async e => {
+    const b = e.target.closest('button'); if (!b) return; const card = b.closest('.it'); if (!card) return;
+    const id = card.dataset.id, it = items.find(x => String(x.id) === id); if (!it) return;
+    const params = { action: 'stock', pin, id };
+    if (b.dataset.s){ params.state = b.dataset.s; } else if (b.dataset.n){ params.sold = b.dataset.n; } else return;
+    b.disabled = true; const d = await jsonp(params); b.disabled = false;
+    if (d && d.pin === false){ try { localStorage.removeItem('kmStaffPin'); } catch(x) {} pin = ''; $('pinBox').style.display = 'flex'; $('pinErr').textContent = 'Wrong PIN. Try again.'; return; }
+    if (!d || !d.ok){ toast('❌ Not saved. Check internet and tap again.'); return; }
+    if (d.status !== undefined){ it.status = d.status; toast(d.status === 'out' ? `⛔ ${it.name}: marked SOLD OUT` : d.status === 'low' ? `⏳ ${it.name}: running low` : `✅ ${it.name}: available`); }
+    if (d.sold !== undefined){ it.sold = d.sold; toast(`${it.name}: ${d.sold} sold`); }
+    draw();
+  });
+  async function load(){
+    if (!sid || !NAMES[sid]) return pickList();
+    const d = await jsonp({ action: 'catalogue' });
+    if (!d || !d.ok){ $('main').innerHTML = '<div class="empty">Could not load items. Check the internet and tap ↻ Refresh.</div>'; return; }
+    const m = (d.stalls || []).find(x => String(x.name).trim().toLowerCase() === NAMES[sid].toLowerCase());
+    stallNo = m ? m.no : null; items = d.items || []; draw();
+  }
+  $('refresh').onclick = load;
+  function open(){ $('pinBox').style.display = 'none'; load(); }
+  $('go').onclick = () => { const v = $('pin').value.trim(); if (!v) return; pin = v; try { localStorage.setItem('kmStaffPin', v); } catch(e) {} open(); };
+  $('pin').onkeydown = e => { if (e.key === 'Enter') $('go').click(); };
+  if (pin) open();
+})();
+</script>
+</body>
+</html>

@@ -338,8 +338,8 @@ function render(items){
   else if (!mine.length){ $('items').innerHTML = '<div class="note">Come and see what our students are making! Items and prices will be shown here soon.</div>'; }
   else {
     $('items').innerHTML = mine.map(i => {
-      const left = (Number(i.stock) || 0) - (Number(i.sold) || 0), out = Number(i.stock) > 0 && left <= 0;
-      const extra = out ? 'Sold out' : (Number(i.stock) > 0 && left <= 5 ? `Only ${left} left` : (i.desc || ''));
+      const left = (Number(i.stock) || 0) - (Number(i.sold) || 0), out = i.status === 'out' || (Number(i.stock) > 0 && left <= 0);
+      const extra = out ? 'Sold out' : i.status === 'low' ? '⏳ Running low, hurry!' : (Number(i.stock) > 0 && left <= 5 ? `Only ${left} left` : (i.desc || ''));
       return `<div class="it${out ? ' out' : ''}"><span class="ic">${esc(i.icon || '🛍️')}</span><span><b>${esc(i.name)}${i.hot ? ' 🔥' : ''}</b>${extra ? `<small>${esc(extra.replace('Counter: ', 'at '))}</small>` : ''}</span><span class="pr">${esc(PR(i.price))}</span></div>`;
     }).join('');
   }

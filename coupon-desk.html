@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Coupon Counter Desk · Kaushal Mela 2026</title>
+<style>
+  :root{--red:#C8202F;--ink:#1c1430;--mute:#6b5a7a;--gold:#F4B42A;--ok:#18914F}
+  *{box-sizing:border-box}
+  body{margin:0;background:#FFF7E8;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:center;gap:10px;padding:10px 16px;background:#2E7D32;color:#fff}
+  header img{height:38px}header b{font-size:18px}header small{display:block;font-size:12px;opacity:.85;font-weight:400}
+  header select{margin-left:auto;border-radius:10px;border:0;padding:6px 8px;font-size:14px}
+  main{max-width:900px;margin:0 auto;padding:14px}
+  .today{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+  .today div{background:#fff;border-radius:14px;padding:10px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.06)}
+  .today b{display:block;font-size:24px}.today div:first-child b{font-size:30px;color:var(--ok)}
+  .today span{font-size:12px;color:var(--mute)}
+  .notes{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .note{background:#fff;border-radius:18px;padding:12px;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.07);border:3px solid transparent}
+  .note.on{border-color:var(--c)}
+  .note .v{font-size:30px;font-weight:900;color:var(--c)}
+  .note .n{font-size:44px;font-weight:900;font-variant-numeric:tabular-nums}
+  .note .bt{display:flex;gap:8px;margin-top:6px}
+  .note button{flex:1;border:0;border-radius:12px;padding:14px 0;font-size:24px;font-weight:900;cursor:pointer;background:var(--c);color:#fff}
+  .note button.m{background:#eee;color:var(--ink)}
+  .sum{margin-top:14px;background:#fff;border-radius:18px;padding:14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 14px rgba(0,0,0,.07)}
+  .sum .t{font-size:16px;color:var(--mute)}.sum .t b{display:block;font-size:40px;color:var(--ink)}
+  .rec{margin-left:auto;border:0;border-radius:14px;padding:18px 26px;font-size:20px;font-weight:900;background:var(--ok);color:#fff;cursor:pointer}
+  .rec:disabled{opacity:.4}
+  .row{display:flex;gap:10px;margin-top:10px}
+  .line{border:2px solid #ddd;background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+  .msg{min-height:24px;margin-top:10px;font-weight:800}.ok{color:var(--ok)}.bad{color:var(--red)}
+  .log{margin-top:12px;font-size:14px;color:var(--mute)}
+  #pinBox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,40,20,.9);z-index:9}
+  #pinBox .b{background:#fff;border-radius:20px;padding:24px;width:min(400px,92vw);text-align:center}
+  #pinBox input{width:100%;padding:12px;border-radius:12px;border:1px solid #ccc;font-size:18px;margin:10px 0}
+  #pinBox button{width:100%;padding:13px;border:0;border-radius:12px;background:#2E7D32;color:#fff;font-size:17px;font-weight:800}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  @media (max-width:640px){.notes{grid-template-columns:1fr 1fr}.today{grid-template-columns:1fr 1fr 1fr}.today div:first-child{grid-column:span 3}.sum{flex-wrap:wrap}.rec{width:100%}}
+</style>
+</head>
+<body>
+<header><img src="km-logo.png" alt=""><b>🎟️ Coupon Counter Desk<small>Kaushal Mela 2026 · cash only · record every sale</small></b>
+  <select id="desk" aria-label="Counter"><option>Counter 1</option><option>Counter 2</option><option>Counter 3</option></select></header>
+<main>
+  <div class="today" aria-live="polite">
+    <div><b id="tTot">₹0</b><span>sold today (all counters)</span></div>
+    <div><b id="t10">0</b><span>₹10 coupons</span></div><div><b id="t20">0</b><span>₹20 coupons</span></div>
+    <div><b id="t50">0</b><span>₹50 coupons</span></div><div><b id="t100">0</b><span>₹100 coupons</span></div>
+  </div>
+  <div class="notes" id="notes"></div>
+  <div class="sum"><div class="t">This sale<b id="sale">₹0</b></div><button class="rec" id="rec" type="button" disabled>✅ Record sale</button></div>
+  <div class="row"><button class="line" id="clr" type="button">Clear</button><button class="line" id="undo" type="button" disabled>↩ Undo last sale</button></div>
+  <div class="msg" id="msg"></div>
+  <div class="log" id="log"></div>
+</main>
+<div id="pinBox"><div class="b"><div style="font-size:40px">🎟️</div><h2 style="margin:4px 0">Coupon Counter Desk</h2><div>Enter the staff PIN.</div><input id="pin" type="password" inputmode="numeric" autocomplete="off" aria-label="Staff PIN"><button id="go" type="button">Open</button><div class="msg bad" id="pinErr"></div></div></div>
+<script>
+(function(){
+  const SCRIPT = 'https://script.google.com/macros/s/AKfycbwU9G8D8idXBm9SCi_snA7oCHVwd02Duy_l1FnUz2OTycXfyhLObraZrDr-ZHINJUDemQ/exec';
+  const $ = i => document.getElementById(i);
+  const D = [[10, '#2F6FE0'], [20, '#7B3FB8'], [50, '#E07A1F'], [100, '#C8202F']];
+  let pin = ''; try { pin = localStorage.getItem('kmStaffPin') || ''; $('desk').value = localStorage.getItem('kmCouponDesk') || 'Counter 1'; } catch(e) {}
+  $('desk').onchange = () => { try { localStorage.setItem('kmCouponDesk', $('desk').value); } catch(e) {} };
+  const cur = { 10: 0, 20: 0, 50: 0, 100: 0 }; let lastSale = null; const log = [];
+  $('notes').innerHTML = D.map(([d, c]) => `<div class="note" id="nb${d}" style="--c:${c}"><div class="v">₹${d}</div><div class="n" id="n${d}">0</div><div class="bt"><button class="m" type="button" data-d="${d}" data-k="-1" aria-label="One less ₹${d} coupon">−</button><button type="button" data-d="${d}" data-k="1" aria-label="One more ₹${d} coupon">+</button></div></div>`).join('');
+  function show(){ let t = 0; D.forEach(([d]) => { $('n' + d).textContent = cur[d]; $('nb' + d).classList.toggle('on', cur[d] > 0); t += d * cur[d]; }); $('sale').textContent = '₹' + t; $('rec').disabled = !t; return t; }
+  $('notes').onclick = e => { const b = e.target.closest('button'); if (!b) return; const d = +b.dataset.d; cur[d] = Math.max(0, cur[d] + +b.dataset.k); show(); $('msg').textContent = ''; };
+  $('clr').onclick = () => { D.forEach(([d]) => cur[d] = 0); show(); };
+  function jsonp(params){ return new Promise(res => { const cb = 'q' + Date.now() + Math.floor(Math.random() * 1e4), sc = document.createElement('script');
+    const t = setTimeout(() => { done(); res(null); }, 15000); function done(){ clearTimeout(t); delete window[cb]; sc.remove(); }
+    window[cb] = d => { done(); res(d); }; sc.onerror = () => { done(); res(null); };
+    sc.src = SCRIPT + '?' + new URLSearchParams(Object.assign({}, params, { callback: cb })).toString(); document.body.appendChild(sc); }); }
+  function totals(d){ if (!d || !d.ok) return; $('tTot').textContent = '₹' + d.total.toLocaleString('en-IN'); [10, 20, 50, 100].forEach(x => $('t' + x).textContent = d['n' + x]); }
+  async function send(n, label){
+    $('rec').disabled = true; $('msg').className = 'msg'; $('msg').textContent = 'Saving…';
+    const d = await jsonp({ action: 'coupon', pin, desk: $('desk').value, n10: n[10], n20: n[20], n50: n[50], n100: n[100] });
+    if (d && d.pin === false){ try { localStorage.removeItem('kmStaffPin'); } catch(e) {} pin = ''; $('pinBox').style.display = 'flex'; $('pinErr').textContent = 'Wrong PIN. Try again.'; return false; }
+    if (!d || !d.ok){ $('msg').className = 'msg bad'; $('msg').textContent = '❌ Not saved. Check the internet and press again.'; show(); return false; }
+    totals(d); $('msg').className = 'msg ok'; $('msg').textContent = label + ' ✓';
+    log.unshift(new Date().toLocaleTimeString('en-IN', { hour:'numeric', minute:'2-digit' }) + ' · ' + label); $('log').innerHTML = log.slice(0, 8).join('<br>');
+    return true;
+  }
+  $('rec').onclick = async () => { const n = Object.assign({}, cur), t = show(); if (!t) return;
+    if (await send(n, `Recorded ₹${t}`)){ lastSale = n; $('undo').disabled = false; D.forEach(([d]) => cur[d] = 0); show(); } };
+  $('undo').onclick = async () => { if (!lastSale) return; const neg = {}; let t = 0; D.forEach(([d]) => { neg[d] = -lastSale[d]; t += d * lastSale[d]; });
+    if (await send(neg, `Undid ₹${t}`)){ lastSale = null; $('undo').disabled = true; } };
+  function open(){ $('pinBox').style.display = 'none'; jsonp({ action: 'coupons', pin }).then(d => { if (d && d.pin === false){ $('pinBox').style.display = 'flex'; $('pinErr').textContent = 'Wrong PIN. Try again.'; } else totals(d); }); setInterval(() => jsonp({ action: 'coupons', pin }).then(totals), 30000); }
+  $('go').onclick = () => { const v = $('pin').value.trim(); if (!v) return; pin = v; try { localStorage.setItem('kmStaffPin', v); } catch(e) {} open(); };
+  $('pin').onkeydown = e => { if (e.key === 'Enter') $('go').click(); };
+  show(); if (pin) open();
+})();
+</script>
+</body>
+</html>

@@ -697,8 +697,8 @@ const APP = {
   }
   function card(it){
     const on = !!list[it.id], s = stallOf(it.stall);
-    return `<div class="pc" role="button" tabindex="0" data-pid="${esc(it.id)}"><button class="heart${on?' on':''}" data-heart="${esc(it.id)}" aria-label="${on?'Remove from':'Add to'} my list">${on?'♥':'♡'}</button>
-      ${photo(it)}<div class="inf"><div class="nm">${esc(it.name)}</div><div class="pr">${esc(PR(it.price))}</div><div class="st">${esc(s.name)}</div></div></div>`;
+    return `<div class="pc" ${it.status === 'out' ? 'style="opacity:.55"' : ''} role="button" tabindex="0" data-pid="${esc(it.id)}"><button class="heart${on?' on':''}" data-heart="${esc(it.id)}" aria-label="${on?'Remove from':'Add to'} my list">${on?'♥':'♡'}</button>
+      ${photo(it)}<div class="inf"><div class="nm">${esc(it.name)}</div><div class="pr">${esc(PR(it.price))}</div><div class="st">${esc(s.name)}</div>${it.status === 'out' ? '<div class="st" style="color:#C8202F;font-weight:800">⛔ Sold out</div>' : it.status === 'low' ? '<div class="st" style="color:#E58A00;font-weight:800">⏳ Running low</div>' : ''}</div></div>`;
   }
   function renderShop(){
     document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.sv === sv));
