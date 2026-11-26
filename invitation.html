@@ -70,6 +70,9 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   .seal{animation:breathe 2.4s ease-in-out infinite}
   @keyframes breathe{50%{box-shadow:0 6px 16px rgba(74,42,26,.35),0 0 0 12px rgba(184,137,58,.15), inset 0 -3px 6px rgba(0,0,0,.25), inset 0 3px 5px rgba(255,255,255,.35)}}
   .tap{position:absolute;left:0;right:0;bottom:9%;text-align:center;color:var(--muted);font-size:15px;letter-spacing:.06em}
+  .logo-seal{width:clamp(92px,26vw,124px);padding:0;background:#fff;overflow:visible}
+  .logo-seal img{width:100%;height:100%;border-radius:50%;display:block}
+  .logo-seal::after{display:none}
   #gate.open .seal{transform:translate(-50%,-50%) scale(1.25);opacity:0;animation:none}
   #gate.open .flap{transform:rotateX(180deg);z-index:1}
   #gate.open .letter{transform:translateY(-62%)}
@@ -421,7 +424,6 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 
 <!-- ================= GATE ================= -->
 <div id="gate" role="dialog" aria-modal="true" aria-label="Your invitation">
-  <img class="gatelogo" src="km-logo.png" alt="Kaushal Mela 2026" width="96" height="96">
   <div class="scene">
     <!-- folded gamosa -->
     <svg class="cloth" viewBox="0 0 520 300" aria-hidden="true">
@@ -454,7 +456,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       <div class="pocket"></div>
       <div class="to" id="envTo">To our honoured guest</div>
       <div class="flap"></div>
-      <button class="seal" id="openBtn" aria-label="Open the invitation">Open</button>
+      <button class="seal logo-seal" id="openBtn" aria-label="Open the invitation"><img src="km-logo.png" alt=""></button>
     </div>
     <p class="tap">Tap the seal to open</p>
   </div>
@@ -893,10 +895,15 @@ window.MelaMusic = function(){
 <script>
 /* ===================== EDIT INVITATION DETAILS HERE ===================== */
 const INVITE = {
-  start: '2026-11-28T10:00:00+05:30',
+  start: '2026-11-28T11:15:00+05:30',   // parents (default link)
   end:   '2026-11-28T14:00:00+05:30',
   dateText:  'Saturday, 28 November 2026',
-  timeText:  '10:00 AM onwards',
+  timeText:  '11:15 AM onwards',
+  times: {   // different arrival times: parents = normal link, Chief Guest = #vip, judges = #judge
+    guest: { start:'2026-11-28T11:15:00+05:30', timeText:'11:15 AM onwards' },
+    vip:   { start:'2026-11-28T10:00:00+05:30', timeText:'10:00 AM' },
+    judge: { start:'2026-11-28T12:00:00+05:30', timeText:'12:00 noon' }
+  },
   venueName: 'Army Public School Jorhat',
   venueAddr: 'Jorhat, Assam',
   mapsQuery: 'Army Public School Jorhat',
@@ -939,6 +946,17 @@ const INVITE = {
     rsvpSub: 'Your confirmation will help us prepare a fitting welcome.',
     bye:     'We look forward to the honour of your presence'
   },
+  judge: {
+    eyebrow: 'INVITATION TO JUDGE',
+    envTo:   'To our honoured Judge',
+    tagline: 'A celebration of skill and enterprise',
+    en:      'The Principal, staff and students of Army Public School Jorhat request your kind presence as a Judge at Kaushal Mela 2026.',
+    inv:     'Our students have designed, made and priced their own products. Your evaluation and guidance will encourage every young maker.',
+    sign:    'Principal, Army Public School Jorhat',
+    rsvpTitle:'Kindly confirm your presence',
+    rsvpSub: 'Your confirmation will help us plan the evaluation.',
+    bye:     'We look forward to your presence'
+  },
 
   journey: [   // photo: file name uploaded next to this page (e.g. 'journey1.jpg'), or leave empty
     { t:'An idea in class',   d:'Every class chose what to make: food, crafts, art, plants and technology.', icon:'💡', tint:'#FBE6D4', photo:'' },
@@ -949,20 +967,20 @@ const INVITE = {
   ],
 
   awaits: [
-    { ic:'robot',  t:'Meet KAVYA',             d:'Our robot host, built in-house, greets every guest in English and Hindi.' },
+    { ic:'robot',  t:'Meet KAVYA',             d:'Our robot host, built in-house by our students. She welcomes you at the gate and helps you find your way around the Mela.' },
     { ic:'stall',  t:'Stalls run by students', d:'Healthcare Hub, Tie & Dye and Art & Craft, Hydroponics, Kitchen Garden, Zero Heat Cafe, Game Zone, Food Court, Tourism and more.' },
     { ic:'leaf',   t:'Herbal garden & nursery', d:'Our Herbal Garden of 19 medicinal plants, plus the Plant Nursery and Habitat Garden.' },
     { ic:'shield', t:'Digital Garrison',       d:'A cyber safety game for players of every age.' },
     { ic:'stall',  t:'Pay with Mela coupons',  d:'Stalls accept coupons only (₹10, ₹20, ₹50, ₹100). Buy them with cash at the Coupon Counter near the entry gate.' },
     { ic:'trophy', t:'Awards',                 d:'Recognition for the best stalls in sales, profit and rating.' }
   ],
-  schedule: [
-    { time:'10:00 AM', what:'Arrival and welcome',              note:'KAVYA, our robot host, greets you' },
-    { time:'10:05 AM', what:'Inauguration of Kaushal Mela',     note:'Ribbon cutting ceremony' },
-    { time:'10:10 AM', what:'Stalls open',                      note:'Healthcare Hub, Tie & Dye and Art & Craft, Herbal Garden, Hydroponics, Farm to Future Hub, Kitchen Garden and more' },
-    { time:'10:31 AM', what:'Cultural programme',               note:'Music concert and dance drama' },
-    { time:'10:50 AM', what:'Stalls and food court',            note:'Plant Nursery & Habitat Garden, Vocational Hub, Zero Heat Cafe, Game Zone, Food Court, Tourism, Handmade Wonders and the Maker Skills & Digital Animation Hub' },
-    { time:'11:14 AM', what:'Podcast',                          note:'In the Podcast Room' }
+  schedule: [   // parents
+    { time:'11:15 AM', what:'Arrival and welcome',              note:'KAVYA greets you at the entry gate. Please show your e-pass' },
+    { time:'11:15 AM onwards', what:'Stalls, food court and Game Zone', note:'Healthcare Hub, Tie & Dye and Art & Craft, Herbal Garden, Hydroponics, Kitchen Garden, Zero Heat Cafe, Food Court, Tourism, Handmade Wonders and more. Buy coupons at the Coupon Counter first' }
+  ],
+  judgeSchedule: [
+    { time:'12:00 noon', what:'Arrival and welcome of judges',  note:'' },
+    { time:'12:00 onwards', what:'Evaluation of student stalls', note:'Sales, profit and stall rating' }
   ],
   vipSchedule: [
     { time:'10:00 AM', what:'Arrival and welcome of esteemed guests', note:'' },
@@ -974,6 +992,7 @@ const INVITE = {
     { time:'11:25 AM', what:'Departure',                        note:'' }
   ]
 };
+(function(){ const m = location.hash === '#vip' ? 'vip' : location.hash === '#judge' ? 'judge' : 'guest'; if (INVITE.times && INVITE.times[m]) Object.assign(INVITE, INVITE.times[m]); })();
 /* ======================================================================== */
 
 (function(){
@@ -1101,7 +1120,7 @@ const INVITE = {
     if (hero) hero.classList.add(h >= 5 && h < 9 ? 'sky-dawn' : h >= 9 && h < 16 ? 'sky-day' : h >= 16 && h < 19 ? 'sky-dusk' : 'sky-night'); })();
 
   function render(){
-    mode = location.hash === '#vip' ? 'vip' : 'guest';
+    mode = location.hash === '#vip' ? 'vip' : location.hash === '#judge' ? 'judge' : 'guest';
     const M = INVITE[mode];
     const who = toName || (mode === 'vip' ? INVITE.vip.guestName : '');
     $('eyebrow').textContent = M.eyebrow;
@@ -1115,9 +1134,9 @@ const INVITE = {
     $('rsvpTitle').textContent = M.rsvpTitle;
     $('rsvpSub').textContent = M.rsvpSub;
     $('bye').textContent = M.bye;
-    $('countRow').style.display = mode === 'vip' ? 'none' : '';
-    $('shareBtn').style.display = mode === 'vip' ? 'none' : '';
-    const sched = mode === 'vip' ? INVITE.vipSchedule : INVITE.schedule;
+    $('countRow').style.display = mode !== 'guest' ? 'none' : '';
+    $('shareBtn').style.display = mode !== 'guest' ? 'none' : '';
+    const sched = mode === 'vip' ? INVITE.vipSchedule : mode === 'judge' ? INVITE.judgeSchedule : INVITE.schedule;
     $('slots').innerHTML = sched.map(s => `<div class="slot"><b>${esc(s.time)}</b> · ${esc(s.what)}${s.note ? `<small>${esc(s.note)}</small>` : ''}</div>`).join('');
     const here = location.href.split('#')[0].split('?')[0];
     const base = /^https?:/.test(location.protocol) && !/claude|usercontent/.test(location.hostname) ? here : INVITE.shareUrl;
@@ -1180,10 +1199,12 @@ const INVITE = {
   let seen = false; try { seen = localStorage.getItem('kmCoverSeen') === '1'; } catch(e) {}
   const skip = INVITE.showCover === 'never' || (INVITE.showCover !== 'always' && (seen || standalone));
   const audio = INVITE.music ? new Audio(INVITE.music) : (INVITE.builtInMusic && window.MelaMusic ? MelaMusic() : null);
-  if (audio) audio.loop = true;
+  if (audio){ audio.loop = true; try { audio.preload = 'auto'; } catch(e) {} }
   function startMusic(){
     if (!audio) return;
-    audio.play().then(() => { $('music').style.display = 'block'; $('music').classList.add('playing'); }).catch(() => { $('music').style.display = 'block'; });
+    audio.play().then(() => { $('music').style.display = 'block'; $('music').classList.add('playing'); }).catch(() => { $('music').style.display = 'block';
+      const retry = () => { document.removeEventListener('pointerdown', retry, true); if (audio.paused) audio.play().then(() => $('music').classList.add('playing')).catch(() => {}); };
+      document.addEventListener('pointerdown', retry, true); });
   }
   if (skip){ $('gate').classList.add('gone'); document.body.classList.remove('locked'); $('dear').classList.add('write'); if (audio){ $('music').style.display = 'block'; const first = () => { document.removeEventListener('pointerdown', first, true); if (audio.paused) startMusic(); }; document.addEventListener('pointerdown', first, true); startMusic(); } }
   $('openBtn').addEventListener('click', () => {
@@ -1249,7 +1270,7 @@ const INVITE = {
       <div class="pass-ev">Kaushal Mela 2026</div>
       <div class="pass-no"><small>Confirmation no.</small><strong>${esc(r.id)}</strong></div>
       <div class="pass-name">${esc(r.name)}</div>
-      <div class="pass-meta">${r.vip ? 'Chief Guest' : guests}<br>${esc(INVITE.dateText)}, ${esc(INVITE.timeText)}<br>${esc(INVITE.venueName)}</div>
+      <div class="pass-meta">${r.vip ? 'Chief Guest' : r.judge ? 'Judge' : guests}<br>${esc(INVITE.dateText)}, ${esc(INVITE.timeText)}<br>${esc(INVITE.venueName)}</div>
       <div class="qr" aria-label="QR code of your e-pass">${qrSvg(new URL('pass.html?id=' + encodeURIComponent(r.id), location.href).href)}</div>
       ${chip(r.status)}<div class="pass-kv"><img src="kavya.png" alt="">Show me this at the entry gate. KAVYA will scan you in! 📷</div></div>${gband}</div>`;
   }
@@ -1285,14 +1306,14 @@ const INVITE = {
     if (!name){ $('rErr').textContent = 'Please enter your name.'; return; }
     if (name.length > 60){ $('rErr').textContent = 'Please keep the name under 60 characters.'; return; }
     const yes = document.querySelector('input[name=att]:checked').value === 'yes';
-    const count = mode === 'vip' ? '1' : $('rCount').value;
+    const count = mode !== 'guest' ? '1' : $('rCount').value;
     $('rErr').textContent = '';
     if (INVITE.rsvpScript){
       const b = $('rConfirm'); b.disabled = true; b.textContent = 'Saving your reply…';
       try {
         const d = await jsonp(INVITE.rsvpScript + (INVITE.rsvpScript.includes('?') ? '&' : '?') + qs({action:'rsvp', name, att: yes?'yes':'no', count, mode}));
         if (!d || !d.ok) throw new Error('failed');
-        const r = { id:d.id, name, attending:yes, count, vip: mode === 'vip', status:'Received' };
+        const r = { id:d.id, name, attending:yes, count, vip: mode === 'vip', judge: mode === 'judge', status:'Received' };
         remember(r); showDone(r);
       } catch(e){ $('rErr').textContent = 'Your reply could not be saved. Check your internet connection and tap Confirm again.'; }
       finally { b.disabled = false; b.textContent = 'Confirm'; }
@@ -1301,11 +1322,11 @@ const INVITE = {
     // no Google Sheet connected yet: confirm on this phone, so guests always get their e-pass
     if (!INVITE.whatsapp && !INVITE.rsvpForm){
       const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; let tag = ''; for (let i = 0; i < 5; i++) tag += chars[Math.floor(Math.random()*chars.length)];
-      const r = { id:'KM26-' + tag, name, attending:yes, count, vip: mode === 'vip', status:'Confirmed' };
+      const r = { id:'KM26-' + tag, name, attending:yes, count, vip: mode === 'vip', judge: mode === 'judge', status:'Confirmed' };
       remember(r); showDone(r); return;
     }
-    const who = mode === 'vip' ? ' (Chief Guest invitation)' : '';
-    const msg = yes ? `Kaushal Mela 2026${who}: ${name} will attend` + (mode === 'vip' ? '.' : `, with ${count} guest${count==='1'?'':'s'} in total.`)
+    const who = mode === 'vip' ? ' (Chief Guest invitation)' : mode === 'judge' ? ' (Judge invitation)' : '';
+    const msg = yes ? `Kaushal Mela 2026${who}: ${name} will attend` + (mode !== 'guest' ? '.' : `, with ${count} guest${count==='1'?'':'s'} in total.`)
                     : `Kaushal Mela 2026${who}: ${name} regrets being unable to attend.`;
     const link = $('sendLink');
     $('passBox').innerHTML = ''; $('doneTitle').textContent = 'Thank you!';
@@ -1545,10 +1566,14 @@ body.locked #kvHost,#appLayer.open~#kvHost{display:none}
 <script>
 (function(){
   const $ = i => document.getElementById(i), host = $('kvHost');
-  const START = new Date('2026-11-28T10:00:00+05:30').getTime();
+  const START = new Date(INVITE.start).getTime(), AT = INVITE.timeText.replace(' onwards','').replace(':00 AM',' AM');
   let hideT = null, said = new Set(), busy = false;
-  function daysLine(){ const ms = START - Date.now(); if (ms <= 0) return 'The Mela is on! Come on in, the stalls are open! 🎉';
-    const d = Math.ceil(ms / 864e5); return d <= 1 ? 'Just one more sleep! See you tomorrow at 10 AM! 🎉' : `${d} days to go! I'm practising my welcome already 🤖`; }
+  function daysLine(){ const now = Date.now(); if (now >= START) return 'The Mela is on! Come on in, the stalls are open! 🎉';
+    const ist = t => Math.floor((t + 19800000) / 864e5);   // calendar day in India time
+    const d = ist(START) - ist(now);
+    if (d <= 0) return `It's Mela day! See you at ${AT} 🎉`;
+    if (d === 1) return `The Mela is tomorrow! See you on Saturday at ${AT} 🎉`;
+    return `Just ${d} days to go! See you on Saturday at ${AT} 🎉`; }
   function speak(t){ try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, ''));
     const v = speechSynthesis.getVoices().find(x => /en[-_]IN/i.test(x.lang)) || speechSynthesis.getVoices().find(x => /^en/i.test(x.lang)); if (v){ u.voice = v; u.lang = v.lang; }
     u.onstart = () => host.classList.add('talk'); u.onend = u.onerror = () => host.classList.remove('talk'); speechSynthesis.speak(u); } catch(e) {} }
