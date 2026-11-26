@@ -862,10 +862,20 @@ const APP = {
     if ('speechSynthesis' in window) { const b = document.createElement('button'); b.className = 'say'; b.type = 'button'; b.textContent = '🔊'; b.onclick = () => speakIt(text); m.appendChild(document.createElement('br')); m.appendChild(b); }
     $('msgs').appendChild(m); $('msgs').scrollTop = 1e6;
   }
-  function speakIt(text){
+
+  /* KAVYA's voice: the same female voice everywhere (pitch 1.15, like the KAVYA robot) */
+  function kavyaVoice(lang){
+    let vs = []; try { vs = speechSynthesis.getVoices(); } catch(e) {}
+    try { const saved = localStorage.getItem('kmGateVoice'); if (saved && (!lang || lang === 'en')) { const sv = vs.find(v => v.name === saved); if (sv) return sv; } } catch(e) {}
+    const want = { en:['en-IN','en-GB','en-US','en'], hi:['hi-IN'], as:['as-IN','bn-IN','bn'] }[lang || 'en'] || ['en'];
+    const F = /neerja|heera|swara|kalpana|tanishaa|veena|lekha|female|zira|aria|jenny|samantha|susan|hazel|libby|sonia|natasha|google/i, M = /ravi|prabhat|hemant|bashkar|david|mark|guy|george|james|richard|\bmale\b/i;
+    const score = v => { const l = v.lang.replace('_','-').toLowerCase(); const i = want.findIndex(t => l === t.toLowerCase() || l.startsWith(t.toLowerCase() + '-') || (t.length <= 3 && l.startsWith(t)));
+      if (i < 0) return -99; let s = 10 - i * 2; if (F.test(v.name)) s += 6; if (M.test(v.name) && !/female/i.test(v.name)) s -= 9; return s; };
+    return vs.filter(v => score(v) > -99).sort((a, b) => score(b) - score(a))[0] || null;
+  }
+    function speakIt(text){
     try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, ''));
-      const tags = { en:['en-IN','en-GB','en'], hi:['hi-IN'], as:['as-IN','bn-IN'] }[chatLang]; const vs = speechSynthesis.getVoices();
-      const v = tags.map(tg => vs.find(x => x.lang.replace('_','-').toLowerCase().startsWith(tg.toLowerCase()))).find(Boolean); if (v) { u.voice = v; u.lang = v.lang; }
+      const v = kavyaVoice(chatLang); if (v) { u.voice = v; u.lang = v.lang; } u.pitch = 1.15;
       u.onstart = () => $('miniFace').classList.add('talk'); u.onend = () => $('miniFace').classList.remove('talk'); speechSynthesis.speak(u); } catch(e) {}
   }
   function stallTxt(s){ const its = D.items.filter(i => String(i.stall) === String(s.no)).map(i => `${i.name} ${PR(i.price)}`).join(', '); return `${s.name}${s.cls ? ' (' + s.cls + ')' : ''}${its ? ' — ' + its : ''}`; }

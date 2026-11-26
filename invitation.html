@@ -1584,8 +1584,19 @@ body.locked #kvHost,#appLayer.open~#kvHost{display:none}
     if (d <= 0) return `It's Mela day! See you at ${AT} 🎉`;
     if (d === 1) return `The Mela is tomorrow! See you on Saturday at ${AT} 🎉`;
     return `Just ${d} days to go! See you on Saturday at ${AT} 🎉`; }
+
+/* KAVYA's voice: the same female voice everywhere (pitch 1.15, like the KAVYA robot) */
+function kavyaVoice(lang){
+  let vs = []; try { vs = speechSynthesis.getVoices(); } catch(e) {}
+  try { const saved = localStorage.getItem('kmGateVoice'); if (saved && (!lang || lang === 'en')) { const sv = vs.find(v => v.name === saved); if (sv) return sv; } } catch(e) {}
+  const want = { en:['en-IN','en-GB','en-US','en'], hi:['hi-IN'], as:['as-IN','bn-IN','bn'] }[lang || 'en'] || ['en'];
+  const F = /neerja|heera|swara|kalpana|tanishaa|veena|lekha|female|zira|aria|jenny|samantha|susan|hazel|libby|sonia|natasha|google/i, M = /ravi|prabhat|hemant|bashkar|david|mark|guy|george|james|richard|\bmale\b/i;
+  const score = v => { const l = v.lang.replace('_','-').toLowerCase(); const i = want.findIndex(t => l === t.toLowerCase() || l.startsWith(t.toLowerCase() + '-') || (t.length <= 3 && l.startsWith(t)));
+    if (i < 0) return -99; let s = 10 - i * 2; if (F.test(v.name)) s += 6; if (M.test(v.name) && !/female/i.test(v.name)) s -= 9; return s; };
+  return vs.filter(v => score(v) > -99).sort((a, b) => score(b) - score(a))[0] || null;
+}
   function speak(t){ try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, ''));
-    const v = speechSynthesis.getVoices().find(x => /en[-_]IN/i.test(x.lang)) || speechSynthesis.getVoices().find(x => /^en/i.test(x.lang)); if (v){ u.voice = v; u.lang = v.lang; }
+    const v = kavyaVoice('en'); if (v){ u.voice = v; u.lang = v.lang; } u.pitch = 1.15;
     u.onstart = () => host.classList.add('talk'); u.onend = u.onerror = () => host.classList.remove('talk'); speechSynthesis.speak(u); } catch(e) {} }
   function say(t, ms){ $('kvTxt').textContent = t; host.classList.add('in','say'); busy = true; clearTimeout(hideT);
     hideT = setTimeout(() => { host.classList.remove('say'); busy = false; }, ms || 6000); }

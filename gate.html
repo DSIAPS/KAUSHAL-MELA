@@ -195,7 +195,7 @@
   }
 
   /* ---------- KAVYA's voice: female Indian English first, same pitch as the KAVYA robot ---------- */
-  const FEMALE = /neerja|heera|swara|kalpana|veena|lekha|female|zira|aria|jenny|samantha|susan|hazel|libby|sonia|natasha|google uk english female/i;
+  const FEMALE = /neerja|heera|swara|kalpana|tanishaa|veena|lekha|female|zira|aria|jenny|samantha|susan|hazel|libby|sonia|natasha|google uk english female/i;
   const MALE = /ravi|prabhat|hemant|david|mark|guy|george|male|james|richard/i;
   let voices = [];
   function loadVoices(){ try { voices = speechSynthesis.getVoices().filter(v => /^en|^hi/i.test(v.lang)); } catch(e) { voices = []; } fillVoices(); }
@@ -263,7 +263,7 @@
     if (!d.ok) return show('bad', '❌', 'Pass not found', 'Please see the volunteer at the desk', 'Hmm, I could not find this pass. Please see the volunteer.', 5000);
     const vip = /chief|vip/i.test(d.invite), judge = /judge/i.test(d.invite), name = String(d.name || 'Guest').trim();
     const who = vip ? 'Chief Guest / invited guest' : judge ? 'Judge' : `${d.guests} guest${d.guests === 1 ? '' : 's'}`;
-    if (d.already) return show('warn', '👋', `Welcome back, ${name}!`, `Already checked in at ${d.checkTime} · ${who}`, `Welcome back, ${name}! You are already checked in. Enjoy the Mela!`, 4500);
+    if (d.already) return show('warn', '⚠️', `${name}: already checked in`, `This e-pass was checked in at ${d.checkTime} · ${who}. Not counted again.`, `Hello ${name}! You are already checked in at ${d.checkTime}. Please go ahead and enjoy the Mela!`, 5000);
     welcomed++; store.set('kmGateCount', welcomed); $('count').textContent = welcomed; setTimeout(pollStats, 1500);
     if (vip) return show('vip', '🌟', `Welcome, ${name}!`, 'It is our honour to have you', `${hello()}, ${name}! It is our honour to welcome you to Kaushal Mela 2026.`, 6500, `Checked in at ${d.checkTime}`);
     if (judge) return show('ok', '🏅', `Welcome, ${name}!`, 'Thank you for judging Kaushal Mela 2026', `${hello()}, ${name}! Thank you for judging Kaushal Mela 2026.`, 6000, `Checked in at ${d.checkTime}`);
