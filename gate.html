@@ -256,8 +256,8 @@
   async function checkIn(id){
     busy = true; lastId = id; lastAt = Date.now();
     show('wait', '<div class="spin"></div>', 'Reading your pass…', id);
-    let d = await jsonp({action:'checkin', id, pin});
-    if (!d) d = await jsonp({action:'checkin', id, pin});
+    let d = await jsonp({action:'checkin', id, pin, gate: store.get('kmGateName', 'Gate')});
+    if (!d) d = await jsonp({action:'checkin', id, pin, gate: store.get('kmGateName', 'Gate')});
     if (!d) return show('bad', '📶', 'Network is slow', 'Please try again, or see the volunteer', 'Oh no, the network is slow. Please try once more!', 4000);
     if (d.pin === false){ store.set('kmStaffPin', ''); pin = ''; return show('bad', '🔒', 'Staff PIN needed', 'Volunteer: tap ⚙ and enter the PIN again', 'Please ask the volunteer to help me.', 6000); }
     if (!d.ok) return show('bad', '❌', 'Pass not found', 'Please see the volunteer at the desk', 'Hmm, I could not find this pass. Please see the volunteer.', 5000);
