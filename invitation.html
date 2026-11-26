@@ -792,7 +792,7 @@ el('ksModal').addEventListener('click',function(ev){if(ev.target===el('ksModal')
         <label><input type="radio" name="att" value="no">Regretfully decline</label>
       </div>
       <label for="rCat">Attending as</label>
-      <select id="rCat"><option value="guest">Parent / family (11:15 AM)</option><option value="vip">Chief Guest / invited guest (10:00 AM)</option><option value="judge">Judge (12:00 noon)</option></select>
+      <select id="rCat"><option value="guest">Parent / family (11:30 AM)</option><option value="vip">Chief Guest / invited guest (10:00 AM)</option><option value="judge">Judge (12:00 noon)</option></select>
       <div id="countRow">
         <label for="rCount">Number of guests</label>
         <select id="rCount"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
@@ -898,13 +898,13 @@ window.MelaMusic = function(){
 /* ===================== EDIT INVITATION DETAILS HERE ===================== */
 const INVITE = {
   start: '2026-11-28T10:00:00+05:30',   // Mela opens (countdown)
-  calStart: '2026-11-28T11:15:00+05:30', // 'Add to calendar' time (parents)
+  calStart: '2026-11-28T11:30:00+05:30', // 'Add to calendar' time (parents)
   end:   '2026-11-28T14:00:00+05:30',
   dateText:  'Saturday, 28 November 2026',
-  timeText:  'Parents from 11:15 AM',
+  timeText:  'Parents from 11:30 AM',
   categories: [   // one link for all: arrival time by category (also chosen in the RSVP form)
     { k:'vip',   label:'Chief Guest and invited guests', time:'10:00 AM' },
-    { k:'guest', label:'Parents and families',           time:'11:15 AM' },
+    { k:'guest', label:'Parents and families',           time:'11:30 AM' },
     { k:'judge', label:'Judges',                         time:'12:00 noon' }
   ],
   times: {   // different arrival times: parents = normal link, Chief Guest = #vip, judges = #judge
@@ -982,8 +982,8 @@ const INVITE = {
     { ic:'trophy', t:'Awards',                 d:'Recognition for the best stalls in sales, profit and rating.' }
   ],
   schedule: [   // parents
-    { time:'11:15 AM', what:'Arrival and welcome',              note:'KAVYA greets you at the entry gate. Please show your e-pass' },
-    { time:'11:15 AM onwards', what:'Stalls, food court and Game Zone', note:'Healthcare Hub, Tie & Dye and Art & Craft, Herbal Garden, Hydroponics, Kitchen Garden, Zero Heat Cafe, Food Court, Tourism, Handmade Wonders and more. Buy coupons at the Coupon Counter first' }
+    { time:'11:30 AM', what:'Arrival and welcome',              note:'KAVYA greets you at the entry gate. Please show your e-pass' },
+    { time:'11:30 AM onwards', what:'Stalls, food court and Game Zone', note:'Healthcare Hub, Tie & Dye and Art & Craft, Herbal Garden, Hydroponics, Kitchen Garden, Zero Heat Cafe, Food Court, Tourism, Handmade Wonders and more. Buy coupons at the Coupon Counter first' }
   ],
   judgeSchedule: [
     { time:'12:00 noon', what:'Arrival and welcome of judges',  note:'' },
@@ -1602,7 +1602,7 @@ function kavyaVoice(lang){
     hideT = setTimeout(() => { host.classList.remove('say'); busy = false; }, ms || 6000); }
   $('kvSay').onclick = () => speak($('kvTxt').textContent);
   $('kvX').onclick = () => { host.classList.remove('say'); busy = false; clearTimeout(hideT); try { speechSynthesis.cancel(); } catch(e) {} };
-  const TAPS = [() => 'Namaskar! I\'m KAVYA, your Mela host. Tap Confirm your presence and I\'ll make your e-pass! 🎫', () => 'Parents and families, please arrive at 11:15 AM. I\'ll be waiting at the gate! 🤖',
+  const TAPS = [() => 'Namaskar! I\'m KAVYA, your Mela host. Tap Confirm your presence and I\'ll make your e-pass! 🎫', () => 'Parents and families, please arrive at 11:30 AM. I\'ll be waiting at the gate! 🤖',
     () => 'At the Mela, stalls take coupons only. Buy them with cash at the Coupon Counter near the gate 🎟️', () => 'Everything at the Mela is made by our students. Come and cheer them on! 👏'];
   let tap = 0; $('kvBot').onclick = () => say(TAPS[tap++ % TAPS.length](), 7000);
   function hello(){ say('Namaskar! I\'m KAVYA, your Mela host. You\'re invited to Kaushal Mela 2026! 🎉', 7500); watch(); }
