@@ -57,6 +57,7 @@
   .cam{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 26px}
   .frame{position:relative;width:100%;max-width:860px;aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:#000;box-shadow:0 0 0 2px rgba(54,197,240,.5),0 0 50px rgba(54,197,240,.25),0 20px 40px rgba(0,0,0,.5)}
   video,#ov{position:absolute;inset:0;width:100%;height:100%;transform:scaleX(-1)}
+  .frame.back video,.frame.back #ov{transform:none}
   video{object-fit:fill}
   .hud{position:absolute;inset:0;pointer-events:none}
   .c{position:absolute;width:54px;height:54px;border:5px solid var(--mint);filter:drop-shadow(0 0 8px var(--mint))}
@@ -102,7 +103,15 @@
   .note{font-size:13px;color:#6b5a7a;margin-top:8px;line-height:1.4}
   :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){*{animation:none!important}}
-  @media (max-width:900px){main{grid-template-columns:1fr;grid-template-rows:auto 1fr}.holo{width:150px}.bubble{font-size:18px}}
+  @media (max-width:900px){
+    .top{height:auto;flex-wrap:wrap;padding:8px 12px;gap:8px}.top img{height:38px}.top .t b{font-size:15px}.top .t span{display:none}
+    .stat{padding:2px 9px}.stat b{font-size:19px}.stat span{font-size:9px}.bunting{display:none}
+    main{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:auto}
+    .host{flex-direction:row;gap:10px;padding:10px 12px}.holo{width:96px;flex:none}.holo .orbit,.holo .beam{display:none}
+    .bubble{margin-top:0;font-size:17px;padding:10px 14px;text-align:left}.bubble:before{display:none}.name{display:none}
+    .cam{padding:8px 10px 60px}.frame{border-radius:16px}.tip{font-size:13px;padding:16px 8px 8px}.tag{font-size:10px}
+    .c{width:34px;height:34px;border-width:4px}.c.tl,.c.bl{left:12%}.c.tr,.c.br{right:12%}.laser{left:12%;right:12%}
+    .result .ic{font-size:56px}.ticker{height:36px;font-size:14px}body{overflow:auto}}
 </style>
 </head>
 <body>
@@ -291,7 +300,11 @@
   async function startCam(){
     if (stream) stream.getTracks().forEach(t => t.stop());
     const id = $('camSel').value, size = { width: { ideal: 1280 }, height: { ideal: 720 } };
-    stream = await navigator.mediaDevices.getUserMedia({ video: id ? Object.assign({ deviceId: { exact: id } }, size) : size, audio: false });
+    const mobile = /Android|iPhone|iPad|iPod|Mobile|Tablet/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform));
+    stream = await navigator.mediaDevices.getUserMedia({ video: id ? Object.assign({ deviceId: { exact: id } }, size) : Object.assign({ facingMode: mobile ? { ideal: 'environment' } : 'user' }, size), audio: false });
+    let facing = ''; try { facing = stream.getVideoTracks()[0].getSettings().facingMode || ''; } catch(e) {}
+    const lbl = (stream.getVideoTracks()[0] || {}).label || '';
+    $('frame').classList.toggle('back', facing === 'environment' || /back|rear|environment/i.test(lbl));
     const v = $('v'); v.srcObject = stream; await v.play(); store.set('kmGateCam', id);
     if (v.videoWidth) $('frame').style.aspectRatio = v.videoWidth + '/' + v.videoHeight;
   }
