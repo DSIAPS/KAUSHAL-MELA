@@ -98,7 +98,7 @@
     <div class="kpi big"><span class="ic">🎉</span><span>Guests inside</span><b id="kIn">0</b><em id="kInSub">of 0 expected</em></div>
     <div class="kpi"><span class="ic">💰</span><span>Coupons sold</span><b id="kCoup">₹0</b><em id="kCoupSub">at the Coupon Counter</em></div>
     <div class="kpi"><span class="ic">🎫</span><span>E-passes checked in</span><b id="kPass">0</b><em id="kPassSub">of 0 RSVPs</em></div>
-    <div class="kpi"><span class="ic">🤖</span><span>KAVYA stall scans</span><b id="kScan">0</b><em>today · skill badges unlocked</em></div>
+    <div class="kpi"><span class="ic">🤖</span><span>KAVYA stall scans</span><b id="kScan">0</b><em id="kScanSub">today · skill badges unlocked</em></div>
     <div class="kpi"><span class="ic">📺</span><span>Kaushal TV plays</span><b id="kPlay">0</b><em id="kPlaySub">0 opens</em></div>
     <div class="kpi"><span class="ic">⭐</span><span>Stall rating</span><b id="kRate">–</b><em id="kRateSub">0 ratings</em></div>
   </section>
@@ -153,11 +153,11 @@
     setNum('kIn', d.inn.guests); $('kInSub').textContent = `of ${d.rsvp.expected} expected · ${d.inn.passes} families`;
     const cp = d.coupons || { total: 0 }; setNum('kCoup', '₹' + Number(cp.total || 0).toLocaleString('en-IN')); $('kCoupSub').textContent = d.items && d.items.out.length ? `⛔ ${d.items.out.length} item${d.items.out.length === 1 ? '' : 's'} sold out` : 'at the Coupon Counter';
     setNum('kPass', d.inn.passes); $('kPassSub').textContent = `of ${d.rsvp.yes} RSVPs`;
-    setNum('kScan', d.scansToday);
+    const talks = (d.scans && d.scans['talk-start']) || 0; setNum('kScan', Math.max(0, d.scansToday - talks)); $('kScanSub').textContent = talks ? `today · 💬 ${talks} chats with Touch KAVYA` : 'today · skill badges unlocked';
     setNum('kPlay', d.views.plays); $('kPlaySub').textContent = `${d.views.opens} opens of Kaushal TV`;
-    let rn = 0, rs = 0; Object.values(d.ratings).forEach(r => { rn += r.n; rs += r.sum; });
+    let rn = 0, rs = 0; Object.entries(d.ratings).forEach(([id, r]) => { if (id === 'touch-kavya') return; rn += r.n; rs += r.sum; });
     setNum('kRate', rn ? (rs / rn).toFixed(1) + '★' : '–'); $('kRateSub').textContent = `${rn} rating${rn === 1 ? '' : 's'} from visitors`;
-    const hot = Object.entries(d.scans).filter(([id]) => !/^road-/.test(id)).sort((a, b) => b[1] - a[1]).slice(0, 6), mx = hot.length ? hot[0][1] : 1;
+    const hot = Object.entries(d.scans).filter(([id]) => !/^(road-|talk-|touch-)/.test(id)).sort((a, b) => b[1] - a[1]).slice(0, 6), mx = hot.length ? hot[0][1] : 1;
     $('hot').innerHTML = hot.length ? hot.map(([id, n], i) => `<div class="bar${i < 3 ? ' top' : ''}"><span class="e">${BADGE[id] || '🛍️'}</span><div class="t"><i style="width:${Math.max(6, n / mx * 100)}%"></i><span>${esc(nm(id))}</span></div><b>${n}</b></div>`).join('')
       : '<div class="empty">Waiting for the first KAVYA stall scan… 🤖</div>';
     const tl = Object.entries(d.timeline).sort(), tmx = Math.max(1, ...tl.map(x => x[1]));
@@ -169,7 +169,7 @@
     $('vipBox').className = d.inn.vip ? 'yes' : '';
     $('jTxt').textContent = d.rsvp.judge ? `${d.inn.judge} of ${d.rsvp.judge} arrived` : (d.inn.judge ? `${d.inn.judge} arrived` : 'Awaited');
     $('jBox').className = d.inn.judge ? 'yes' : '';
-    const rated = Object.entries(d.ratings).filter(([, r]) => r.n).map(([id, r]) => [id, r.sum / r.n, r.n]).sort((a, b) => b[1] - a[1] || b[2] - a[2]).slice(0, 5);
+    const rated = Object.entries(d.ratings).filter(([id, r]) => r.n && id !== 'touch-kavya').map(([id, r]) => [id, r.sum / r.n, r.n]).sort((a, b) => b[1] - a[1] || b[2] - a[2]).slice(0, 5);
     $('rated').innerHTML = rated.length ? rated.map(([id, a, n]) => `<div class="row"><span>${BADGE[id] || '🛍️'} ${esc(nm(id))}</span><span><b>${a.toFixed(1)}★</b> <small style="opacity:.7">(${n})</small></span></div>`).join('') : '<div class="empty">Ratings appear as visitors tap ⭐ on stall pages.</div>';
     const eps = Object.entries(d.views.eps).sort((a, b) => b[1] - a[1]).slice(0, 5);
     $('eps').innerHTML = eps.length ? eps.map(([e, n]) => `<div class="row"><span>🎬 ${esc(e)}</span><b>${n}</b></div>`).join('') : '<div class="empty">Plays appear as people watch Kaushal TV.</div>';
@@ -210,7 +210,7 @@ function kavyaVoice(lang){
     if (big){ confetti(/chief|vip/i.test(t)); $('kav').classList.remove('cheer'); void $('kav').offsetWidth; $('kav').classList.add('cheer'); }
     busyUntil = Date.now() + Math.max(9000, t.length * 85);
   }, 1000);
-  const topOf = o => { const e = Object.entries(o).filter(([id]) => !/^road-/.test(id)).sort((a, b) => b[1] - a[1])[0]; return e ? e[0] : null; };
+  const topOf = o => { const e = Object.entries(o).filter(([id]) => !/^(road-|talk-|touch-)/.test(id)).sort((a, b) => b[1] - a[1])[0]; return e ? e[0] : null; };
   function idleLine(d){
     const lines = [];
     if (d.inn.guests) lines.push(`Right now ${d.inn.guests} guests are enjoying Kaushal Mela 2026! 🎉`);
@@ -255,8 +255,8 @@ function kavyaVoice(lang){
   $('pin').onkeydown = e => { if (e.key === 'Enter') $('go').click(); };
   if (pin || DEMO) start();
 
-  let dn = 0;
-  function demo(){ dn++; const ids = Object.keys(NAMES), sc = {}; ids.forEach((id, i) => { sc[id] = Math.max(0, Math.round(60 * Math.random() * (1 - i / 40))); });
+  var dn;
+  function demo(){ dn = (dn || 0) + 1; const ids = Object.keys(NAMES), sc = {}; ids.forEach((id, i) => { sc[id] = Math.max(0, Math.round(60 * Math.random() * (1 - i / 40))); });
     return { ok:true, rsvp:{ replies:420, yes:398, expected:1180, vip:6, judge:4 }, inn:{ passes:312 + dn * 20, guests:906 + dn * 60, vip:5 + (dn > 1 ? 1 : 0), judge:3 }, gates:{ 'VIP Gate':9, 'Gate 1':121, 'Gate 2':104, 'Gate 3':78 },
       coupons:{ total: 14650 + dn * 900 }, items:{ sold: 0, out: dn > 1 ? [{ item: 'Momo', stall: 'Food Court' }] : [], low: [] }, timeline:{ '10:00':8, '10:15':4, '10:30':2, '10:45':6, '11:00':40, '11:15':96, '11:30':78, '11:45':52, '12:00':26 }, scans:sc, scansToday:Object.values(sc).reduce((a, b) => a + b, 0),
       ratings:{ 'leafylicious':{ n:18, sum:85 }, 'food-court':{ n:30, sum:139 }, 'hydroponics':{ n:12, sum:57 }, 'game-zone':{ n:25, sum:116 }, 'tie-and-dye-and-art-and-craft':{ n:9, sum:43 } },
