@@ -136,6 +136,10 @@ h3{font-size:1.6vw;font-weight:800;margin-bottom:1.4vh}
 .cover .lg{display:flex;gap:1vw;font-size:1.5vw;color:#c9d3ff}
 .news{position:fixed;left:50%;top:12vh;transform:translate(-50%,-40vh);z-index:15;background:#f2b630;color:#0b1445;font-weight:800;font-size:1.8vw;padding:1.6vh 2.4vw;border-radius:99px;box-shadow:0 1vh 4vh rgba(0,0,0,.4);transition:.5s;max-width:80vw;text-align:center}
 .news.on{transform:translate(-50%,0)}
+.vset{display:grid;grid-template-columns:auto 1fr auto;gap:.8vh 1vw;align-items:center;background:rgba(255,255,255,.08);border-radius:1vw;padding:1.4vh 1.4vw;font-size:1.05vw;max-width:70vw}
+.vset select{font-family:inherit;font-size:1vw;padding:.6vh .6vw;border-radius:.5vw;max-width:36vw}
+.vset button{background:#f2b630;color:#0b1445;font-weight:800;padding:.6vh 1vw;border-radius:99px}
+.vset .warn{grid-column:1/-1;color:#ffb3c2;font-size:.95vw}
 canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:30}
 #cam{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none}
 .priv{font-size:.95vw}
@@ -176,7 +180,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:30}
 <div class="cover" id="start">
  <img class="k" src="kavya.png" alt="">
  <div class="h">Talk to <span>KAVYA</span></div>
- <div class="s">Setup: tap once to switch on KAVYA's voice, camera and full screen.<br>Use Microsoft Edge on the IFPD.</div>
+ <div class="s">Setup: check KAVYA's voice for each language, then tap Start.<br>Use Microsoft Edge on the IFPD for the human-like voice.</div>
+ <div class="vset" id="vset"></div>
  <button class="tap" id="go">▶ Start KAVYA</button>
 </div>
 <div class="cover off" id="attract">
@@ -319,12 +324,16 @@ const SBY = Object.fromEntries(DATA.stalls.map(s => [s.id, s]));
 /* ================= voice ================= */
 function kVoice(lang){
   let vs = []; try { vs = speechSynthesis.getVoices(); } catch(e) {}
-  const want = { en:['en-IN','en-GB','en-US','en'], hi:['hi-IN'], as:['as-IN','bn-IN','bn'], bn:['bn-IN','bn'] }[lang] || ['en'];
-  const F = /neerja|swara|tanishaa|yashica|heera|kalpana|veena|lekha|female|zira|aria|jenny|sonia|libby|natasha|google/i, M = /ravi|prabhat|madhur|bashkar|priyom|hemant|david|mark|guy|george|james|richard|\bmale\b/i;
+  const M = /ravi|prabhat|madhur|bashkar|priyom|hemant|david|mark|guy|george|james|richard|ryan|thomas|william|andrew|brian|christopher|eric|roger|steffan|\bmale\b/i;
+  try { const saved = localStorage.getItem('kmVoice_' + (lang || 'en')); if (saved) { const sv = vs.find(v => v.name === saved); if (sv) return sv; } } catch(e) {}
+  const want = { en:['en-IN','en-GB','en-US','en-AU','en'], hi:['hi-IN'], as:['as-IN','bn-IN','bn'], bn:['bn-IN','bn'] }[lang || 'en'] || ['en'];
+  const F = /neerja|swara|tanishaa|yashica|heera|kalpana|veena|lekha|female|zira|aria|jenny|ava|emma|michelle|sonia|libby|natasha|clara|google us english|google हिन्दी|google বাংলা/i;
   const sc = v => { const l = v.lang.replace('_','-').toLowerCase(); const i = want.findIndex(t => l === t.toLowerCase() || l.startsWith(t.toLowerCase() + '-') || (t.length <= 3 && l.startsWith(t)));
-    if (i < 0) return -99; let s = 10 - i * 3; if (F.test(v.name)) s += 6; if (/natural|online/i.test(v.name)) s += 3; if (M.test(v.name) && !/female/i.test(v.name)) s -= 12; return s; };
-  return vs.filter(v => sc(v) > -99).sort((a, b) => sc(b) - sc(a))[0] || null;
+    if (i < 0) return -999; let s = 20 - i * 3; if (/natural|online|neural/i.test(v.name)) s += 30; else if (/google/i.test(v.name)) s += 14;
+    if (F.test(v.name)) s += 10; if (M.test(v.name) && !/female/i.test(v.name)) s -= 60; return s; };
+  return vs.filter(v => sc(v) > -999).sort((a, b) => sc(b) - sc(a))[0] || null;
 }
+function kavyaPitch(v){ return v && /natural|online|neural/i.test(v.name) ? 1 : v && /google/i.test(v.name) ? 1.05 : 1.08; }
 function speak(text, done){
   const host = $('host'), clean = text.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, '').replace(/…/g, '... ');
   const words = text.split(/\s+/); $('say').innerHTML = words.map(w => `<span class="w">${esc(w)}</span>`).join(' ');
@@ -338,7 +347,7 @@ function speak(text, done){
     if (LANG === 'as' && v && !/^as/i.test(v.lang)) t = t.replace(/ৰ/g, 'র').replace(/ৱ/g, 'ও');
     const u = new SpeechSynthesisUtterance(t);
     if (v){ u.voice = v; u.lang = v.lang; } else u.lang = REC[LANG];
-    u.pitch = v && /natural|online/i.test(v.name) ? 1.04 : 1.14; u.rate = .98;
+    u.pitch = kavyaPitch(v); u.rate = .97;
     u.onstart = () => { host.classList.add('talk'); clearInterval(timer); timer = setInterval(() => reveal(wi + 1), 330); };
     u.onboundary = e => { if (e.name === 'word' || e.charIndex) { const n = t.slice(0, e.charIndex).split(/\s+/).length; reveal(n); } };
     u.onend = u.onerror = fin;
@@ -534,9 +543,20 @@ function step(){ fc.clearRect(0, 0, fx.width, fx.height); parts = parts.filter(p
   parts.forEach(p => { p.vy += .5; p.x += p.vx; p.y += p.vy; p.a += .2; fc.save(); fc.translate(p.x, p.y); fc.rotate(p.a); fc.fillStyle = p.c; fc.globalAlpha = Math.min(1, p.life / 40); fc.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2); fc.restore(); });
   if (parts.length) requestAnimationFrame(step); else fc.clearRect(0, 0, fx.width, fx.height); }
 
+
+/* voice setup: pick and test KAVYA's voice for each language (saved on this device) */
+function voiceSetup(){ const box = $('vset'); if (!box) return; let vs = []; try { vs = speechSynthesis.getVoices(); } catch(e) {}
+  const pref = { en:/^en/i, hi:/^hi/i, as:/^(as|bn)/i, bn:/^bn/i }, TXT = { en:'Namaskar! I am KAVYA. Welcome to Kaushal Mela 2026!', hi:'नमस्ते! मैं काव्या हूँ। कौशल मेला 2026 में आपका स्वागत है!', as:'নমস্কাৰ! মই কাব্যা। কৌশল মেলা ২০২৬লৈ আপোনাক স্বাগতম!', bn:'নমস্কার! আমি কাব্যা। কৌশল মেলা ২০২৬-এ আপনাকে স্বাগত!' };
+  let warn = !vs.some(v => /natural|online|neural/i.test(v.name)) ? '<div class="warn">⚠️ No natural (human-like) voices found. Open this page in Microsoft Edge for KAVYA\'s human voice.</div>' : '';
+  box.innerHTML = Object.keys(LN).map(l => { const best = kVoice(l); const list = vs.filter(v => pref[l].test(v.lang));
+    return `<b>${LN[l]}</b><select data-l="${l}">${list.map(v => `<option value="${esc(v.name)}" ${best && best.name === v.name ? 'selected' : ''}>${esc(v.name)}</option>`).join('') || '<option value="">(no voice on this device)</option>'}</select><button data-t="${l}">▶ Test</button>`; }).join('') + warn;
+  box.onchange = e => { const s = e.target.closest('select'); if (s) try { localStorage.setItem('kmVoice_' + s.dataset.l, s.value); } catch(x) {} };
+  box.onclick = e => { const b = e.target.closest('[data-t]'); if (!b) return; const l = b.dataset.t, was = LANG; LANG = l; speak(TXT[l], () => { LANG = was; }); }; }
+try { speechSynthesis.onvoiceschanged = () => { speechSynthesis.getVoices(); voiceSetup(); }; } catch(e) {}
+setTimeout(voiceSetup, 300); setTimeout(voiceSetup, 1500);
 /* ================= start ================= */
 setLang('en', true);
-try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); } catch(e) {}
+try { speechSynthesis.getVoices(); } catch(e) {}
 $('go').addEventListener('click', async () => {
   try { await document.documentElement.requestFullscreen(); } catch(e) {}
   try { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); } catch(e) {}

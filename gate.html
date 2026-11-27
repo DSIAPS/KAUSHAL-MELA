@@ -195,20 +195,20 @@
   }
 
   /* ---------- KAVYA's voice: female Indian English first, same pitch as the KAVYA robot ---------- */
-  const FEMALE = /neerja|heera|swara|kalpana|tanishaa|veena|lekha|female|zira|aria|jenny|samantha|susan|hazel|libby|sonia|natasha|google uk english female/i;
-  const MALE = /ravi|prabhat|hemant|david|mark|guy|george|male|james|richard/i;
+  const FEMALE = /neerja|heera|swara|kalpana|tanishaa|veena|lekha|female|zira|aria|jenny|ava|emma|michelle|samantha|susan|hazel|libby|sonia|natasha|clara|google us english|google uk english female/i;
+  const MALE = /ravi|prabhat|madhur|hemant|david|mark|guy|george|\bmale\b|james|richard|ryan|thomas|william|andrew|brian|christopher|eric|roger/i;
   let voices = [];
   function loadVoices(){ try { voices = speechSynthesis.getVoices().filter(v => /^en|^hi/i.test(v.lang)); } catch(e) { voices = []; } fillVoices(); }
-  function rank(v){ let s = 0; if (/en[-_]IN/i.test(v.lang)) s += 4; if (FEMALE.test(v.name)) s += 6; if (MALE.test(v.name) && !/female/i.test(v.name)) s -= 8; if (/natural|online|google/i.test(v.name)) s += 1; if (/^hi/i.test(v.lang)) s -= 3; return s; }
-  function bestVoice(){ const saved = store.get('kmGateVoice', ''); const sv = voices.find(v => v.name === saved); if (sv && !(MALE.test(sv.name) && !/female/i.test(sv.name))) return sv; return voices.slice().sort((a, b) => rank(b) - rank(a))[0] || null; }
+  function rank(v){ let s = 0; if (/en[-_]IN/i.test(v.lang)) s += 4; else if (/^en/i.test(v.lang)) s += 2; if (/natural|online|neural/i.test(v.name)) s += 30; else if (/google/i.test(v.name)) s += 14; if (FEMALE.test(v.name)) s += 10; if (MALE.test(v.name) && !/female/i.test(v.name)) s -= 60; if (/^hi/i.test(v.lang)) s -= 10; return s; }
+  function bestVoice(){ const saved = store.get('kmGateVoice2', ''); const sv = voices.find(v => v.name === saved); if (sv && !(MALE.test(sv.name) && !/female/i.test(sv.name))) return sv; return voices.slice().sort((a, b) => rank(b) - rank(a))[0] || null; }
   function fillVoices(){ const sel = $('voiceSel'); if (!sel) return; const b = bestVoice();
     sel.innerHTML = voices.slice().sort((a, b) => rank(b) - rank(a)).map(v => `<option value="${esc(v.name)}" ${b && v.name === b.name ? 'selected' : ''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('') || '<option value="">Automatic (laptop voice)</option>'; }
   if ('speechSynthesis' in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
   function speak(t, force){ if (!force && store.get('kmGateMode', 'voice') === 'chime') return; try { speechSynthesis.cancel(); const v = bestVoice(); const u = new SpeechSynthesisUtterance(t.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, ''));
-    if (v){ u.voice = v; u.lang = v.lang; } else u.lang = 'en-IN'; u.rate = 1; u.pitch = 1.15;
+    if (v){ u.voice = v; u.lang = v.lang; } else u.lang = 'en-IN'; u.rate = .97; u.pitch = v && /natural|online|neural/i.test(v.name) ? 1 : v && /google/i.test(v.name) ? 1.05 : 1.08;
     u.onstart = () => $('host').classList.add('talk'); u.onend = u.onerror = () => $('host').classList.remove('talk'); speechSynthesis.speak(u); } catch(e) {} }
-  $('voiceSel').onchange = () => store.set('kmGateVoice', $('voiceSel').value);
-  $('vTest').onclick = () => { store.set('kmGateVoice', $('voiceSel').value); speak('Namaskar! I am KAVYA. Welcome to Kaushal Mela 2026!', true); };
+  $('voiceSel').onchange = () => store.set('kmGateVoice2', $('voiceSel').value);
+  $('vTest').onclick = () => { store.set('kmGateVoice2', $('voiceSel').value); speak('Namaskar! I am KAVYA. Welcome to Kaushal Mela 2026!', true); };
 
   /* ---------- sounds (same family as the KAVYA robot) ---------- */
   let AC = null;
@@ -310,7 +310,7 @@
   }
   $('go').onclick = async () => {
     const p = $('pin').value.trim(); if (!p){ $('err').textContent = 'Enter the staff PIN.'; return; }
-    pin = p; store.set('kmStaffPin', p); store.set('kmGateVoice', $('voiceSel').value); store.set('kmGateName', $('gateSel').value); store.set('kmGateMode', $('modeSel').value);
+    pin = p; store.set('kmStaffPin', p); store.set('kmGateVoice2', $('voiceSel').value); store.set('kmGateName', $('gateSel').value); store.set('kmGateMode', $('modeSel').value);
     $('gateName').textContent = '· ' + $('gateSel').value.toUpperCase(); pollStats(); $('err').textContent = ''; ac();
     try { await startCam(); await listCams(); }
     catch(e){ $('err').textContent = 'Camera could not start. Allow camera access in Chrome, check the USB cable, then try again.'; return; }

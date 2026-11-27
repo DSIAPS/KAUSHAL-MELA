@@ -178,19 +178,22 @@
   /* ---------- KAVYA presenter ---------- */
 function kavyaVoice(lang){
   let vs = []; try { vs = speechSynthesis.getVoices(); } catch(e) {}
-  try { const saved = localStorage.getItem('kmGateVoice'); if (saved && (!lang || lang === 'en')) { const sv = vs.find(v => v.name === saved); if (sv && !/ravi|prabhat|hemant|bashkar|david|mark|guy|george|james|richard|\bmale\b/i.test(sv.name.replace(/female/ig,''))) return sv; } } catch(e) {}
-  const want = { en:['en-IN','en-GB','en-US','en'], hi:['hi-IN'], as:['as-IN','bn-IN','bn'] }[lang || 'en'] || ['en'];
-  const F = /neerja|heera|swara|kalpana|tanishaa|veena|lekha|female|zira|aria|jenny|samantha|susan|hazel|libby|sonia|natasha|google/i, M = /ravi|prabhat|hemant|bashkar|david|mark|guy|george|james|richard|\bmale\b/i;
-  const score = v => { const l = v.lang.replace('_','-').toLowerCase(); const i = want.findIndex(t => l === t.toLowerCase() || l.startsWith(t.toLowerCase() + '-') || (t.length <= 3 && l.startsWith(t)));
-    if (i < 0) return -99; let s = 10 - i * 2; if (F.test(v.name)) s += 6; if (M.test(v.name) && !/female/i.test(v.name)) s -= 9; return s; };
-  return vs.filter(v => score(v) > -99).sort((a, b) => score(b) - score(a))[0] || null;
+  const M = /ravi|prabhat|madhur|bashkar|priyom|hemant|david|mark|guy|george|james|richard|ryan|thomas|william|andrew|brian|christopher|eric|roger|steffan|\bmale\b/i;
+  try { const saved = localStorage.getItem('kmVoice_' + (lang || 'en')); if (saved) { const sv = vs.find(v => v.name === saved); if (sv) return sv; } } catch(e) {}
+  const want = { en:['en-IN','en-GB','en-US','en-AU','en'], hi:['hi-IN'], as:['as-IN','bn-IN','bn'], bn:['bn-IN','bn'] }[lang || 'en'] || ['en'];
+  const F = /neerja|swara|tanishaa|yashica|heera|kalpana|veena|lekha|female|zira|aria|jenny|ava|emma|michelle|sonia|libby|natasha|clara|google us english|google हिन्दी|google বাংলা/i;
+  const sc = v => { const l = v.lang.replace('_','-').toLowerCase(); const i = want.findIndex(t => l === t.toLowerCase() || l.startsWith(t.toLowerCase() + '-') || (t.length <= 3 && l.startsWith(t)));
+    if (i < 0) return -999; let s = 20 - i * 3; if (/natural|online|neural/i.test(v.name)) s += 30; else if (/google/i.test(v.name)) s += 14;
+    if (F.test(v.name)) s += 10; if (M.test(v.name) && !/female/i.test(v.name)) s -= 60; return s; };
+  return vs.filter(v => sc(v) > -999).sort((a, b) => sc(b) - sc(a))[0] || null;
 }
+function kavyaPitch(v){ return v && /natural|online|neural/i.test(v.name) ? 1 : v && /google/i.test(v.name) ? 1.05 : 1.08; }
 
   let voiceOn = true; try { voiceOn = localStorage.getItem('kmDashVoice') !== 'off'; } catch(e) {}
   const vb = () => { $('kVoice').textContent = voiceOn ? '🔊 Voice on' : '🔇 Voice off'; }; vb();
   $('kVoice').onclick = () => { voiceOn = !voiceOn; try { localStorage.setItem('kmDashVoice', voiceOn ? 'on' : 'off'); } catch(e) {} vb(); if (!voiceOn) try { speechSynthesis.cancel(); } catch(e) {} };
   function speak(t){ if (!voiceOn || !('speechSynthesis' in window)) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, ''));
-    const v = kavyaVoice('en'); if (v){ u.voice = v; u.lang = v.lang; } else u.lang = 'en-IN'; u.pitch = 1.15;
+    const v = kavyaVoice('en'); if (v){ u.voice = v; u.lang = v.lang; } else u.lang = 'en-IN'; u.pitch = kavyaPitch(v);
     u.onstart = () => $('kav').classList.add('talk'); u.onend = u.onerror = () => $('kav').classList.remove('talk'); speechSynthesis.speak(u); } catch(e) {} }
   const fx = $('fx'), fc = fx.getContext('2d'); let parts = [];
   function confetti(gold){ fx.width = innerWidth; fx.height = innerHeight; const cols = gold ? ['#F4B42A','#FFE08A','#fff'] : ['#F4B42A','#E5383B','#36C5F0','#2EE6A6','#fff'];
