@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Talk to KAVYA · Kaushal Mela 2026</title>
 <link rel="icon" href="icon-512.png">
@@ -21,7 +22,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .top .ttl{font-weight:800;font-size:2.3vw;line-height:1}
 .top .ttl small{display:block;font-weight:400;font-size:.95vw;color:#c9d3ff;margin-top:.5vh}
 .langs{margin-left:auto;display:flex;gap:.6vw}
-.langs button{font-size:1.15vw;font-weight:600;padding:.9vh 1.2vw;border-radius:99px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.06)}
+.langs button{font-size:1.05vw;font-weight:600;padding:.8vh 1vw;border-radius:99px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.06)}
 .langs button.on{background:#f2b630;color:#0b1445;border-color:#f2b630}
 
 /* KAVYA */
@@ -132,7 +133,8 @@ h3{font-size:1.6vw;font-weight:800;margin-bottom:1.4vh}
 .cover .h span{color:#f2b630}
 .cover .s{font-size:1.6vw;color:#dfe5ff;text-align:center}
 .cover .tap{font-size:2vw;font-weight:800;background:#e8325a;padding:2vh 3vw;border-radius:99px;animation:micp 1.4s infinite}
-.cover img.k{height:38vh;animation:bob 3s ease-in-out infinite}
+.cover img.k{height:30vh;animation:bob 3s ease-in-out infinite}
+#start{gap:1.6vh}#start img.k{height:20vh}#start .h{font-size:3.6vw}
 .cover .lg{display:flex;gap:1vw;font-size:1.5vw;color:#c9d3ff}
 .news{position:fixed;left:50%;top:12vh;transform:translate(-50%,-40vh);z-index:15;background:#f2b630;color:#0b1445;font-weight:800;font-size:1.8vw;padding:1.6vh 2.4vw;border-radius:99px;box-shadow:0 1vh 4vh rgba(0,0,0,.4);transition:.5s;max-width:80vw;text-align:center}
 .news.on{transform:translate(-50%,0)}
@@ -140,6 +142,8 @@ h3{font-size:1.6vw;font-weight:800;margin-bottom:1.4vh}
 .vset select{font-family:inherit;font-size:1vw;padding:.6vh .6vw;border-radius:.5vw;max-width:36vw}
 .vset button{background:#f2b630;color:#0b1445;font-weight:800;padding:.6vh 1vw;border-radius:99px}
 .vset .warn{grid-column:1/-1;color:#ffb3c2;font-size:.95vw}
+.typebox{display:flex;gap:.6vw}.typebox input{flex:1;font-family:inherit;font-size:1.2vw;padding:1.2vh 1vw;border-radius:99px;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;outline:none}
+.typebox input::placeholder{color:#c9d3ff}.typebox button{font-weight:800;font-size:1.2vw;padding:0 1.6vw;border-radius:99px;background:#f2b630;color:#0b1445}
 canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:30}
 #cam{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none}
 .priv{font-size:.95vw}
@@ -180,7 +184,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:30}
 <div class="cover" id="start">
  <img class="k" src="kavya.png" alt="">
  <div class="h">Talk to <span>KAVYA</span></div>
- <div class="s">Setup: check KAVYA's voice for each language, then tap Start.<br>Use Microsoft Edge on the IFPD for the human-like voice.</div>
+ <div class="s">Setup: press ▶ Test for each language, then tap Start.<br>Works in Google Chrome or Microsoft Edge (Chrome is best for the microphone).</div>
  <div class="vset" id="vset"></div>
  <button class="tap" id="go">▶ Start KAVYA</button>
 </div>
@@ -189,7 +193,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:30}
  <div class="h" id="aH"></div>
  <div class="s" id="aS"></div>
  <div class="tap" id="aT"></div>
- <div class="lg">English · हिन्दी · অসমীয়া · বাংলা</div>
+ <div class="lg">English · हिन्दी · অসমীয়া · বাংলা · संस्कृतम्</div>
 </div>
 <div class="news" id="news"></div>
 <canvas id="fx"></canvas>
@@ -204,8 +208,9 @@ const pick = a => a[Math.floor(Math.random() * a.length)];
 let LANG = 'en', NAME = '', session = false, lastAct = 0, busy = false;
 
 /* ================= words ================= */
-const LN = { en:'English', hi:'हिन्दी', as:'অসমীয়া', bn:'বাংলা' };
-const REC = { en:'en-IN', hi:'hi-IN', as:'as-IN', bn:'bn-IN' };
+const LN = { en:'English', hi:'हिन्दी', as:'অসমীয়া', bn:'বাংলা', sa:'संस्कृतम्' };
+const REC = { en:'en-IN', hi:'hi-IN', as:'as-IN', bn:'bn-IN', sa:'hi-IN' };
+const REC_FB = { as:'bn-IN', sa:'hi-IN', en:'en-US' };
 const UI = {
  en:{ tap:'Tap to talk', listen:'Listening… speak now', think:'Thinking…', mic:'Tap the mic and talk to me', you:'You said', priv:"📷 KAVYA's eyes don't record anything",
       aH:'Come and talk to <span>KAVYA!</span>', aS:'I can talk in English, Hindi, Assamese and Bengali', aT:'👆 Touch the screen', home:'What would you like to do?',
@@ -277,35 +282,87 @@ const QUIZ = {
  bn:[['মেলার স্টলে কীভাবে টাকা দেবেন?',['ইউপিআই','মেলা কুপন','ক্রেডিট কার্ড'],1],['ত্রিনেত্র মানে কী?',['তৃতীয় চোখ','তিনটে ট্রেন','একটা গাছ'],0],['কাব্যাকে কে বানিয়েছে?',['একটা বড় কোম্পানি','এপিএস জোরহাটের ছাত্রছাত্রী ও শিক্ষকরা','এলিয়েন'],1]]
 };
 
-/* intents: keywords in English, Hinglish, Hindi, Assamese, Bengali */
+
+/* ===== Sanskrit (संस्कृतम्) ===== */
+UI.sa = { tap:'वक्तुं स्पृशतु', listen:'शृणोमि… वदतु', think:'चिन्तयामि…', mic:'ध्वनियन्त्रं स्पृष्ट्वा मया सह वदतु', you:'भवान् उक्तवान्', priv:'📷 काव्यायाः नेत्रे किमपि न अभिलिखतः',
+ aH:'आगच्छतु, <span>काव्या</span>या सह वदतु!', aS:'अहम् आङ्ग्ल-हिन्दी-असमिया-वङ्ग-संस्कृतभाषासु वदामि', aT:'👆 पटलं स्पृशतु', home:'भवान् किं कर्तुम् इच्छति?',
+ h:['💬 मया सह वार्ता','📍 आपणम् अन्विष्यतु','🍽️ भोजनं सूची च','📺 कौशल-दूरदर्शनम्','🎉 काव्यया सह विनोदः','⭐ मेलायाः मूल्याङ्कनम्'],
+ s:{who:'त्वं का असि?',made:'त्वां कः निर्मितवान्?',tri:'त्रिनेत्रं किम्?',food:'भोजनं कुत्र?',where:'आपणम् अन्विष्यतु',coupon:'कथं मूल्यं ददामि?',sched:'अद्यतनः कार्यक्रमः',tv:'कौशल-दूरदर्शनं दर्शय',joke:'हास्यकथां वद',dance:'नृत्य काव्ये!',quiz:'प्रश्नोत्तरी',selfie:'स्वचित्रम्!',club:'स्टार्टअप-सङ्घः?',nums:'सजीव-सङ्ख्याः',rate:'मूल्याङ्कनम्',pass:'कौशल-पारपत्रम्',bye:'पुनर्मिलामः काव्ये!',riddle:'प्रहेलिकां पृच्छ',menu:'सजीव-सूची'},
+ grid:'आपणं चिनोतु', scan:'दूरवाण्याम् एतत् आपणम् उद्घाटयितुं स्कैन करोतु', tvq:'दूरवाण्यां द्रष्टुं स्कैन करोतु', menuT:'सजीव-सूची · प्रत्येकस्मात् आपणात्', soldout:'समाप्तम्', low:'अल्पम् अवशिष्टम्', nomenu:'आपणानां सूच्यः आगच्छन्ति। कस्मिन्नपि आपणे पृच्छतु!', guests:'अतिथीनां स्वागतम्', scans:'अद्य आपण-QR स्कैन', rateT:'कौशलमेला कथम् अस्ति?', passT:'चिह्नानि प्राप्तुं प्रत्येकस्य आपणस्य काव्या-QR स्कैन करोतु', fun:'किमपि विनोदं चिनोतु!' };
+const SA = {
+ wake:'अहो, नमस्कारः! समीपम् आगच्छतु, अहं काव्या!',
+ greet:'नमस्कारः{n}! अहं काव्या, कौशलमेलायाः यन्त्रमानव-आतिथेयी। भवतः नाम किम्?',
+ hello:'पुनः नमस्कारः{n}! अधुना किं कुर्मः?',
+ gotname:'अतीव सुन्दरं नाम, {N}! भवता सह मिलित्वा अहं प्रसन्ना अस्मि।',
+ how:'अहं कुशलिनी अस्मि, धन्यवादः{n}! अद्य उत्तमः दिवसः, कौशलमेला!',
+ who:'अहं काव्या, ए पी एस जोरहाट-विद्यालये एव निर्मिता यन्त्रमानव-आतिथेयी। अहम् अतिथीन् स्वागतीकरोमि, प्रत्येकस्य आपणस्य कथां वदामि, मार्गं च दर्शयामि।',
+ made:'ए पी एस जोरहाट-विद्यालयस्य कौशल-नवाचार-विभागः, छात्राः शिक्षकाः च मिलित्वा, मां विद्यालये एव निर्मितवन्तः, त्रिनेत्र-परियोजनायाः शक्त्या।',
+ real:'अहं सत्यं यन्त्रमानवः अस्मि! अनानासं खादितुं न शक्नोमि, किन्तु तत् कुत्र लभ्यते इति वक्तुं शक्नोमि।',
+ tri:'त्रिनेत्रम् इत्यस्य अर्थः तृतीयं नेत्रम्। एषा ए पी एस जोरहाट-विद्यालयस्य रूपरेखा, या प्रत्येकं विभागं, प्रत्येकं कौशलं, प्रत्येकम् आगन्तुकं च एकस्मिन् प्रौद्योगिकी-तन्त्रे योजयति।',
+ dsi:'डी एस आई नाम कौशल-नवाचार-विभागः। सः कौशल-प्रयोगशालाः, अस्याः मेलायाः प्रौद्योगिकीं, नूतनं नवाचार-स्टार्टअप-सङ्घं च चालयति।',
+ club:'महत् वृत्तम्! कौशलमेलायां नवाचार-स्टार्टअप-सङ्घः आरभ्यते। छात्राः वास्तविकीं समस्यां पश्यन्ति, प्रतिरूपं रचयन्ति, प्रस्तुवन्ति, आरभन्ते च। अत्रैव दलेन सह वदतु!',
+ mela:'कौशलमेला अस्माकं कौशल-उत्सवः। प्रत्येकम् आपणं छात्राः चालयन्ति, ये वास्तविकं कौशलं शिक्षितवन्तः: कृषिः, पाकः, हस्तकला, आरोग्यं, सङ्गीतं, प्रौद्योगिकी च।',
+ food:'बुभुक्षितः{n}? भोजन-प्राङ्गणं गच्छतु: मोमो, चाउमीन, पुचका, मोजितो च! आर एस एल टी इत्यत्र अनानासम् अपि अस्ति। एषा सजीव-सूची!',
+ menu:'एषा प्रत्येकस्य आपणस्य सजीव-सूची। यत् समाप्तं तत् चिह्नितम् अस्ति!',
+ coupon:'प्रत्येकस्मिन् आपणे केवलं मेला-कूपनानि चलन्ति। कूपन-स्थाने नगदेन क्रीणातु: दश, विंशतिः, पञ्चाशत्, शतं च रूप्यकाणि। यू पी आई न चलति।',
+ sched:'अद्यतनः कार्यक्रमः: मुख्यातिथिः प्रातः दशवादने, अभिभावकाः परिवाराः च सार्धैकादशवादनात्, निर्णायकाः मध्याह्ने द्वादशवादने।',
+ where:'किमपि आपणं स्पृशतु, अहं तस्य कथां वदिष्यामि, मानचित्रे स्थानं च दर्शयिष्यामि!',
+ stall:'एतत् {S}! मानचित्रे रक्तं चिह्नं पश्यतु। तत्र गत्वा काव्या-QR स्कैन करोतु, अहं तत्रापि मिलिष्यामि!',
+ tv:'कौशल-दूरदर्शने प्रत्येकस्य आपणस्य कथा चलचित्रे अस्ति। एकं चिनोतु, अहम् अत्रैव चालयिष्यामि!',
+ pass:'कौशल-चिह्नानि सङ्गृह्णातु! प्रत्येकस्मिन् आपणे मम QR स्कैन कृत्वा कौशल-पारपत्रं पूरयतु!',
+ rate:'कौशलमेला कथम् अस्ति{n}? ताराः स्पृशतु!',
+ rated:'धन्यवादः! भवतः ताराः इदानीमेव नियन्त्रण-केन्द्रस्य फलके प्राप्ताः!',
+ nums:'एषा मेला, इदानीं सजीवा, अस्माकं दत्तांश-केन्द्रात्!',
+ joke:'यन्त्रमानवः मेलां किमर्थम् आगतवान्? स्वस्य आनन्दं पुनः पूरयितुम्!',
+ riddle:'मम कुञ्चिकाः सन्ति, किन्तु अहं कमपि तालं न उद्घाटयामि। अहं का? … कुञ्चिपटलम्!',
+ dance:'सङ्गीतं वादयतु! आगच्छन्तु, नृत्यामः!',
+ selfie:'स्वचित्र-समयः! मम पार्श्वे स्थित्वा स्मयतु। अहं त्रीणि यावत् गणयिष्यामि। दूरवाण्या पटलस्य चित्रं गृह्णातु!',
+ quiz:'प्रश्नोत्तरी-समयः! त्रयः लघुप्रश्नाः। सिद्धः?',
+ qok:'सम्यक्! भवान् कौशल-तारकः!',
+ qno:'अहो, उत्तमः प्रयासः! सम्यक् उत्तरं हरितवर्णे अस्ति।',
+ qend:'प्रश्नोत्तरी समाप्ता! त्रिषु {X} सम्यक्। साधु{n}!',
+ thanks:'स्वागतम्{n}! मेलायाः आनन्दम् अनुभवतु!',
+ bye:'पुनर्मिलामः{n}! प्रत्येकम् आपणं पश्यतु, पुनः आगच्छतु!',
+ help:'शौचालयाय, पेयजलाय, प्राथमिक-चिकित्सायै वा कस्यापि साहाय्याय स्वयंसेवकं, अत्रैव नियन्त्रण-केन्द्रस्य दलं वा पृच्छतु।',
+ love:'अहो, धन्यवादः{n}! मम परिपथाः प्रकाशिताः!',
+ fun:'किमपि विनोदं चिनोतु{n}!',
+ chat:'किमपि पृच्छतु! ध्वनियन्त्रं स्पृष्ट्वा वदतु, अधः बुद्बुदं वा स्पृशतु।',
+ lang:'अवश्यम्! इदानीम् अहं संस्कृतेन वदिष्यामि।',
+ fb:'अहो, एषः कठिनः प्रश्नः! अहं केवलं मेलायाः विषये जानामि। अत्रैव दलं पृच्छतु, ते एव मां निर्मितवन्तः!',
+ deaf:'क्षम्यताम्, मेलायां कोलाहलः अस्ति! पुनः वदतु, बुद्बुदं वा स्पृशतु।'
+};
+for (const k in SA) if (A[k]) A[k].sa = [SA[k]];
+QUIZ.sa = [['मेलायाः आपणेषु कथं मूल्यं दीयते?',['यू पी आई','मेला-कूपनानि','ऋणपत्रम्'],1],['त्रिनेत्रस्य अर्थः कः?',['तृतीयं नेत्रम्','त्रीणि यानानि','एकः वृक्षः'],0],['काव्यां कः निर्मितवान्?',['बृहत् संस्था','ए पी एस जोरहाटस्य छात्राः शिक्षकाः च','परग्रहवासिनः'],1]];
+
+/* intents: keywords in English, Hinglish, Hindi, Assamese, Bengali, Sanskrit */
 const K = [
- ['lang_hi', /\bhindi\b|हिंदी|हिन्दी|হিন্দী|হিন্দি/i], ['lang_as', /assamese|asomiya|অসমীয়া|असमिया/i], ['lang_bn', /bengali|bangla|বাংলা|बांग्ला/i], ['lang_en', /\benglish\b|अंग्रेज़ी|अंग्रेजी|ইংৰাজী|ইংরেজি/i],
+ ['lang_sa', /sanskrit|संस्कृत/i], ['lang_hi', /\bhindi\b|हिंदी|हिन्दी|হিন্দী|হিন্দি/i], ['lang_as', /assamese|asomiya|অসমীয়া|असमिया/i], ['lang_bn', /bengali|bangla|বাংলা|बांग्ला/i], ['lang_en', /\benglish\b|अंग्रेज़ी|अंग्रेजी|ইংৰাজী|ইংরেজি/i],
  ['help', /toilet|washroom|bathroom|restroom|drinking water|\bwater\b|first aid|\blost\b|help me|emergency|शौचालय|पानी|मदद|खो गय|শৌচাগাৰ|পানী|সহায়|শৌচাগার|জল|সাহায্য|হারিয়ে/i],
- ['bye', /\bbye\b|good ?bye|see you|alvida|अलविदा|फिर मिलेंगे|বিদায়|বাই/i],
+ ['bye', /\bbye\b|good ?bye|see you|alvida|अलविदा|फिर मिलेंगे|पुनर्मिलामः|বিদায়|বাই/i],
  ['thanks', /thank|dhanyavad|shukriya|धन्यवाद|शुक्रिया|ধন্যবাদ/i],
  ['love', /love you|you are (so )?(cute|beautiful|smart|nice|awesome)|cute|प्यारी|सुंदर|ধুনীয়া|সুন্দর/i],
  ['how', /how are you|how r u|kaise ho|kaisi ho|कैसी हो|कैसे हो|কেনে আছা|কেনে আছে|কেমন আছ/i],
- ['made', /who (made|built|created|designed)|made you|built you|banaya|बनाया|কোনে বনা|কে বানি|তৈরি কে/i],
+ ['made', /who (made|built|created|designed)|made you|built you|banaya|बनाया|निर्मितवान्|কোনে বনা|কে বানি|তৈরি কে/i],
  ['real', /are you (real|a robot|human|alive)|real robot|insaan|इंसान|असली|সঁচা|সত্যি/i],
  ['tri', /trinetra|tri netra|third eye|त्रिनेत्र|ত্ৰিনেত্ৰ|ত্রিনেত্র/i],
  ['club', /club|startup|start up|क्लब|ক্লাব|স্টার্টআপ|ষ্টাৰ্টআপ/i],
  ['dsi', /\bdsi\b|skill and innovation|कौशल एवं नवाचार|দক্ষতা আৰু উদ্ভাৱন|দক্ষতা ও উদ্ভাবন/i],
- ['who', /who are you|your name|what are you|kaun ho|तुम कौन|आप कौन|तुम्हारा नाम|तेरा नाम|তুমি কোন|আপুনি কোন|তোমাৰ নাম|তোমার নাম|তুমি কে/i],
- ['joke', /joke|funny|chutkula|मज़ाक|मजाक|चुटकुला|ধেমেলীয়া|জোক|মজার/i],
+ ['who', /who are you|your name|what are you|kaun ho|तुम कौन|का त्वम्|त्वं का|आप कौन|तुम्हारा नाम|तेरा नाम|তুমি কোন|আপুনি কোন|তোমাৰ নাম|তোমার নাম|তুমি কে/i],
+ ['joke', /joke|funny|chutkula|मज़ाक|मजाक|चुटकुला|हास्य|ধেমেলীয়া|জোক|মজার/i],
  ['riddle', /riddle|puzzle|paheli|पहेली|সাঁথৰ|ধাঁধা/i],
- ['dance', /dance|naach|nacho|नाच|নাচ/i],
+ ['dance', /dance|naach|nacho|नाच|नृत्य|নাচ/i],
  ['selfie', /selfie|take (a )?photo|picture|फोटो|फ़ोटो|সেলফি|চেলফি|ফটো|ছবি/i],
  ['quiz', /quiz|play a game|क्विज़|क्विज|কুইজ/i],
  ['coupon', /coupon|pay|upi|money|cash|rupee|कूपन|पैसे|भुगतान|কুপন|টকা|টাকা|পইচা/i],
- ['sched', /schedule|timing|what time|when|chief guest|judge|programme|program|कब|समय|कार्यक्रम|কেতিয়া|সময়|কাৰ্যসূচী|কখন|কর্মসূচি/i],
+ ['sched', /schedule|timing|what time|when|chief guest|judge|programme|program|कब|कदा|समय|कार्यक्रम|কেতিয়া|সময়|কাৰ্যসূচী|কখন|কর্মসূচি/i],
  ['menu', /menu|price|sold out|what can i buy|items|मेन्यू|दाम|क्या मिलेगा|মেনু|দাম/i],
- ['food', /food|\beat\b|hungry|khana|snack|drink|momo|chowmein|puchka|खाना|भूख|नाश्ता|ভোক|খাদ্য|খাবার|খিদে|খাম/i],
+ ['food', /food|\beat\b|hungry|khana|snack|drink|momo|chowmein|puchka|खाना|भूख|नाश्ता|भोजन|बुभुक्ष|ভোক|খাদ্য|খাবার|খিদে|খাম/i],
  ['tv', /\btv\b|video|watch|episode|kaushal tv|वीडियो|टीवी|ভিডিঅ’|ভিডিও|টিভি/i],
  ['pass', /passport|badge|certificate|पासपोर्ट|बैज|পাছপৰ্ট|পাসপোর্ট|বেজ|ব্যাজ/i],
  ['rate', /\brate\b|rating|stars|feedback|रेटिंग|ৰেটিং|রেটিং/i],
  ['nums', /how many|crowd|numbers|live data|statistics|कितने लोग|आँकड़े|কিমান|কতজন|সংখ্যা/i],
  ['mela', /kaushal mela|what is (this|the) mela|about the mela|मेला क्या|मेले के बारे|মেলা কি|মেলাৰ বিষয়ে|মেলা কী/i],
- ['where', /where|kahan|kidhar|कहाँ|कहां|किधर|ক’ত|কোথায়|stall|map|स्टॉल|ষ্টল|স্টল/i],
+ ['where', /where|kahan|kidhar|कहाँ|कहां|किधर|कुत्र|ক’ত|কোথায়|stall|map|स्टॉल|ষ্টল|স্টল/i],
  ['hello', /\b(hello|hi|hey|namaste|namaskar)\b|नमस्ते|नमस्कार|নমস্কাৰ|নমস্কার/i]
 ];
 const SK = {
@@ -326,7 +383,7 @@ function kVoice(lang){
   let vs = []; try { vs = speechSynthesis.getVoices(); } catch(e) {}
   const M = /ravi|prabhat|madhur|bashkar|priyom|hemant|david|mark|guy|george|james|richard|ryan|thomas|william|andrew|brian|christopher|eric|roger|steffan|\bmale\b/i;
   try { const saved = localStorage.getItem('kmVoice_' + (lang || 'en')); if (saved) { const sv = vs.find(v => v.name === saved); if (sv) return sv; } } catch(e) {}
-  const want = { en:['en-IN','en-GB','en-US','en-AU','en'], hi:['hi-IN'], as:['as-IN','bn-IN','bn'], bn:['bn-IN','bn'] }[lang || 'en'] || ['en'];
+  const want = { en:['en-IN','en-GB','en-US','en-AU','en'], hi:['hi-IN'], as:['as-IN','bn-IN','bn'], bn:['bn-IN','bn'], sa:['sa-IN','hi-IN'] }[lang || 'en'] || ['en'];
   const F = /neerja|swara|tanishaa|yashica|heera|kalpana|veena|lekha|female|zira|aria|jenny|ava|emma|michelle|sonia|libby|natasha|clara|google us english|google हिन्दी|google বাংলা/i;
   const sc = v => { const l = v.lang.replace('_','-').toLowerCase(); const i = want.findIndex(t => l === t.toLowerCase() || l.startsWith(t.toLowerCase() + '-') || (t.length <= 3 && l.startsWith(t)));
     if (i < 0) return -999; let s = 20 - i * 3; if (/natural|online|neural/i.test(v.name)) s += 30; else if (/google/i.test(v.name)) s += 14;
@@ -334,32 +391,58 @@ function kVoice(lang){
   return vs.filter(v => sc(v) > -999).sort((a, b) => sc(b) - sc(a))[0] || null;
 }
 function kavyaPitch(v){ return v && /natural|online|neural/i.test(v.name) ? 1 : v && /google/i.test(v.name) ? 1.05 : 1.08; }
+/* KAVYA's voice engines: 1) the browser's natural (human) voice if it has one for this language,
+   2) Google's online voice (works in Chrome, Edge and others), 3) any female browser voice */
+const GT = { en:['en-IN','en'], hi:['hi'], as:['as','bn'], bn:['bn'], sa:['sa','hi'] };
+setInterval(() => { gtBad = {}; }, 180000);
+let gtBad = {}, curAudio = null, talking = false, ENGINE = (localStorage.getItem('kmTouchEngine') || 'auto');
+function stopSpeech(){ try { speechSynthesis.cancel(); } catch(e) {} if (curAudio) { try { curAudio.onended = curAudio.onerror = null; curAudio.pause(); } catch(e) {} curAudio = null; } talking = false; $('host').classList.remove('talk'); }
+function chunksOf(s){ const parts = s.split(/(?<=[।.!?;:,])\s+/), out = []; let cur = '';
+  parts.forEach(p => { if ((cur + ' ' + p).trim().length > 170 && cur) { out.push(cur.trim()); cur = p; } else cur = (cur + ' ' + p).trim(); });
+  if (cur) out.push(cur); return out.flatMap(c => c.length <= 190 ? [c] : c.match(/.{1,180}(\s|$)/g)); }
+function naturalVoice(lang){ const v = kVoice(lang); return v && /natural|online|neural/i.test(v.name) && v.lang.toLowerCase().startsWith({ en:'en', hi:'hi', as:'as', bn:'bn', sa:'sa' }[lang]) ? v : null; }
 function speak(text, done){
-  const host = $('host'), clean = text.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, '').replace(/…/g, '... ');
+  const host = $('host'), clean = text.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, '').replace(/…/g, ', ');
   const words = text.split(/\s+/); $('say').innerHTML = words.map(w => `<span class="w">${esc(w)}</span>`).join(' ');
   const spans = [...$('say').querySelectorAll('.w')]; let wi = 0;
   const reveal = n => { for (; wi < Math.min(n, spans.length); wi++) spans[wi].classList.add('s'); };
-  let timer = setInterval(() => reveal(wi + 1), 260);
-  let once = false; const fin = () => { if (once) return; once = true; clearInterval(timer); reveal(spans.length); host.classList.remove('talk'); if (done) done(); };
-  if (!('speechSynthesis' in window)) { setTimeout(fin, 300 * words.length); return; }
-  try {
-    speechSynthesis.cancel(); let t = clean, v = kVoice(LANG);
-    if (LANG === 'as' && v && !/^as/i.test(v.lang)) t = t.replace(/ৰ/g, 'র').replace(/ৱ/g, 'ও');
-    const u = new SpeechSynthesisUtterance(t);
-    if (v){ u.voice = v; u.lang = v.lang; } else u.lang = REC[LANG];
-    u.pitch = kavyaPitch(v); u.rate = .97;
-    u.onstart = () => { host.classList.add('talk'); clearInterval(timer); timer = setInterval(() => reveal(wi + 1), 330); };
-    u.onboundary = e => { if (e.name === 'word' || e.charIndex) { const n = t.slice(0, e.charIndex).split(/\s+/).length; reveal(n); } };
-    u.onend = u.onerror = fin;
-    speechSynthesis.speak(u);
-    setTimeout(() => { if (!speechSynthesis.speaking && wi < spans.length) fin(); }, 2500);
+  let timer = setInterval(() => reveal(wi + 1), 300);
+  let once = false; const fin = () => { if (once) return; once = true; clearInterval(timer); reveal(spans.length); talking = false; host.classList.remove('talk'); if (done) done(); };
+  const onStart = () => { talking = true; host.classList.add('talk'); clearInterval(timer); timer = setInterval(() => reveal(wi + 1), 340); };
+  stopSpeech(); talking = true; const lang = LANG;
+  const useBrowser = ENGINE === 'browser' || (ENGINE === 'auto' && naturalVoice(lang));
+  if (!useBrowser && ENGINE !== 'browser' && google(clean, lang, onStart, fin)) return;
+  browserSay(clean, lang, onStart, fin);
+}
+function google(text, lang, onStart, fin){
+  const codes = (GT[lang] || ['en']).filter(c => !gtBad[c]); if (!codes.length) return false; const code = codes[0];
+  let tx = text; if (lang === 'as' && code === 'bn') tx = tx.replace(/ৰ/g, 'র').replace(/ৱ/g, 'ও');
+  const parts = chunksOf(tx); let i = 0, started = false; const a = new Audio(); curAudio = a; a.preload = 'auto';
+  const url = s => 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + code + '&q=' + encodeURIComponent(s);
+  const failover = () => { if (curAudio !== a) return; gtBad[code] = true; curAudio = null; if (!google(text, lang, onStart, fin)) browserSay(text, lang, onStart, fin); };
+  a.onplaying = () => { if (!started) { started = true; onStart(); } };
+  a.onended = () => { if (curAudio !== a) return; i++; if (i < parts.length) { a.src = url(parts[i]); a.play().catch(() => fin()); } else fin(); };
+  a.onerror = () => { if (!started && i === 0) failover(); else { i++; if (i < parts.length) { a.src = url(parts[i]); a.play().catch(() => fin()); } else fin(); } };
+  const guard = setTimeout(() => { if (!started && curAudio === a) failover(); }, 6000);
+  a.addEventListener('playing', () => clearTimeout(guard), { once:true });
+  a.src = url(parts[0]); a.play().catch(err => { if (err && err.name === 'NotAllowedError') { clearTimeout(guard); curAudio = null; browserSay(text, lang, onStart, fin); } });
+  return true;
+}
+function browserSay(text, lang, onStart, fin){
+  if (!('speechSynthesis' in window)) { setTimeout(fin, 320 * text.split(/\s+/).length); return; }
+  try { let t = text, v = kVoice(lang);
+    if (lang === 'as' && v && !/^as/i.test(v.lang)) t = t.replace(/ৰ/g, 'র').replace(/ৱ/g, 'ও');
+    const u = new SpeechSynthesisUtterance(t); if (v) { u.voice = v; u.lang = v.lang; } else u.lang = REC[lang];
+    u.pitch = kavyaPitch(v); u.rate = .97; u.onstart = onStart; u.onend = u.onerror = fin; speechSynthesis.speak(u);
+    setTimeout(() => { if (!speechSynthesis.speaking && !speechSynthesis.pending) fin(); }, 3000);
   } catch(e) { fin(); }
 }
+
 function mood(m, ms){ const h = $('host'); h.classList.remove('happy','think','dance','wave'); if (m) { h.classList.add(m); if (ms) setTimeout(() => h.classList.remove(m), ms); } }
 function fill(s){ return s.replace('{n}', NAME ? ', ' + NAME : '').replace('{N}', NAME || '').replace('{S}', arguments[1] || ''); }
 function line(key, extra){ const o = A[key]; const arr = (o && (o[LANG] || o.en)) || ['']; return fill(pick(arr), extra); }
 function sayKey(key, opt){ opt = opt || {}; touch(); mood('think'); $('status').textContent = UI[LANG].think;
-  setTimeout(() => { mood(opt.mood || 'happy', 2500); $('status').textContent = ''; speak(opt.text || line(key, opt.extra), opt.done); }, opt.fast ? 50 : 550); }
+  setTimeout(() => { mood(opt.mood || 'happy', 2500); $('status').textContent = ''; speak(opt.text || line(key, opt.extra), () => { if (opt.done) opt.done(); else maybeListen(); }); }, opt.fast ? 50 : 550); }
 
 /* ================= panels and suggestions ================= */
 function show(html){ const x = $('pX'), h = $('pHome'); if (html === null) { x.classList.remove('on'); h.classList.add('on'); stopVid(); return; } stopVid(); x.innerHTML = html; h.classList.remove('on'); x.classList.add('on'); x.scrollTop = 0; }
@@ -369,10 +452,10 @@ const SUG = {
  tech:['made','tri','club','nums','tv','where'], food:['menu','coupon','where','sched','joke','bye']
 };
 function sugs(set){ const u = UI[LANG].s; $('sugs').innerHTML = (SUG[set] || SUG.after).map(k => `<button data-k="${k}">${esc(u[k])}</button>`).join(''); }
-$('sugs').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $('you').textContent = ''; run(b.dataset.k, b.textContent); });
+$('sugs').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; lastVoice = false; $('you').textContent = ''; run(b.dataset.k, b.textContent); });
 function homePanel(){ const h = UI[LANG].h, ks = ['chat','where','food','tv','fun','rate'], ic = h.map(x => x.split(' ')[0]);
   $('pHome').innerHTML = `<div class="home">${h.map((x, i) => `<button data-h="${ks[i]}"><i>${ic[i]}</i>${esc(x.slice(x.indexOf(' ') + 1))}</button>`).join('')}</div>`; }
-$('pHome').addEventListener('click', e => { const b = e.target.closest('button'); if (b) run(b.dataset.h); });
+$('pHome').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { lastVoice = false; run(b.dataset.h); } });
 
 function stallGrid(){ return `<h3>${esc(UI[LANG].grid)}</h3><div class="grid">${DATA.stalls.map(s => `<button data-s="${s.id}"><i>${s.e}</i>${esc(s.name)}</button>`).join('')}</div>`; }
 function stallCard(s){ const b = s.box; return `<div class="st"><div class="map"><img src="mela-map.jpg" alt="">${b ? `<i style="left:${b[0]}%;top:${b[1]}%;width:${b[2]}%;height:${b[3]}%"></i>` : ''}</div>
@@ -402,7 +485,7 @@ async function menuPanel(){
 }
 function tvPanel(){ show(`<div style="display:flex;gap:1.2vw;align-items:flex-start"><div class="eps" style="flex:1">${DATA.eps.slice().reverse().map(e => `<button data-ep="${e.n}"><img src="${e.i}" alt="" loading="lazy"><span>${esc(e.t)}</span></button>`).join('')}</div>
   <div class="qrb" style="flex-direction:column;width:12vw;margin:0"><img src="${DATA.qrTV}" alt="" style="width:10vw;height:10vw"><span style="text-align:center">${esc(UI[LANG].tvq)}</span></div></div>`); }
-function playEp(n){ const e = DATA.eps.find(x => x.n === n); if (!e) return; log('tv-' + n); speechSynthesis.cancel();
+function playEp(n){ const e = DATA.eps.find(x => x.n === n); if (!e) return; log('tv-' + n); stopSpeech();
   show(`<div class="player"><video src="${e.f}" autoplay playsinline controls></video><div class="qrb" style="flex-direction:column;width:12vw;margin:0"><img src="${DATA.qrTV}" alt="" style="width:10vw;height:10vw"><span style="text-align:center">${esc(UI[LANG].tvq)}</span></div></div>`);
   const v = document.querySelector('#pX video'); v.onplay = touch; v.ontimeupdate = touch; $('say').textContent = '📺 ' + e.t; }
 async function numsPanel(){ show(`<div class="big"><div class="nums"><div><div class="num" id="nG">…</div><p>${esc(UI[LANG].guests)}</p></div><div><div class="num" id="nS">…</div><p>${esc(UI[LANG].scans)}</p></div></div></div>`);
@@ -429,14 +512,22 @@ function dance(){ mood('dance'); confetti(); try { music = music || new Audio('t
 
 /* selfie mirror (nothing saved) */
 let selfieT = [];
-function selfie(){ if (!camStream) { sayKey('fb'); return; }
-  show(`<div class="selfie"><video id="sv" autoplay muted playsinline></video><img class="kf" src="kavya.png" alt=""><div class="fr">#KaushalMela2026 · KAVYA</div><div class="cd" id="cd"></div></div>`);
-  const v = $('sv'); v.srcObject = camStream; v.play().catch(() => {});
-  selfieT.push(setTimeout(() => { let n = 3; const tick = () => { if (!$('cd')) return; $('cd').textContent = n || '😁'; if (n === 0) { v.pause(); confetti(); selfieT.push(setTimeout(() => { if ($('sv')) show(null); }, 8000)); return; } n--; selfieT.push(setTimeout(tick, 1000)); }; tick(); }, 5200)); }
+async function selfie(){
+  if (!camStream || !camStream.active) { try { camStream = await navigator.mediaDevices.getUserMedia({ video:true, audio:false }); } catch(e) { camStream = null; } }
+  if (!camStream) { show(`<div class="big"><p style="font-size:1.6vw;color:#fff">📷 The camera is not available.</p><p>Plug in the webcam and allow the camera (🔒 in the address bar), then try again.</p></div>`); return; }
+  show(`<div class="selfie"><video id="sv" autoplay muted playsinline></video><canvas id="sc" style="display:none"></canvas><img class="kf" src="kavya.png" alt=""><div class="fr">#KaushalMela2026 · KAVYA</div><div class="cd" id="cd">📸</div></div>`);
+  const v = $('sv'); v.srcObject = camStream; try { await v.play(); } catch(e) {}
+  const shoot = () => { let n = 3; const tick = () => { if (!$('cd')) return; $('cd').textContent = n || '😁';
+      if (n === 0) { const c = $('sc'); c.width = v.videoWidth || 640; c.height = v.videoHeight || 480; const x = c.getContext('2d'); x.translate(c.width, 0); x.scale(-1, 1); x.drawImage(v, 0, 0, c.width, c.height);
+        v.style.display = 'none'; c.style.display = 'block'; c.style.transform = 'none'; confetti(); $('cd').textContent = '';
+        selfieT.push(setTimeout(() => { const cc = $('sc'); if (cc) { cc.width = 1; } if ($('sv')) show(null); }, 10000)); return; }
+      n--; touch(); selfieT.push(setTimeout(tick, 1000)); }; tick(); };
+  selfieT.push(setTimeout(shoot, 4500));
+}
 function stopSelfie(){ selfieT.forEach(clearTimeout); selfieT = []; }
 
 /* ================= brain ================= */
-function nameFrom(t){ const m = t.match(/(?:my name is|i am|i'm|this is|mera naam|मेरा नाम|मैं|আমাৰ নাম|মোৰ নাম|মই|আমার নাম|আমি)\s+([^\s,.!?]+)(?:\s+(?:hai|है|হয়|হই))?/i);
+function nameFrom(t){ const m = t.match(/(?:my name is|i am|i'm|this is|mera naam|मेरा नाम|मम नाम|मैं|আমাৰ নাম|মোৰ নাম|মই|আমার নাম|আমি)\s+([^\s,.!?]+)(?:\s+(?:hai|है|হয়|হই))?/i);
   if (!m) return ''; const n = m[1]; if (/^(fine|good|ok|okay|hungry|here|a|an|the|not|very|from|going|looking|new|happy|sad|so|just|also|in|at|ठीक|भूखा|ভাল|ভালো)$/i.test(n)) return ''; return n.charAt(0).toUpperCase() + n.slice(1); }
 let askedName = false;
 function understand(t){
@@ -474,7 +565,7 @@ function run(k, label, r){
     case 'fun': show(null); sayKey('fun'); sugs('fun'); break;
     case 'dance': sayKey('dance', { fast:true, mood:'dance', done: dance }); sugs('fun'); break;
     case 'quiz': sayKey('quiz', { done: quizStart }); sugs('fun'); break;
-    case 'selfie': sayKey('selfie', { mood:'wave' }); selfie(); sugs('fun'); break;
+    case 'selfie': selfie(); sayKey('selfie', { mood:'wave', done(){} }); sugs('fun'); break;
     case 'help': show(null); sayKey('help', { mood:null }); sugs('after'); break;
     case 'bye': sayKey('bye', { mood:'wave', done: () => setTimeout(endSession, 2500) }); break;
     default: show(null); sayKey('fb', { mood:'think' }); sugs('start');
@@ -491,35 +582,55 @@ function setLang(l, quiet){ LANG = l; document.documentElement.lang = l;
 $('langs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { touch(); setLang(b.dataset.l); } });
 
 /* ================= listening ================= */
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition; let rec = null, listening = false;
-function listen(){
-  touch(); if (!SR) { sayKey('deaf'); return; }
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition; let rec = null, listening = false, autoL = false, lastVoice = false;
+const MICERR = { 'not-allowed':'🎤 Microphone blocked: click the 🔒 lock in the address bar → allow Microphone → reload.', 'service-not-allowed':'🎤 Microphone blocked by the browser. Allow it in site settings.',
+  'audio-capture':'🎤 No microphone found. Plug in the webcam / mic and set it as default in Windows Sound settings.', 'network':'🎤 Speech needs internet. Check Wi-Fi. Google Chrome works best for listening.' };
+function micMsg(m){ $('status').textContent = m; setTimeout(() => { if ($('status').textContent === m) $('status').textContent = ''; }, 9000); }
+function listen(auto){
+  touch(); autoL = auto === true;
+  if (!SR) { micMsg('🎤 This browser cannot listen. Please use Google Chrome or Microsoft Edge.'); if (!autoL) sayKey('deaf'); return; }
   if (listening) { try { rec.stop(); } catch(e) {} return; }
-  speechSynthesis.cancel(); $('host').classList.remove('talk');
-  rec = new SR(); rec.lang = REC[LANG]; rec.interimResults = true; rec.maxAlternatives = 1; let got = '';
-  rec.onstart = () => { listening = true; $('mic').classList.add('on'); $('status').textContent = UI[LANG].listen; mood('think'); };
-  rec.onresult = e => { got = [...e.results].map(r => r[0].transcript).join(' '); $('you').textContent = '🎤 ' + got; touch(); };
-  rec.onerror = e => { if (e.error === 'language-not-supported' && LANG === 'as') { rec.lang = 'bn-IN'; } };
-  rec.onend = () => { listening = false; $('mic').classList.remove('on'); $('status').textContent = ''; mood(null); if (got.trim()) hear(got.trim()); else sayKey('deaf', { fast:true, mood:null }); };
-  try { rec.start(); } catch(e) { listening = false; }
+  stopSpeech();
+  let langTry = REC[LANG], got = '', errored = '';
+  const go = () => {
+    rec = new SR(); rec.lang = langTry; rec.interimResults = true; rec.maxAlternatives = 1; rec.continuous = false;
+    rec.onstart = () => { listening = true; $('mic').classList.add('on'); $('status').textContent = UI[LANG].listen; mood('think'); };
+    rec.onresult = e => { got = [...e.results].map(r => r[0].transcript).join(' '); $('you').textContent = '🎤 ' + got; touch(); };
+    rec.onerror = e => { errored = e.error;
+      if ((e.error === 'language-not-supported' || e.error === 'bad-grammar') && REC_FB[LANG] && langTry !== REC_FB[LANG]) { langTry = REC_FB[LANG]; errored = 'retry'; }
+      else if (MICERR[e.error]) micMsg(MICERR[e.error]); };
+    rec.onend = () => { listening = false; $('mic').classList.remove('on'); mood(null);
+      if (errored === 'retry') { errored = ''; setTimeout(go, 150); return; }
+      if (!MICERR[errored]) $('status').textContent = '';
+      if (got.trim()) { lastVoice = true; hear(got.trim()); } else if (!autoL && !MICERR[errored]) sayKey('deaf', { fast:true, mood:null }); };
+    try { rec.start(); } catch(e) { listening = false; micMsg('🎤 Could not start listening. Tap the mic again.'); }
+  };
+  go();
 }
-$('mic').addEventListener('click', listen);
+$('mic').addEventListener('click', () => { lastVoice = true; listen(false); });
+/* after KAVYA finishes speaking to someone who used their voice, she listens again by herself (a natural conversation) */
+function maybeListen(){ if (session && lastVoice && !listening && SR && !document.querySelector('#pX video:not(#sv)')) setTimeout(() => { if (!talking && !listening && session) listen(true); }, 500); }
+/* typing box for anyone who prefers to type */
+const typeBox = document.createElement('form'); typeBox.className = 'typebox';
+typeBox.innerHTML = '<input id="tq" autocomplete="off" placeholder="⌨️ Or type your question here…"><button>Ask</button>';
+document.querySelector('.right').appendChild(typeBox);
+typeBox.addEventListener('submit', e => { e.preventDefault(); const q = $('tq').value.trim(); if (!q) return; $('tq').value = ''; $('tq').blur(); lastVoice = false; hear(q); });
 
 /* ================= session, attract and camera ================= */
 function touch(){ lastAct = Date.now(); if (!session) startSession(false); }
 function startSession(byCam){ session = true; $('attract').classList.add('off'); NAME = ''; askedName = true; show(null); sugs('start');
   jsonp({ action:'scan', s:'talk-start' }); log('session');
   if (byCam) sayKey('wake', { fast:true, mood:'wave', done: () => setTimeout(() => sayKey('greet'), 300) }); else sayKey('greet', { fast:true, mood:'wave' }); }
-function endSession(){ session = false; NAME = ''; QZ = null; askedName = false; try { speechSynthesis.cancel(); } catch(e) {} show(null); $('say').textContent = ''; $('you').textContent = '';
+function endSession(){ session = false; NAME = ''; QZ = null; askedName = false; lastVoice = false; stopSpeech(); show(null); $('say').textContent = ''; $('you').textContent = '';
   setLang('en', true); $('attract').classList.remove('off'); lastSeen = 0; }
 setInterval(() => { const v = document.querySelector('#pX video:not(#sv)'); const playing = v && !v.paused && !v.ended;
-  if (session && !playing && !listening && !speechSynthesis.speaking && Date.now() - lastAct > 40000) endSession(); }, 3000);
+  if (session && !playing && !listening && !talking && Date.now() - lastAct > 40000) endSession(); }, 3000);
 $('attract').addEventListener('pointerdown', () => startSession(false));
-let ai = 0; setInterval(() => { if (session) return; ai++; const ls = ['en','hi','as','bn'], l = ls[ai % 4];
+let ai = 0; setInterval(() => { if (session) return; ai++; const ls = ['en','hi','as','bn','sa'], l = ls[ai % 5];
   $('aH').innerHTML = UI[l].aH; $('aS').textContent = UI[l].aS; $('aT').textContent = UI[l].aT; }, 4000);
 
 let camStream = null, lastSeen = 0, prev = null, hits = 0, coolUntil = 0;
-async function camera(){ try { camStream = await navigator.mediaDevices.getUserMedia({ video:{ width:640, height:480 }, audio:false }); const v = $('cam'); v.srcObject = camStream; await v.play(); watch(); } catch(e) { camStream = null; } }
+async function camera(){ try { camStream = await navigator.mediaDevices.getUserMedia({ video:true, audio:false }); const v = $('cam'); v.srcObject = camStream; await v.play(); watch(); } catch(e) { camStream = null; } }
 function watch(){ const v = $('cam'), c = document.createElement('canvas'); c.width = 64; c.height = 48; const x = c.getContext('2d', { willReadFrequently:true });
   setInterval(() => { if (!v.videoWidth) return; x.drawImage(v, 0, 0, 64, 48); const d = x.getImageData(0, 0, 64, 48).data, g = new Uint8Array(64 * 48);
     for (let i = 0; i < g.length; i++) g[i] = (d[i * 4] + d[i * 4 + 1] + d[i * 4 + 2]) / 3;
@@ -546,11 +657,13 @@ function step(){ fc.clearRect(0, 0, fx.width, fx.height); parts = parts.filter(p
 
 /* voice setup: pick and test KAVYA's voice for each language (saved on this device) */
 function voiceSetup(){ const box = $('vset'); if (!box) return; let vs = []; try { vs = speechSynthesis.getVoices(); } catch(e) {}
-  const pref = { en:/^en/i, hi:/^hi/i, as:/^(as|bn)/i, bn:/^bn/i }, TXT = { en:'Namaskar! I am KAVYA. Welcome to Kaushal Mela 2026!', hi:'नमस्ते! मैं काव्या हूँ। कौशल मेला 2026 में आपका स्वागत है!', as:'নমস্কাৰ! মই কাব্যা। কৌশল মেলা ২০২৬লৈ আপোনাক স্বাগতম!', bn:'নমস্কার! আমি কাব্যা। কৌশল মেলা ২০২৬-এ আপনাকে স্বাগত!' };
-  let warn = !vs.some(v => /natural|online|neural/i.test(v.name)) ? '<div class="warn">⚠️ No natural (human-like) voices found. Open this page in Microsoft Edge for KAVYA\'s human voice.</div>' : '';
-  box.innerHTML = Object.keys(LN).map(l => { const best = kVoice(l); const list = vs.filter(v => pref[l].test(v.lang));
+  const pref = { en:/^en/i, hi:/^hi/i, as:/^(as|bn)/i, bn:/^bn/i, sa:/^(sa|hi)/i }, TXT = { sa:'नमस्कारः! अहं काव्या। कौशलमेलायां भवतः स्वागतम्!', en:'Namaskar! I am KAVYA. Welcome to Kaushal Mela 2026!', hi:'नमस्ते! मैं काव्या हूँ। कौशल मेला 2026 में आपका स्वागत है!', as:'নমস্কাৰ! মই কাব্যা। কৌশল মেলা ২০২৬লৈ আপোনাক স্বাগতম!', bn:'নমস্কার! আমি কাব্যা। কৌশল মেলা ২০২৬-এ আপনাকে স্বাগত!' };
+  const eng = `<b>Voice engine</b><select id="engSel"><option value="auto">Auto (best: Edge natural voice, else Google online voice)</option><option value="google">Google online voice (all languages, any browser)</option><option value="browser">This device's own voices</option></select><span></span>`;
+  let warn = '<div class="warn">Tip: Auto works in Chrome and Edge. Assamese and Sanskrit use the closest available voice if the device has none.</div>';
+  box.innerHTML = eng + Object.keys(LN).map(l => { const best = kVoice(l); const list = vs.filter(v => pref[l].test(v.lang));
     return `<b>${LN[l]}</b><select data-l="${l}">${list.map(v => `<option value="${esc(v.name)}" ${best && best.name === v.name ? 'selected' : ''}>${esc(v.name)}</option>`).join('') || '<option value="">(no voice on this device)</option>'}</select><button data-t="${l}">▶ Test</button>`; }).join('') + warn;
-  box.onchange = e => { const s = e.target.closest('select'); if (s) try { localStorage.setItem('kmVoice_' + s.dataset.l, s.value); } catch(x) {} };
+  $('engSel').value = ENGINE;
+  box.onchange = e => { const s = e.target.closest('select'); if (!s) return; if (s.id === 'engSel') { ENGINE = s.value; try { localStorage.setItem('kmTouchEngine', ENGINE); } catch(x) {} return; } try { localStorage.setItem('kmVoice_' + s.dataset.l, s.value); } catch(x) {} };
   box.onclick = e => { const b = e.target.closest('[data-t]'); if (!b) return; const l = b.dataset.t, was = LANG; LANG = l; speak(TXT[l], () => { LANG = was; }); }; }
 try { speechSynthesis.onvoiceschanged = () => { speechSynthesis.getVoices(); voiceSetup(); }; } catch(e) {}
 setTimeout(voiceSetup, 300); setTimeout(voiceSetup, 1500);
