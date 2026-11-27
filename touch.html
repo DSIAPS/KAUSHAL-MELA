@@ -54,7 +54,10 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .kname{font-weight:800;font-size:2.4vw;letter-spacing:.6vw;margin-top:2.4vh}
 .status{font-size:1.2vw;color:#9fe7ff;margin-top:.6vh;min-height:2vh}
 .mic{margin-top:2.6vh;width:9vw;height:9vw;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff6b8a,#e8325a 60%,#b0173b);box-shadow:0 0 0 .7vw rgba(232,50,90,.25),0 1vh 3vh rgba(0,0,0,.4);display:grid;place-items:center;font-size:3.6vw}
+.mic{--lv:0;box-shadow:0 0 0 calc(.7vw + var(--lv) * 2.4vw) rgba(242,182,48,calc(.25 + var(--lv) * .5)),0 1vh 3vh rgba(0,0,0,.4)!important}
 .mic.on{animation:micp 1s infinite}
+#micbar{position:fixed;left:2vw;bottom:5vh;width:32vw;z-index:12;background:#e8325a;color:#fff;font-weight:600;font-size:1.05vw;line-height:1.35;padding:1.2vh 1vw;border-radius:1vw;box-shadow:0 1vh 3vh rgba(0,0,0,.4);opacity:0;transform:translateY(40%);pointer-events:none;transition:.4s}
+#micbar.on{opacity:1;transform:none}
 @keyframes micp{50%{box-shadow:0 0 0 1.8vw rgba(232,50,90,.15),0 1vh 3vh rgba(0,0,0,.4)}}
 .mic small{display:block;font-size:.95vw;font-weight:600;margin-top:-1vh}
 .mlab{font-size:1.05vw;color:#dfe5ff;margin-top:1.2vh}
@@ -148,6 +151,17 @@ h3{font-size:1.6vw;font-weight:800;margin-bottom:1.4vh}
 .sbtn{display:flex;flex-direction:column;gap:1.4vh;width:14vw}.sb{display:block;text-align:center;text-decoration:none;font-weight:800;font-size:1.4vw;padding:1.8vh 1vw;border-radius:99px;background:#f2b630;color:#0b1445}.sb.alt{background:rgba(255,255,255,.15);color:#fff}.sbtn small{font-size:.9vw;color:#c9d3ff;text-align:center}
 #printArea{display:none}
 @media print{@page{size:A5 landscape;margin:6mm}body *{visibility:hidden!important}#printArea,#printArea *{visibility:visible!important}#printArea{display:block!important;position:fixed;inset:0}#printArea img{width:100%;height:auto}}
+.selfie2{display:grid;grid-template-columns:1.35fr 1fr;gap:1.2vw;height:100%}
+.selfie2 .live{position:relative;border-radius:1.2vw;overflow:hidden;background:#000}
+.selfie2 video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.selfie2 .kf{position:absolute;right:2%;bottom:0;height:70%}
+.selfie2 .fr{position:absolute;left:3%;top:3%;background:#f2b630;color:#0b1445;font-weight:800;font-size:1.2vw;padding:.7vh 1.1vw;border-radius:99px}
+.selfie2 .cd{position:absolute;inset:0;display:grid;place-items:center;font-size:12vw;font-weight:800;color:#f2b630;text-shadow:0 1vh 3vh rgba(0,0,0,.6)}
+.avp{display:flex;flex-direction:column;gap:1vh;min-height:0}.avp b{font-size:1.3vw}
+.avg{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:.6vw}
+.avg button{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);border-radius:.9vw;padding:.6vh .3vw;display:flex;flex-direction:column;align-items:center;gap:.3vh;font-size:.78vw;font-weight:600}
+.avg button img{height:6.2vh}.avg button.on{background:#f2b630;color:#0b1445;border-color:#f2b630}
+.shootb{font-weight:800;font-size:1.6vw;padding:1.8vh 0;border-radius:99px;background:#e8325a;color:#fff}.shootb:disabled{opacity:.5}
 canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:30}
 #cam{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none}
 .priv{font-size:.95vw}
@@ -200,6 +214,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:30}
  <div class="lg">English · हिन्दी · অসমীয়া · বাংলা · संस्कृतम्</div>
 </div>
 <div class="news" id="news"></div>
+<div id="micbar"></div>
 <canvas id="fx"></canvas>
 <div id="printArea"></div>
 <video id="cam" muted playsinline></video>
@@ -220,22 +235,22 @@ const UI = {
  en:{ tap:'Tap to talk', listen:'Listening… speak now', think:'Thinking…', mic:'Tap the mic and talk to me', you:'You said', priv:"📷 KAVYA's eyes don't record anything",
       aH:'Come and talk to <span>KAVYA!</span>', aS:'I can talk in English, Hindi, Assamese and Bengali', aT:'👆 Touch the screen', home:'What would you like to do?',
       h:['💬 Chat with me','📍 Find a stall','🍽️ Food & menu','📺 Kaushal TV','🎉 Fun with KAVYA','⭐ Rate the Mela','📸 Selfie with KAVYA','🧠 Quiz time'],
-      s:{who:'Who are you?',made:'Who made you?',tri:'What is TRINeTRA?',food:'Where is the food?',where:'Find a stall',coupon:'How do I pay?',sched:"Today's schedule",tv:'Show Kaushal TV',joke:'Tell me a joke',dance:'Dance, KAVYA!',quiz:'Play a quiz',selfie:'Selfie time!',club:'Startup Club?',nums:'Live numbers',rate:'Rate the Mela',pass:'Skill Passport',bye:'Bye KAVYA!',riddle:'Ask me a riddle',menu:'Live menu'},
+      s:{who:'Who are you?',made:'Who made you?',tri:'What is TRINeTRA?',dsi:'What is DSI?',food:'Where is the food?',where:'Find a stall',coupon:'How do I pay?',sched:"Today's schedule",tv:'Show Kaushal TV',joke:'Tell me a joke',dance:'Dance, KAVYA!',quiz:'Play a quiz',selfie:'Selfie time!',club:'Startup Club?',nums:'Live numbers',rate:'Rate the Mela',pass:'Skill Passport',bye:'Bye KAVYA!',riddle:'Ask me a riddle',menu:'Live menu'},
       grid:'Tap a stall', scan:'Scan to open this stall on your phone', tvq:'Scan to watch on your phone', menuT:'Live menu · updates from every stall', soldout:'Sold out', low:'Running low', nomenu:'The stall menus are coming in. Ask at any stall!', guests:'guests welcomed', scans:'stall QR scans today', rateT:'How do you like Kaushal Mela?', passT:'Scan any stall\'s KAVYA QR to collect badges', fun:'Pick something fun!' },
  hi:{ tap:'बोलने के लिए छुएँ', listen:'सुन रही हूँ… बोलिए', think:'सोच रही हूँ…', mic:'माइक दबाइए और मुझसे बात कीजिए', you:'आपने कहा', priv:'📷 काव्या की आँखें कुछ रिकॉर्ड नहीं करतीं',
       aH:'आइए, <span>काव्या</span> से बात कीजिए!', aS:'मैं अंग्रेज़ी, हिंदी, असमिया और बांग्ला बोल सकती हूँ', aT:'👆 स्क्रीन छुइए', home:'आप क्या करना चाहेंगे?',
       h:['💬 मुझसे बात करें','📍 स्टॉल खोजें','🍽️ खाना और मेन्यू','📺 कौशल टीवी','🎉 काव्या के साथ मस्ती','⭐ मेले को रेटिंग दें','📸 काव्या के साथ सेल्फ़ी','🧠 क्विज़'],
-      s:{who:'तुम कौन हो?',made:'तुम्हें किसने बनाया?',tri:'त्रिनेत्र क्या है?',food:'खाना कहाँ है?',where:'स्टॉल खोजें',coupon:'पैसे कैसे दें?',sched:'आज का कार्यक्रम',tv:'कौशल टीवी दिखाओ',joke:'एक चुटकुला सुनाओ',dance:'नाचो काव्या!',quiz:'क्विज़ खेलें',selfie:'सेल्फ़ी टाइम!',club:'स्टार्टअप क्लब?',nums:'लाइव आँकड़े',rate:'मेले को रेटिंग',pass:'स्किल पासपोर्ट',bye:'बाय काव्या!',riddle:'एक पहेली पूछो',menu:'लाइव मेन्यू'},
+      s:{who:'तुम कौन हो?',made:'तुम्हें किसने बनाया?',tri:'त्रिनेत्र क्या है?',dsi:'डीएसआई क्या है?',food:'खाना कहाँ है?',where:'स्टॉल खोजें',coupon:'पैसे कैसे दें?',sched:'आज का कार्यक्रम',tv:'कौशल टीवी दिखाओ',joke:'एक चुटकुला सुनाओ',dance:'नाचो काव्या!',quiz:'क्विज़ खेलें',selfie:'सेल्फ़ी टाइम!',club:'स्टार्टअप क्लब?',nums:'लाइव आँकड़े',rate:'मेले को रेटिंग',pass:'स्किल पासपोर्ट',bye:'बाय काव्या!',riddle:'एक पहेली पूछो',menu:'लाइव मेन्यू'},
       grid:'स्टॉल चुनिए', scan:'इस स्टॉल को फ़ोन पर खोलने के लिए स्कैन करें', tvq:'फ़ोन पर देखने के लिए स्कैन करें', menuT:'लाइव मेन्यू · हर स्टॉल से', soldout:'खत्म', low:'कम बचा', nomenu:'स्टॉल के मेन्यू आ रहे हैं। किसी भी स्टॉल पर पूछिए!', guests:'मेहमानों का स्वागत', scans:'आज स्टॉल QR स्कैन', rateT:'आपको कौशल मेला कैसा लगा?', passT:'बैज पाने के लिए हर स्टॉल का काव्या QR स्कैन करें', fun:'कुछ मज़ेदार चुनिए!' },
  as:{ tap:'কথা ক’বলৈ স্পৰ্শ কৰক', listen:'শুনি আছোঁ… কওক', think:'ভাবি আছোঁ…', mic:'মাইক টিপি মোৰ লগত কথা পাতক', you:'আপুনি ক’লে', priv:'📷 কাব্যাৰ চকুৱে একো ৰেকৰ্ড নকৰে',
       aH:'আহক, <span>কাব্যা</span>ৰ লগত কথা পাতক!', aS:'মই ইংৰাজী, হিন্দী, অসমীয়া আৰু বাংলা ক’ব পাৰোঁ', aT:'👆 স্ক্ৰীণ স্পৰ্শ কৰক', home:'আপুনি কি কৰিব বিচাৰে?',
       h:['💬 মোৰ লগত কথা','📍 ষ্টল বিচাৰক','🍽️ খাদ্য আৰু মেনু','📺 কৌশল টিভি','🎉 কাব্যাৰ লগত ধেমালি','⭐ মেলাক ৰেটিং দিয়ক','📸 কাব্যাৰ সৈতে চেলফি','🧠 কুইজ'],
-      s:{who:'তুমি কোন?',made:'তোমাক কোনে বনালে?',tri:'ত্ৰিনেত্ৰ কি?',food:'খাদ্য ক’ত পাম?',where:'ষ্টল বিচাৰক',coupon:'কেনেকৈ পইচা দিম?',sched:'আজিৰ কাৰ্যসূচী',tv:'কৌশল টিভি দেখুৱাওক',joke:'এটা ধেমেলীয়া কথা কোৱা',dance:'নাচা কাব্যা!',quiz:'কুইজ খেলোঁ',selfie:'চেলফি!',club:'ষ্টাৰ্টআপ ক্লাব?',nums:'লাইভ সংখ্যা',rate:'মেলাক ৰেটিং',pass:'স্কিল পাছপৰ্ট',bye:'বাই কাব্যা!',riddle:'এটা সাঁথৰ সোধা',menu:'লাইভ মেনু'},
+      s:{who:'তুমি কোন?',made:'তোমাক কোনে বনালে?',tri:'ত্ৰিনেত্ৰ কি?',dsi:'ডি এছ আই কি?',food:'খাদ্য ক’ত পাম?',where:'ষ্টল বিচাৰক',coupon:'কেনেকৈ পইচা দিম?',sched:'আজিৰ কাৰ্যসূচী',tv:'কৌশল টিভি দেখুৱাওক',joke:'এটা ধেমেলীয়া কথা কোৱা',dance:'নাচা কাব্যা!',quiz:'কুইজ খেলোঁ',selfie:'চেলফি!',club:'ষ্টাৰ্টআপ ক্লাব?',nums:'লাইভ সংখ্যা',rate:'মেলাক ৰেটিং',pass:'স্কিল পাছপৰ্ট',bye:'বাই কাব্যা!',riddle:'এটা সাঁথৰ সোধা',menu:'লাইভ মেনু'},
       grid:'এটা ষ্টল বাছক', scan:'ফোনত এই ষ্টল খুলিবলৈ স্কেন কৰক', tvq:'ফোনত চাবলৈ স্কেন কৰক', menuT:'লাইভ মেনু · প্ৰতিটো ষ্টলৰ পৰা', soldout:'শেষ', low:'কম আছে', nomenu:'ষ্টলৰ মেনু আহি আছে। যিকোনো ষ্টলত সোধক!', guests:'অতিথিক আদৰণি', scans:'আজি ষ্টল QR স্কেন', rateT:'কৌশল মেলা কেনে লাগিল?', passT:'বেজ পাবলৈ প্ৰতিটো ষ্টলৰ কাব্যা QR স্কেন কৰক', fun:'কিবা ধেমালি বাছক!' },
  bn:{ tap:'কথা বলতে ছুঁয়ে দিন', listen:'শুনছি… বলুন', think:'ভাবছি…', mic:'মাইক টিপে আমার সঙ্গে কথা বলুন', you:'আপনি বললেন', priv:'📷 কাব্যার চোখ কিছুই রেকর্ড করে না',
       aH:'আসুন, <span>কাব্যা</span>র সঙ্গে কথা বলুন!', aS:'আমি ইংরেজি, হিন্দি, অসমিয়া আর বাংলা বলতে পারি', aT:'👆 স্ক্রিন ছুঁয়ে দিন', home:'আপনি কী করতে চান?',
       h:['💬 আমার সঙ্গে কথা','📍 স্টল খুঁজুন','🍽️ খাবার ও মেনু','📺 কৌশল টিভি','🎉 কাব্যার সঙ্গে মজা','⭐ মেলাকে রেটিং দিন','📸 কাব্যার সঙ্গে সেলফি','🧠 কুইজ'],
-      s:{who:'তুমি কে?',made:'তোমাকে কে বানিয়েছে?',tri:'ত্রিনেত্র কী?',food:'খাবার কোথায়?',where:'স্টল খুঁজুন',coupon:'কীভাবে টাকা দেব?',sched:'আজকের কর্মসূচি',tv:'কৌশল টিভি দেখাও',joke:'একটা মজার কথা বলো',dance:'নাচো কাব্যা!',quiz:'কুইজ খেলি',selfie:'সেলফি!',club:'স্টার্টআপ ক্লাব?',nums:'লাইভ সংখ্যা',rate:'মেলাকে রেটিং',pass:'স্কিল পাসপোর্ট',bye:'বাই কাব্যা!',riddle:'একটা ধাঁধা বলো',menu:'লাইভ মেনু'},
+      s:{who:'তুমি কে?',made:'তোমাকে কে বানিয়েছে?',tri:'ত্রিনেত্র কী?',dsi:'ডিএসআই কী?',food:'খাবার কোথায়?',where:'স্টল খুঁজুন',coupon:'কীভাবে টাকা দেব?',sched:'আজকের কর্মসূচি',tv:'কৌশল টিভি দেখাও',joke:'একটা মজার কথা বলো',dance:'নাচো কাব্যা!',quiz:'কুইজ খেলি',selfie:'সেলফি!',club:'স্টার্টআপ ক্লাব?',nums:'লাইভ সংখ্যা',rate:'মেলাকে রেটিং',pass:'স্কিল পাসপোর্ট',bye:'বাই কাব্যা!',riddle:'একটা ধাঁধা বলো',menu:'লাইভ মেনু'},
       grid:'একটি স্টল বেছে নিন', scan:'ফোনে এই স্টল খুলতে স্ক্যান করুন', tvq:'ফোনে দেখতে স্ক্যান করুন', menuT:'লাইভ মেনু · প্রতিটি স্টল থেকে', soldout:'শেষ', low:'কম আছে', nomenu:'স্টলের মেনু আসছে। যেকোনো স্টলে জিজ্ঞেস করুন!', guests:'অতিথিকে স্বাগত', scans:'আজ স্টল QR স্ক্যান', rateT:'কৌশল মেলা কেমন লাগল?', passT:'ব্যাজ পেতে প্রতিটি স্টলের কাব্যা QR স্ক্যান করুন', fun:'মজার কিছু বেছে নিন!' }
 };
 const A = {
@@ -248,13 +263,13 @@ const A = {
  made:{ en:['I was built in-house by the Department of Skill and Innovation of APS Jorhat, by students and teachers together, powered by Project TRINeTRA. No outside company, all home-grown!'], hi:['मुझे एपीएस जोरहाट के कौशल एवं नवाचार विभाग ने, छात्रों और शिक्षकों ने मिलकर, स्कूल में ही बनाया है, प्रोजेक्ट त्रिनेत्र की ताकत से। कोई बाहरी कंपनी नहीं!'], as:['মোক এ পি এছ যোৰহাটৰ দক্ষতা আৰু উদ্ভাৱন বিভাগে, ছাত্ৰ-ছাত্ৰী আৰু শিক্ষকে মিলি, বিদ্যালয়তে বনাইছে, প্ৰজেক্ট ত্ৰিনেত্ৰৰ শক্তিৰে।'], bn:['আমাকে এপিএস জোরহাটের দক্ষতা ও উদ্ভাবন বিভাগ, ছাত্রছাত্রী আর শিক্ষকরা মিলে, স্কুলেই তৈরি করেছে, প্রজেক্ট ত্রিনেত্রর শক্তিতে।'] },
  real:{ en:['I am a real robot with a heart made of code! I cannot eat pineapple, but I can tell you where to find it.'], hi:['मैं असली रोबोट हूँ, कोड से बना दिल लेकर! मैं अनानास नहीं खा सकती, पर बता सकती हूँ कि वह कहाँ मिलेगा।'], as:['মই সঁচা ৰ’বট, ক’ডেৰে গঢ়া হৃদয়ৰ সৈতে! মই আনাৰস খাব নোৱাৰোঁ, কিন্তু ক’ত পাব কৈ দিব পাৰোঁ।'], bn:['আমি সত্যিকারের রোবট, কোড দিয়ে গড়া মন নিয়ে! আনারস খেতে পারি না, তবে কোথায় পাবেন বলে দিতে পারি।'] },
  tri:{ en:['TRINeTRA means the third eye. It is APS Jorhat\'s framework that joins every department, every skill and every visitor into one tech ecosystem. Today the whole Mela tech, from your e-pass to me, runs on it!'], hi:['त्रिनेत्र यानी तीसरी आँख। यह एपीएस जोरहाट का ढाँचा है जो हर विभाग, हर कौशल और हर आगंतुक को एक टेक इकोसिस्टम में जोड़ता है। आज ई-पास से लेकर मुझ तक, मेले की पूरी टेक इसी पर चलती है!'], as:['ত্ৰিনেত্ৰ মানে তৃতীয় চকু। ই এ পি এছ যোৰহাটৰ এক কাঠামো, যিয়ে প্ৰতিটো বিভাগ, প্ৰতিটো দক্ষতা আৰু প্ৰতিগৰাকী দৰ্শকক এটা প্ৰযুক্তি পৰিৱেশত সংযোগ কৰে। আজি ই-পাছৰ পৰা মোলৈকে মেলাৰ সকলো প্ৰযুক্তি ইয়াতেই চলে!'], bn:['ত্রিনেত্র মানে তৃতীয় চোখ। এটি এপিএস জোরহাটের একটি কাঠামো, যা প্রতিটি বিভাগ, প্রতিটি দক্ষতা আর প্রতিটি দর্শককে এক প্রযুক্তি পরিবেশে জুড়ে দেয়। আজ ই-পাস থেকে আমি পর্যন্ত, মেলার সব প্রযুক্তি এর উপরই চলে!'] },
- dsi:{ en:['DSI is the Department of Skill and Innovation of APS Jorhat. It runs the skill labs, all the tech of this Mela, and now the new Innovation and Startup Club!'], hi:['डीएसआई यानी कौशल एवं नवाचार विभाग। यह स्किल लैब, इस मेले की पूरी टेक और अब नया इनोवेशन एंड स्टार्टअप क्लब चलाता है!'], as:['ডি এছ আই মানে দক্ষতা আৰু উদ্ভাৱন বিভাগ। ই স্কিল লেব, এই মেলাৰ সকলো প্ৰযুক্তি আৰু নতুন ইনভেচন এণ্ড ষ্টাৰ্টআপ ক্লাব চলায়!'], bn:['ডিএসআই মানে দক্ষতা ও উদ্ভাবন বিভাগ। এটি স্কিল ল্যাব, এই মেলার সব প্রযুক্তি আর নতুন ইনোভেশন অ্যান্ড স্টার্টআপ ক্লাব চালায়!'] },
+ dsi:{ en:['DSI is the Department of Skill and Innovation of APS Jorhat. It runs the skill labs, and all the tech of this Mela!'], hi:['डीएसआई यानी कौशल एवं नवाचार विभाग। यह स्किल लैब और इस मेले की पूरी टेक चलाता है!'], as:['ডি এছ আই মানে দক্ষতা আৰু উদ্ভাৱন বিভাগ। ই স্কিল লেব আৰু এই মেলাৰ সকলো প্ৰযুক্তি চলায়!'], bn:['ডিএসআই মানে দক্ষতা ও উদ্ভাবন বিভাগ। এটি স্কিল ল্যাব আর এই মেলার সব প্রযুক্তি চালায়!'] },
  club:{ en:['Big news! The Innovation and Startup Club is launching at Kaushal Mela. Students spot a real problem, build a prototype, pitch it and launch it. Want to join? Talk to the team right here!'], hi:['बड़ी खबर! कौशल मेले में इनोवेशन एंड स्टार्टअप क्लब लॉन्च हो रहा है। छात्र असली समस्या खोजते हैं, प्रोटोटाइप बनाते हैं, पिच करते हैं और लॉन्च करते हैं। जुड़ना है? यहीं टीम से बात कीजिए!'], as:['ডাঙৰ খবৰ! কৌশল মেলাত ইনভেচন এণ্ড ষ্টাৰ্টআপ ক্লাব আৰম্ভ হৈছে। ছাত্ৰ-ছাত্ৰীয়ে সঁচা সমস্যা বিচাৰে, প্ৰ’ট’টাইপ বনায়, উপস্থাপন কৰে আৰু আৰম্ভ কৰে। যোগ দিব? ইয়াতেই দলটোৰ লগত কথা পাতক!'], bn:['বড় খবর! কৌশল মেলায় ইনোভেশন অ্যান্ড স্টার্টআপ ক্লাব শুরু হচ্ছে। ছাত্রছাত্রীরা সত্যিকারের সমস্যা খোঁজে, প্রোটোটাইপ বানায়, উপস্থাপন করে আর শুরু করে। যোগ দেবেন? এখানেই দলের সঙ্গে কথা বলুন!'] },
  mela:{ en:['Kaushal Mela is our skill fair. Every stall is run by students who learnt a real skill: farming, cooking, crafts, health, music, tech and much more. Buy with Mela coupons and cheer them on!'], hi:['कौशल मेला हमारा कौशल उत्सव है। हर स्टॉल छात्र चलाते हैं जिन्होंने असली हुनर सीखा है: खेती, खाना बनाना, हस्तशिल्प, स्वास्थ्य, संगीत, टेक और बहुत कुछ।'], as:['কৌশল মেলা আমাৰ দক্ষতাৰ উৎসৱ। প্ৰতিটো ষ্টল ছাত্ৰ-ছাত্ৰীয়ে চলায়, যিসকলে সঁচা দক্ষতা শিকিছে: খেতি, ৰন্ধন, হস্তশিল্প, স্বাস্থ্য, সংগীত, প্ৰযুক্তি আৰু বহুত।'], bn:['কৌশল মেলা আমাদের দক্ষতার উৎসব। প্রতিটি স্টল চালায় ছাত্রছাত্রীরা, যারা সত্যিকারের দক্ষতা শিখেছে: চাষ, রান্না, হস্তশিল্প, স্বাস্থ্য, সংগীত, প্রযুক্তি আর আরও অনেক কিছু।'] },
  food:{ en:['Hungry{n}? Head to the Food Court: momo, chowmein, puchka, nachos and mojito! There is also the Zero Heat Cafe, the Canteen and fresh pineapple at the RSLT stand. Here is the live menu!'], hi:['भूख लगी{n}? फ़ूड कोर्ट चलिए: मोमो, चाउमीन, पुचका, नाचोस और मोजितो! ज़ीरो हीट कैफ़े, कैंटीन और आर एस एल टी पर ताज़ा अनानास भी है। यह रहा लाइव मेन्यू!'], as:['ভোক লাগিছে{n}? ফুড ক’ৰ্টলৈ যাওক: মম’, চাউমিন, পুচকা, নাচ’জ আৰু মজিট’! জিৰ’ হিট কেফে, কেণ্টিন আৰু আৰ এছ এল টিত আনাৰসো আছে। এয়া লাইভ মেনু!'], bn:['খিদে পেয়েছে{n}? ফুড কোর্টে চলুন: মোমো, চাউমিন, ফুচকা, নাচোস আর মোহিতো! জিরো হিট ক্যাফে, ক্যান্টিন আর আর এস এল টি-তে আনারসও আছে। এই নিন লাইভ মেনু!'] },
  menu:{ en:['Here is the live menu from every stall. Sold out items are marked, so no wasted walks!'], hi:['यह रहा हर स्टॉल का लाइव मेन्यू। जो खत्म हो गया, उस पर निशान है!'], as:['এয়া প্ৰতিটো ষ্টলৰ লাইভ মেনু। যিবোৰ শেষ হৈছে, সেইবোৰত চিন দিয়া আছে!'], bn:['এই নিন প্রতিটি স্টলের লাইভ মেনু। যা শেষ হয়ে গেছে, তাতে চিহ্ন দেওয়া আছে!'] },
  coupon:{ en:['Every stall takes Mela coupons only. Buy them with cash at the Coupon Counter: 10, 20, 50 and 100 rupees. Sorry, no UPI!'], hi:['हर स्टॉल पर सिर्फ़ मेला कूपन चलते हैं। कूपन काउंटर पर नकद में खरीदिए: 10, 20, 50 और 100 रुपये। माफ़ कीजिए, यूपीआई नहीं।'], as:['প্ৰতিটো ষ্টলত কেৱল মেলা কুপন চলে। কুপন কাউণ্টাৰত নগদ ধনেৰে কিনক: ১০, ২০, ৫০ আৰু ১০০ টকা। ক্ষমা কৰিব, ইউ পি আই নচলে।'], bn:['প্রতিটি স্টলে শুধু মেলা কুপন চলে। কুপন কাউন্টারে নগদে কিনুন: ১০, ২০, ৫০ আর ১০০ টাকা। দুঃখিত, ইউপিআই চলবে না।'] },
- sched:{ en:['Today\'s plan: the Chief Guest and VIPs at 10 AM, parents and families from 11:30, and our judges at 12 noon. Keep watching for the Innovation and Startup Club launch!'], hi:['आज का कार्यक्रम: मुख्य अतिथि और वीआईपी सुबह 10 बजे, अभिभावक और परिवार 11:30 से, और निर्णायक दोपहर 12 बजे। इनोवेशन एंड स्टार्टअप क्लब के लॉन्च पर नज़र रखिए!'], as:['আজিৰ কাৰ্যসূচী: মুখ্য অতিথি আৰু ভি আই পি পুৱা ১০ বজাত, অভিভাৱক আৰু পৰিয়াল ১১:৩০ৰ পৰা, বিচাৰক দুপৰীয়া ১২ বজাত।'], bn:['আজকের কর্মসূচি: প্রধান অতিথি ও ভিআইপি সকাল ১০টায়, অভিভাবক ও পরিবার ১১:৩০ থেকে, আর বিচারকরা দুপুর ১২টায়।'] },
+ sched:{ en:['Today\'s plan: the Chief Guest and VIPs at 10 AM, parents and families from 11:30, and our judges at 12 noon.'], hi:['आज का कार्यक्रम: मुख्य अतिथि और वीआईपी सुबह 10 बजे, अभिभावक और परिवार 11:30 से, और निर्णायक दोपहर 12 बजे।'], as:['আজিৰ কাৰ্যসূচী: মুখ্য অতিথি আৰু ভি আই পি পুৱা ১০ বজাত, অভিভাৱক আৰু পৰিয়াল ১১:৩০ৰ পৰা, বিচাৰক দুপৰীয়া ১২ বজাত।'], bn:['আজকের কর্মসূচি: প্রধান অতিথি ও ভিআইপি সকাল ১০টায়, অভিভাবক ও পরিবার ১১:৩০ থেকে, আর বিচারকরা দুপুর ১২টায়।'] },
  where:{ en:['Tap any stall and I will tell you its story and show you where it is on the map!'], hi:['किसी भी स्टॉल को छुइए, मैं उसकी कहानी सुनाऊँगी और नक्शे पर जगह दिखाऊँगी!'], as:['যিকোনো ষ্টল স্পৰ্শ কৰক, মই তাৰ কাহিনী ক’ম আৰু মেপত ঠাই দেখুৱাম!'], bn:['যেকোনো স্টলে ছুঁয়ে দিন, আমি তার গল্প বলব আর ম্যাপে জায়গা দেখাব!'] },
  stall:{ hi:['यह रहा {S}! नक्शे पर लाल घेरा देखिए। वहाँ जाकर काव्या का QR स्कैन कीजिए, मैं वहाँ भी मिलूँगी!'], as:['এয়া {S}! মেপত ৰঙা চিনটো চাওক। তালৈ গৈ কাব্যাৰ QR স্কেন কৰক, মই তাতো থাকিম!'], bn:['এই যে {S}! ম্যাপে লাল দাগটা দেখুন। সেখানে গিয়ে কাব্যার QR স্ক্যান করুন, আমি সেখানেও থাকব!'] },
  tv:{ en:['Kaushal TV has the story of every stall on video. Tap one and I will play it right here, or scan the QR to watch on your phone!'], hi:['कौशल टीवी पर हर स्टॉल की कहानी वीडियो में है। एक चुनिए, मैं यहीं चलाऊँगी, या QR स्कैन करके फ़ोन पर देखिए!'], as:['কৌশল টিভিত প্ৰতিটো ষ্টলৰ কাহিনী ভিডিঅ’ত আছে। এটা বাছক, মই ইয়াতেই চলাম, নাইবা QR স্কেন কৰি ফোনত চাওক!'], bn:['কৌশল টিভিতে প্রতিটি স্টলের গল্প ভিডিওতে আছে। একটা বেছে নিন, আমি এখানেই চালাব, অথবা QR স্ক্যান করে ফোনে দেখুন!'] },
@@ -265,7 +280,7 @@ const A = {
  joke:{ en:['Why did the robot come to the Mela? To recharge its happiness!','Why was the computer cold? It left its Windows open!','Teacher: where is your homework? Student: it is saved in the cloud, I am waiting for the rain!'], hi:['रोबोट मेले में क्यों आया? अपनी खुशी रिचार्ज करने!','टीचर: होमवर्क कहाँ है? छात्र: क्लाउड में सेव है, बारिश का इंतज़ार कर रहा हूँ!'], as:['ৰ’বট মেলালৈ কিয় আহিল? নিজৰ আনন্দ ৰিচাৰ্জ কৰিবলৈ!'], bn:['রোবট মেলায় কেন এল? নিজের আনন্দ রিচার্জ করতে!'] },
  riddle:{ en:['I have keys but I open no locks. What am I? … A keyboard!','The more you take, the more you leave behind. What are they? … Footsteps!'], hi:['मेरे पास चाबियाँ हैं पर मैं कोई ताला नहीं खोलती। मैं कौन हूँ? … कीबोर्ड!'], as:['মোৰ চাবি আছে, কিন্তু মই কোনো তলা নুখোলোঁ। মই কি? … কীব’ৰ্ড!'], bn:['আমার চাবি আছে, কিন্তু কোনো তালা খুলি না। আমি কে? … কিবোর্ড!'] },
  dance:{ en:['Music, please! Let\'s dance!'], hi:['म्यूज़िक चलाओ! चलो नाचें!'], as:['গান বজাওক! আহক নাচোঁ!'], bn:['গান চালাও! চলো নাচি!'] },
- selfie:{ en:['Selfie time! Stand next to me and smile. I will count to three. Then you can download or print your photo!'], hi:['सेल्फ़ी टाइम! मेरे पास खड़े होकर मुस्कुराइए। मैं तीन तक गिनूँगी। फिर आप अपनी फ़ोटो डाउनलोड या प्रिंट कर सकते हैं!'], as:['চেলফিৰ সময়! মোৰ কাষত থিয় হৈ হাঁহক। মই তিনিলৈ গণিম। তাৰ পিছত আপোনাৰ ফটো ডাউনলোড বা প্ৰিণ্ট কৰিব পাৰিব!'], bn:['সেলফির সময়! আমার পাশে দাঁড়িয়ে হাসুন। আমি তিন পর্যন্ত গুনব। তারপর আপনার ছবি ডাউনলোড বা প্রিন্ট করতে পারবেন!'] },
+ selfie:{ en:['Selfie time! Pick your favourite KAVYA, a chef, a nurse, a rockstar and more, then tap Take photo. You can download or print it!'], hi:['सेल्फ़ी टाइम! अपनी पसंद की काव्या चुनिए, शेफ़, नर्स, रॉकस्टार और भी, फिर फ़ोटो लें दबाइए। आप उसे डाउनलोड या प्रिंट कर सकते हैं!'], as:['চেলফিৰ সময়! মোৰ কাষত থিয় হৈ হাঁহক। মই তিনিলৈ গণিম। তাৰ পিছত আপোনাৰ ফটো ডাউনলোড বা প্ৰিণ্ট কৰিব পাৰিব!'], bn:['সেলফির সময়! আমার পাশে দাঁড়িয়ে হাসুন। আমি তিন পর্যন্ত গুনব। তারপর আপনার ছবি ডাউনলোড বা প্রিন্ট করতে পারবেন!'] },
  quiz:{ en:['Quiz time! Three quick questions. Ready?'], hi:['क्विज़ टाइम! तीन छोटे सवाल। तैयार?'], as:['কুইজৰ সময়! তিনিটা সৰু প্ৰশ্ন। সাজু?'], bn:['কুইজের সময়! তিনটে ছোট প্রশ্ন। তৈরি?'] },
  qok:{ en:['Correct! You are a Skill Star!'], hi:['सही जवाब! आप स्किल स्टार हैं!'], as:['শুদ্ধ! আপুনি স্কিল ষ্টাৰ!'], bn:['ঠিক! আপনি স্কিল স্টার!'] },
  qno:{ en:['Oops, nice try! The right answer is shining green.'], hi:['अरे, अच्छी कोशिश! सही जवाब हरे रंग में है।'], as:['অ’, ভাল চেষ্টা! শুদ্ধ উত্তৰটো সেউজীয়া।'], bn:['ওহ, ভালো চেষ্টা! সঠিক উত্তর সবুজ রঙে।'] },
@@ -292,7 +307,7 @@ const QUIZ = {
 UI.sa = { tap:'वक्तुं स्पृशतु', listen:'शृणोमि… वदतु', think:'चिन्तयामि…', mic:'ध्वनियन्त्रं स्पृष्ट्वा मया सह वदतु', you:'भवान् उक्तवान्', priv:'📷 काव्यायाः नेत्रे किमपि न अभिलिखतः',
  aH:'आगच्छतु, <span>काव्या</span>या सह वदतु!', aS:'अहम् आङ्ग्ल-हिन्दी-असमिया-वङ्ग-संस्कृतभाषासु वदामि', aT:'👆 पटलं स्पृशतु', home:'भवान् किं कर्तुम् इच्छति?',
  h:['💬 मया सह वार्ता','📍 आपणम् अन्विष्यतु','🍽️ भोजनं सूची च','📺 कौशल-दूरदर्शनम्','🎉 काव्यया सह विनोदः','⭐ मेलायाः मूल्याङ्कनम्','📸 काव्यया सह स्वचित्रम्','🧠 प्रश्नोत्तरी'],
- s:{who:'त्वं का असि?',made:'त्वां कः निर्मितवान्?',tri:'त्रिनेत्रं किम्?',food:'भोजनं कुत्र?',where:'आपणम् अन्विष्यतु',coupon:'कथं मूल्यं ददामि?',sched:'अद्यतनः कार्यक्रमः',tv:'कौशल-दूरदर्शनं दर्शय',joke:'हास्यकथां वद',dance:'नृत्य काव्ये!',quiz:'प्रश्नोत्तरी',selfie:'स्वचित्रम्!',club:'स्टार्टअप-सङ्घः?',nums:'सजीव-सङ्ख्याः',rate:'मूल्याङ्कनम्',pass:'कौशल-पारपत्रम्',bye:'पुनर्मिलामः काव्ये!',riddle:'प्रहेलिकां पृच्छ',menu:'सजीव-सूची'},
+ s:{who:'त्वं का असि?',made:'त्वां कः निर्मितवान्?',tri:'त्रिनेत्रं किम्?',dsi:'डी एस आई किम्?',food:'भोजनं कुत्र?',where:'आपणम् अन्विष्यतु',coupon:'कथं मूल्यं ददामि?',sched:'अद्यतनः कार्यक्रमः',tv:'कौशल-दूरदर्शनं दर्शय',joke:'हास्यकथां वद',dance:'नृत्य काव्ये!',quiz:'प्रश्नोत्तरी',selfie:'स्वचित्रम्!',club:'स्टार्टअप-सङ्घः?',nums:'सजीव-सङ्ख्याः',rate:'मूल्याङ्कनम्',pass:'कौशल-पारपत्रम्',bye:'पुनर्मिलामः काव्ये!',riddle:'प्रहेलिकां पृच्छ',menu:'सजीव-सूची'},
  grid:'आपणं चिनोतु', scan:'दूरवाण्याम् एतत् आपणम् उद्घाटयितुं स्कैन करोतु', tvq:'दूरवाण्यां द्रष्टुं स्कैन करोतु', menuT:'सजीव-सूची · प्रत्येकस्मात् आपणात्', soldout:'समाप्तम्', low:'अल्पम् अवशिष्टम्', nomenu:'आपणानां सूच्यः आगच्छन्ति। कस्मिन्नपि आपणे पृच्छतु!', guests:'अतिथीनां स्वागतम्', scans:'अद्य आपण-QR स्कैन', rateT:'कौशलमेला कथम् अस्ति?', passT:'चिह्नानि प्राप्तुं प्रत्येकस्य आपणस्य काव्या-QR स्कैन करोतु', fun:'किमपि विनोदं चिनोतु!' };
 const SA = {
  wake:'अहो, नमस्कारः! समीपम् आगच्छतु, अहं काव्या!',
@@ -304,7 +319,7 @@ const SA = {
  made:'ए पी एस जोरहाट-विद्यालयस्य कौशल-नवाचार-विभागः, छात्राः शिक्षकाः च मिलित्वा, मां विद्यालये एव निर्मितवन्तः, त्रिनेत्र-परियोजनायाः शक्त्या।',
  real:'अहं सत्यं यन्त्रमानवः अस्मि! अनानासं खादितुं न शक्नोमि, किन्तु तत् कुत्र लभ्यते इति वक्तुं शक्नोमि।',
  tri:'त्रिनेत्रम् इत्यस्य अर्थः तृतीयं नेत्रम्। एषा ए पी एस जोरहाट-विद्यालयस्य रूपरेखा, या प्रत्येकं विभागं, प्रत्येकं कौशलं, प्रत्येकम् आगन्तुकं च एकस्मिन् प्रौद्योगिकी-तन्त्रे योजयति।',
- dsi:'डी एस आई नाम कौशल-नवाचार-विभागः। सः कौशल-प्रयोगशालाः, अस्याः मेलायाः प्रौद्योगिकीं, नूतनं नवाचार-स्टार्टअप-सङ्घं च चालयति।',
+ dsi:'डी एस आई नाम कौशल-नवाचार-विभागः। सः कौशल-प्रयोगशालाः अस्याः मेलायाः प्रौद्योगिकीं च चालयति।',
  club:'महत् वृत्तम्! कौशलमेलायां नवाचार-स्टार्टअप-सङ्घः आरभ्यते। छात्राः वास्तविकीं समस्यां पश्यन्ति, प्रतिरूपं रचयन्ति, प्रस्तुवन्ति, आरभन्ते च। अत्रैव दलेन सह वदतु!',
  mela:'कौशलमेला अस्माकं कौशल-उत्सवः। प्रत्येकम् आपणं छात्राः चालयन्ति, ये वास्तविकं कौशलं शिक्षितवन्तः: कृषिः, पाकः, हस्तकला, आरोग्यं, सङ्गीतं, प्रौद्योगिकी च।',
  food:'बुभुक्षितः{n}? भोजन-प्राङ्गणं गच्छतु: मोमो, चाउमीन, पुचका, मोजितो च! आर एस एल टी इत्यत्र अनानासम् अपि अस्ति। एषा सजीव-सूची!',
@@ -350,7 +365,6 @@ const K = [
  ['made', /who (made|built|created|designed)|made you|built you|banaya|बनाया|निर्मितवान्|কোনে বনা|কে বানি|তৈরি কে/i],
  ['real', /are you (real|a robot|human|alive)|real robot|insaan|इंसान|असली|সঁচা|সত্যি/i],
  ['tri', /trinetra|tri netra|third eye|त्रिनेत्र|ত্ৰিনেত্ৰ|ত্রিনেত্র/i],
- ['club', /club|startup|start up|क्लब|ক্লাব|স্টার্টআপ|ষ্টাৰ্টআপ/i],
  ['dsi', /\bdsi\b|skill and innovation|कौशल एवं नवाचार|দক্ষতা আৰু উদ্ভাৱন|দক্ষতা ও উদ্ভাবন/i],
  ['who', /who are you|your name|what are you|kaun ho|तुम कौन|का त्वम्|त्वं का|आप कौन|तुम्हारा नाम|तेरा नाम|তুমি কোন|আপুনি কোন|তোমাৰ নাম|তোমার নাম|তুমি কে/i],
  ['joke', /joke|funny|chutkula|मज़ाक|मजाक|चुटकुला|हास्य|ধেমেলীয়া|জোক|মজার/i],
@@ -454,7 +468,7 @@ function show(html){ const x = $('pX'), h = $('pHome'); if (html === null) { x.c
 function stopVid(){ document.querySelectorAll('#pX video').forEach(v => { try { v.pause(); } catch(e) {} }); stopSelfie(); }
 const SUG = {
  start:['who','food','where','tv','joke','tri'], after:['where','food','sched','dance','quiz','bye'], fun:['dance','joke','riddle','quiz','selfie','rate'],
- tech:['made','tri','club','nums','tv','where'], food:['menu','coupon','where','sched','joke','bye']
+ tech:['made','tri','dsi','nums','tv','where'], food:['menu','coupon','where','sched','joke','bye']
 };
 function sugs(set){ const u = UI[LANG].s; $('sugs').innerHTML = (SUG[set] || SUG.after).map(k => `<button data-k="${k}">${esc(u[k])}</button>`).join(''); }
 $('sugs').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; lastVoice = false; $('you').textContent = ''; run(b.dataset.k, b.textContent); });
@@ -517,16 +531,29 @@ function dance(){ mood('dance'); confetti(); try { music = music || new Audio('t
 
 /* selfie mirror (nothing saved) */
 let selfieT = [];
+const AVS = [
+ { f:'kavya.png', n:'Classic KAVYA', c:'Me and KAVYA', e:'🤖' }, { f:'vfx/cool.png', n:'Cool KAVYA', c:'Too cool for school!', e:'😎' },
+ { f:'vfx/chef.png', n:'Chef', c:'Future Master Chef', e:'👩‍🍳' }, { f:'vfx/nurse.png', n:'Nurse', c:'Future Health Hero', e:'🩺' },
+ { f:'vfx/farmer.png', n:'Farmer', c:'Future Agri-preneur', e:'🌾' }, { f:'vfx/engineer.png', n:'Engineer', c:'Future Engineer', e:'🛠️' },
+ { f:'vfx/artist.png', n:'Artist', c:'Future Artist', e:'🎨' }, { f:'vfx/performer.png', n:'Rockstar', c:'Future Rockstar', e:'🎤' },
+ { f:'vfx/gamer.png', n:'Gamer', c:'Future Game Developer', e:'🎮' }, { f:'vfx/traveller.png', n:'Traveller', c:'Explorer of the Northeast', e:'🧭' },
+ { f:'vfx/cashier.png', n:'Shopkeeper', c:'Future Entrepreneur', e:'💰' } ];
+let AV = 0;
+const SEL_L = { en:['Pick your KAVYA','📸 Take photo'], hi:['अपनी काव्या चुनिए','📸 फ़ोटो लें'], as:['আপোনাৰ কাব্যা বাছক','📸 ফটো তোলক'], bn:['আপনার কাব্যা বেছে নিন','📸 ছবি তুলুন'], sa:['स्वकीयां काव्यां चिनोतु','📸 चित्रं गृह्णातु'] };
 async function selfie(){
   if (!camStream || !camStream.active) { try { camStream = await navigator.mediaDevices.getUserMedia({ video:true, audio:false }); } catch(e) { camStream = null; } }
   if (!camStream) { show(`<div class="big"><p style="font-size:1.6vw;color:#fff">📷 The camera is not available.</p><p>Plug in the webcam and allow the camera (🔒 in the address bar), then try again.</p></div>`); return; }
-  show(`<div class="selfie"><video id="sv" autoplay muted playsinline></video><img class="kf" src="kavya.png" alt=""><div class="fr">#KaushalMela2026 · KAVYA</div><div class="cd" id="cd">📸</div></div>`);
+  const L = SEL_L[LANG] || SEL_L.en;
+  show(`<div class="selfie2"><div class="live"><video id="sv" autoplay muted playsinline></video><img class="kf" id="kfi" src="${AVS[AV].f}" alt=""><div class="fr" id="cap">${esc(AVS[AV].c)}</div><div class="cd" id="cd"></div></div>
+    <div class="avp"><b>${esc(L[0])}</b><div class="avg">${AVS.map((a, i) => `<button data-av="${i}" class="${i === AV ? 'on' : ''}"><img src="${a.f}" alt=""><span>${a.e} ${esc(a.n)}</span></button>`).join('')}</div>
+    <button class="shootb" id="shoot">${esc(L[1])}</button></div></div>`);
   const v = $('sv'); v.srcObject = camStream; try { await v.play(); } catch(e) {}
-  const shoot = () => { let n = 3; const tick = () => { if (!$('cd')) return; $('cd').textContent = n || '😁';
+  document.querySelectorAll('[data-av]').forEach(b => b.onclick = () => { AV = +b.dataset.av; touch(); document.querySelectorAll('[data-av]').forEach(x => x.classList.toggle('on', x === b));
+    $('kfi').src = AVS[AV].f; $('cap').textContent = AVS[AV].c; log('avatar-' + AVS[AV].n); });
+  $('shoot').onclick = () => { stopSpeech(); $('shoot').disabled = true; let n = 3; const tick = () => { if (!$('cd')) return; $('cd').textContent = n || '😁';
       if (n === 0) { makePhoto(v); return; } n--; touch(); selfieT.push(setTimeout(tick, 1000)); }; tick(); };
-  selfieT.push(setTimeout(shoot, 4000));
 }
-const IMG = {}; ['kavya.png','km-logo.png'].forEach(s => { const im = new Image(); im.src = s; IMG[s] = im; });
+const IMG = {}; ['km-logo.png'].concat(AVS.map(a => a.f)).forEach(s => { const im = new Image(); im.src = s; IMG[s] = im; });
 function makePhoto(v){
   const W = 1600, H = 1200, BAR = 170, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
   x.fillStyle = '#0b1445'; x.fillRect(0, 0, W, H);
@@ -535,9 +562,9 @@ function makePhoto(v){
   const g = x.createLinearGradient(0, 0, W, 0); ['#e8325a','#f47b20','#f2b630','#8cc63f','#1aa37a','#1d9bd7','#3b5bdb','#8e44ad'].forEach((col, i) => g.addColorStop(i / 7, col));
   x.fillStyle = g; x.fillRect(0, ph, W, 10); x.fillRect(0, 0, W, 10);
   try { x.drawImage(IMG['km-logo.png'], 30, ph + 22, 130, 130); } catch(e) {}
-  x.fillStyle = '#fff'; x.font = '800 54px P, sans-serif'; x.fillText('Kaushal Mela 2026 · Selfie with KAVYA', 185, ph + 80);
+  x.fillStyle = '#fff'; x.font = '800 54px P, sans-serif'; x.fillText('Kaushal Mela 2026 · ' + AVS[AV].c, 185, ph + 80);
   x.fillStyle = '#f2c64a'; x.font = '600 30px P, sans-serif'; x.fillText('APS Jorhat · Department of Skill and Innovation · Powered by Project TRINeTRA', 185, ph + 128);
-  try { const k = IMG['kavya.png'], kh = 520, kw = kh * (k.naturalWidth / k.naturalHeight || .8); x.drawImage(k, W - kw - 20, ph - kh + 60, kw, kh); } catch(e) {}
+  try { const k = IMG[AVS[AV].f], kh = 560, kw = kh * (k.naturalWidth / k.naturalHeight || .8); x.drawImage(k, W - kw - 20, ph - kh + 60, kw, kh); } catch(e) {}
   x.fillStyle = '#f2b630'; x.beginPath(); x.roundRect ? x.roundRect(30, 30, 430, 70, 35) : x.rect(30, 30, 430, 70); x.fill();
   x.fillStyle = '#0b1445'; x.font = '800 36px P, sans-serif'; x.fillText('#KaushalMela2026', 58, 78);
   const url = c.toDataURL('image/jpeg', .92); lastPhoto = url; confetti();
@@ -577,7 +604,7 @@ function run(k, label, r){
     case 'who': case 'how': case 'real': case 'love': case 'thanks': case 'mela': case 'joke': case 'riddle': sayKey(k); sugs(k === 'joke' || k === 'riddle' ? 'fun' : 'after'); break;
     case 'made': case 'dsi': show(null); sayKey(k); sugs('tech'); break;
     case 'tri': triPanel(); sayKey('tri'); sugs('tech'); break;
-    case 'club': clubPanel(); sayKey('club'); sugs('tech'); break;
+    case 'club': show(null); sayKey('dsi'); sugs('tech'); break;
     case 'where': show(stallGrid()); sayKey('where'); sugs('after'); break;
     case 'stall': openStall(r.id); break;
     case 'food': menuPanel(); sayKey('food'); sugs('food'); break;
@@ -609,14 +636,24 @@ $('langs').addEventListener('click', e => { const b = e.target.closest('button')
 
 /* ================= listening ================= */
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition; let rec = null, listening = false, autoL = false, lastVoice = false;
+let micStream = null, micLevel = 0, micErrCount = 0;
 const MICERR = { 'not-allowed':'🎤 Microphone blocked: click the 🔒 lock in the address bar → allow Microphone → reload.', 'service-not-allowed':'🎤 Microphone blocked by the browser. Allow it in site settings.',
   'audio-capture':'🎤 No microphone found. Plug in the webcam / mic and set it as default in Windows Sound settings.', 'network':'🎤 Speech needs internet. Check Wi-Fi. Google Chrome works best for listening.' };
-function micMsg(m){ $('status').textContent = m; setTimeout(() => { if ($('status').textContent === m) $('status').textContent = ''; }, 9000); }
+function micMsg(m){ const b = $('micbar'); b.textContent = m; b.classList.add('on'); clearTimeout(micMsg.t); micMsg.t = setTimeout(() => b.classList.remove('on'), 20000); }
+async function micOn(){ /* asks for the microphone once and shows a live level ring around the mic button */
+  if (micStream && micStream.active) return true;
+  try { micStream = await navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:true, noiseSuppression:true } }); }
+  catch(e) { micMsg(e && e.name === 'NotFoundError' ? MICERR['audio-capture'] : MICERR['not-allowed']); return false; }
+  try { const AC = window.AudioContext || window.webkitAudioContext, ac = new AC(), an = ac.createAnalyser(); an.fftSize = 512; ac.createMediaStreamSource(micStream).connect(an);
+    const d = new Uint8Array(an.fftSize); const loop = () => { an.getByteTimeDomainData(d); let s = 0; for (let i = 0; i < d.length; i++) { const v = (d[i] - 128) / 128; s += v * v; }
+      micLevel = Math.min(1, Math.sqrt(s / d.length) * 6); $('mic').style.setProperty('--lv', micLevel.toFixed(2)); requestAnimationFrame(loop); }; loop();
+    if (ac.state === 'suspended') document.addEventListener('pointerdown', () => ac.resume(), { once:true }); } catch(e) {}
+  return true; }
 function listen(auto){
   touch(); autoL = auto === true;
   if (!SR) { micMsg('🎤 This browser cannot listen. Please use Google Chrome or Microsoft Edge.'); if (!autoL) sayKey('deaf'); return; }
   if (listening) { try { rec.stop(); } catch(e) {} return; }
-  stopSpeech();
+  stopSpeech(); $('micbar').classList.remove('on');
   let langTry = REC[LANG], got = '', errored = '';
   const go = () => {
     rec = new SR(); rec.lang = langTry; rec.interimResults = true; rec.maxAlternatives = 1; rec.continuous = false;
@@ -624,16 +661,17 @@ function listen(auto){
     rec.onresult = e => { got = [...e.results].map(r => r[0].transcript).join(' '); $('you').textContent = '🎤 ' + got; touch(); };
     rec.onerror = e => { errored = e.error;
       if ((e.error === 'language-not-supported' || e.error === 'bad-grammar') && REC_FB[LANG] && langTry !== REC_FB[LANG]) { langTry = REC_FB[LANG]; errored = 'retry'; }
-      else if (MICERR[e.error]) micMsg(MICERR[e.error]); };
+      else if (MICERR[e.error]) { if (e.error === 'network' && ++micErrCount >= 2) micMsg('🎤 The listening service is blocked on this network. Connect the IFPD to a mobile hotspot, or use the ⌨️ typing box.'); else micMsg(MICERR[e.error]); }
+      else if (e.error !== 'no-speech' && e.error !== 'aborted') micMsg('🎤 Mic error: ' + e.error + '. Tap the mic and try again.'); };
     rec.onend = () => { listening = false; $('mic').classList.remove('on'); mood(null);
       if (errored === 'retry') { errored = ''; setTimeout(go, 150); return; }
       if (!MICERR[errored]) $('status').textContent = '';
-      if (got.trim()) { lastVoice = true; hear(got.trim()); } else if (!autoL && !MICERR[errored]) sayKey('deaf', { fast:true, mood:null }); };
+      if (got.trim()) { micErrCount = 0; lastVoice = true; hear(got.trim()); } else if (!autoL && !MICERR[errored]) sayKey('deaf', { fast:true, mood:null }); };
     try { rec.start(); } catch(e) { listening = false; micMsg('🎤 Could not start listening. Tap the mic again.'); }
   };
   go();
 }
-$('mic').addEventListener('click', () => { lastVoice = true; listen(false); });
+$('mic').addEventListener('click', async () => { lastVoice = true; if (!micStream) await micOn(); listen(false); });
 /* after KAVYA finishes speaking to someone who used their voice, she listens again by herself (a natural conversation) */
 function maybeListen(){ if (session && lastVoice && !listening && SR && !document.querySelector('#pX video:not(#sv)')) setTimeout(() => { if (!talking && !listening && session) listen(true); }, 500); }
 /* typing box for anyone who prefers to type */
@@ -684,12 +722,20 @@ function step(){ fc.clearRect(0, 0, fx.width, fx.height); parts = parts.filter(p
 /* voice setup: pick and test KAVYA's voice for each language (saved on this device) */
 function voiceSetup(){ const box = $('vset'); if (!box) return; let vs = []; try { vs = speechSynthesis.getVoices(); } catch(e) {}
   const pref = { en:/^en/i, hi:/^hi/i, as:/^(as|bn)/i, bn:/^bn/i, sa:/^(sa|hi)/i }, TXT = { sa:'नमस्कारः! अहं काव्या। कौशलमेलायां भवतः स्वागतम्!', en:'Namaskar! I am KAVYA. Welcome to Kaushal Mela 2026!', hi:'नमस्ते! मैं काव्या हूँ। कौशल मेला 2026 में आपका स्वागत है!', as:'নমস্কাৰ! মই কাব্যা। কৌশল মেলা ২০২৬লৈ আপোনাক স্বাগতম!', bn:'নমস্কার! আমি কাব্যা। কৌশল মেলা ২০২৬-এ আপনাকে স্বাগত!' };
+  const micT = `<b>Microphone</b><span id="mtres" style="font-size:1vw">Tap ▶ Test, then say “hello Kavya”</span><button id="mtest">🎤 Test</button>`;
   const eng = `<b>Voice engine</b><select id="engSel"><option value="auto">Auto (best: Edge natural voice, else Google online voice)</option><option value="google">Google online voice (all languages, any browser)</option><option value="browser">This device's own voices</option></select><span></span>`;
   let warn = '<div class="warn">Tip: Auto works in Chrome and Edge. Assamese and Sanskrit use the closest available voice if the device has none.</div>';
-  box.innerHTML = eng + Object.keys(LN).map(l => { const best = kVoice(l); const list = vs.filter(v => pref[l].test(v.lang));
+  box.innerHTML = micT + eng + Object.keys(LN).map(l => { const best = kVoice(l); const list = vs.filter(v => pref[l].test(v.lang));
     return `<b>${LN[l]}</b><select data-l="${l}">${list.map(v => `<option value="${esc(v.name)}" ${best && best.name === v.name ? 'selected' : ''}>${esc(v.name)}</option>`).join('') || '<option value="">(no voice on this device)</option>'}</select><button data-t="${l}">▶ Test</button>`; }).join('') + warn;
   $('engSel').value = ENGINE;
   box.onchange = e => { const s = e.target.closest('select'); if (!s) return; if (s.id === 'engSel') { ENGINE = s.value; try { localStorage.setItem('kmTouchEngine', ENGINE); } catch(x) {} return; } try { localStorage.setItem('kmVoice_' + s.dataset.l, s.value); } catch(x) {} };
+  $('mtest').onclick = async () => { const r = $('mtres'); if (!SR) { r.textContent = '❌ This browser cannot listen. Use Google Chrome.'; return; }
+    if (!(await micOn())) { r.textContent = '❌ Microphone blocked or missing: allow it (🔒 in the address bar).'; return; }
+    r.textContent = '🎤 Listening… speak now'; const x = new SR(); x.lang = 'en-IN'; let got = '', er = '';
+    x.onresult = e => { got = [...e.results].map(q => q[0].transcript).join(' '); r.textContent = '✅ Heard: “' + got + '”'; };
+    x.onerror = e => { er = e.error; r.textContent = '❌ ' + (MICERR[e.error] || ('Error: ' + e.error)); };
+    x.onend = () => { if (!got && !er) r.textContent = '⚠️ Heard nothing. Check the level ring on the mic, speak closer, or pick the webcam mic as default.'; };
+    try { x.start(); } catch(e) { r.textContent = '❌ Could not start: ' + e.message; } };
   box.onclick = e => { const b = e.target.closest('[data-t]'); if (!b) return; const l = b.dataset.t, was = LANG; LANG = l; speak(TXT[l], () => { LANG = was; }); }; }
 try { speechSynthesis.onvoiceschanged = () => { speechSynthesis.getVoices(); voiceSetup(); }; } catch(e) {}
 setTimeout(voiceSetup, 300); setTimeout(voiceSetup, 1500);
@@ -700,7 +746,7 @@ $('go').addEventListener('click', async () => {
   try { await document.documentElement.requestFullscreen(); } catch(e) {}
   try { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); } catch(e) {}
   $('start').classList.add('off'); $('attract').classList.remove('off');
-  await camera(); poll(); setInterval(poll, 8000);
+  await camera(); await micOn(); poll(); setInterval(poll, 8000);
 });
 window.ask = hear;
 </script>
