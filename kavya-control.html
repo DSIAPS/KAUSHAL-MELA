@@ -1,116 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex">
-<title>KAVYA Control · Kaushal Mela 2026</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kaushal Mela 2026 · Thank you</title><link rel="icon" href="icon-512.png">
+<meta http-equiv="refresh" content="8;url=play.html">
+<meta name="description" content="Kaushal TV: student skill stories from APS Jorhat. A Project TRINeTRA product by the Department of Skill and Innovation.">
 <style>
-  :root{--red:#C8202F;--ink:#1c1430;--mute:#6b5a7a;--gold:#F4B42A;--bg:#F6F2FB}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  header{display:flex;align-items:center;gap:12px;padding:12px 20px;background:#0B1640;color:#fff}
-  header img{height:42px}
-  header b{font-size:20px}header small{display:block;opacity:.75;font-size:13px;font-weight:400}
-  header .st{margin-left:auto;font-size:14px;opacity:.9}
-  main{max-width:1100px;margin:0 auto;padding:18px;display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
-  .card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 6px 20px rgba(20,10,40,.07)}
-  h2{margin:0 0 12px;font-size:18px}
-  .quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .quick button{text-align:left;border:2px solid #eee;background:#fff;border-radius:14px;padding:12px 14px;font-size:15px;cursor:pointer;line-height:1.3}
-  .quick button b{display:block;font-size:16px;margin-bottom:2px}
-  .quick button:hover{border-color:var(--red)}
-  .quick button.vip{border-color:var(--gold);background:#FFF8E6}
-  textarea{width:100%;min-height:110px;border-radius:14px;border:2px solid #ddd;padding:12px;font:inherit;font-size:17px;resize:vertical}
-  .row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
-  .btn{border:0;border-radius:12px;padding:12px 18px;font-weight:800;font-size:16px;cursor:pointer}
-  .btn.send{background:var(--red);color:#fff;flex:1}
-  .btn.line{background:#fff;border:2px solid #ddd;color:var(--ink)}
-  .msg{min-height:22px;margin-top:10px;font-weight:700}
-  .ok{color:#18914F}.bad{color:var(--red)}
-  .log div{padding:9px 0;border-bottom:1px dashed #ddd;font-size:14px}.log div small{color:var(--mute);margin-right:8px}
-  .count{font-size:13px;color:var(--mute);text-align:right}
-  #pinBox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(11,22,64,.92);z-index:9}
-  #pinBox .card{width:min(420px,92vw);text-align:center}
-  #pinBox input{width:100%;padding:12px;border-radius:12px;border:1px solid #ccc;font-size:18px;margin:12px 0}
-  :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-  @media (max-width:820px){main{grid-template-columns:1fr}.quick{grid-template-columns:1fr}}
-</style>
-</head>
-<body>
-<header><img src="km-logo.png" alt=""><img src="kavya.png" alt=""><b>KAVYA Control<small>Make KAVYA speak on the kiosk · Kaushal Mela 2026</small></b><span class="st" id="st"></span></header>
-<main>
-  <section class="card">
-    <h2>⚡ Quick announcements</h2>
-    <div class="quick" id="quick"></div>
-  </section>
-  <section>
-    <div class="card">
-      <h2>✍️ Type anything for KAVYA</h2>
-      <textarea id="txt" maxlength="220" placeholder="e.g. The Live Music show starts in 5 minutes at the main stage!"></textarea>
-      <div class="count"><span id="cnt">0</span> / 220</div>
-      <div class="row"><button class="btn send" id="send" type="button">📢 Send to kiosk</button><button class="btn line" id="test" type="button">🔊 Preview here</button></div>
-      <div class="msg" id="msg"></div>
-      <p style="font-size:13px;color:var(--mute);margin:8px 0 0">KAVYA speaks it on the kiosk within about 10 seconds. Keep it short and friendly. No phone numbers or personal details.</p>
-    </div>
-    <div class="card" style="margin-top:18px"><h2>🕘 Sent today</h2><div class="log" id="log"><div style="color:var(--mute)">Nothing sent yet.</div></div></div>
-  </section>
-</main>
-<div id="pinBox"><div class="card"><div style="font-size:42px">🤖</div><h2>KAVYA Control</h2><div>Enter the staff PIN.</div><input id="pin" type="password" inputmode="numeric" autocomplete="off" aria-label="Staff PIN"><button class="btn send" id="go" type="button" style="width:100%">Open</button><div class="msg bad" id="pinErr"></div></div></div>
-<script>
-(function(){
-  const SCRIPT = 'https://script.google.com/macros/s/AKfycbwU9G8D8idXBm9SCi_snA7oCHVwd02Duy_l1FnUz2OTycXfyhLObraZrDr-ZHINJUDemQ/exec';
-  const Q = [
-    ['🌟', 'Welcome Chief Guest', 'Namaskar! A very warm welcome to our honoured Chief Guest. Thank you for joining Kaushal Mela 2026 at Army Public School Jorhat!', 1],
-    ['🎀', 'Ribbon cutting', 'Please gather near the bamboo gate. Our Chief Guest will now open Kaushal Mela 2026!', 1],
-    ['🙏', 'Welcome parents', 'Namaskar parents and families! Welcome to Kaushal Mela 2026. Every stall today is run by our students.'],
-    ['🎟️', 'Coupons first', 'Reminder: stalls take Mela coupons only. Buy them with cash at the Coupon Counter near the entry gate.'],
-    ['🍜', 'Food Court open', 'The Food Court is open! Momo, chowmein, puchka and more are waiting for you.'],
-    ['🎶', 'Live music now', 'Our young musicians are performing live now. Come and enjoy the Live Concert!'],
-    ['🏅', 'Skill Passport', 'Scan the KAVYA QR at every stall to collect skill badges. Ten badges get you a Skill Explorer certificate!'],
-    ['🏆', 'Judges arriving', 'Our judges are now visiting the stalls. Best of luck to all our young makers!'],
-    ['📺', 'Kaushal TV', 'Watch Kaushal TV: 20 skill stories made by our students. Scan the QR on my screen!'],
-    ['🧒', 'Lost child / help', 'If you need any help, please visit the Command Centre. Our team is here for you.'],
-    ['🙌', 'Thank you', 'Thank you for visiting Kaushal Mela 2026! Please drive home safely. See you again!']
-  ];
-  const $ = i => document.getElementById(i);
-  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let pin = ''; try { pin = localStorage.getItem('kmStaffPin') || ''; } catch(e) {}
-  $('quick').innerHTML = Q.map((q, i) => `<button type="button" data-i="${i}" class="${q[3] ? 'vip' : ''}"><b>${q[0]} ${esc(q[1])}</b>${esc(q[2])}</button>`).join('');
-  $('quick').onclick = e => { const b = e.target.closest('button'); if (!b) return; $('txt').value = Q[+b.dataset.i][2]; cnt(); send(); };
-  const cnt = () => { $('cnt').textContent = $('txt').value.length; }; $('txt').oninput = cnt;
-function kavyaVoice(lang){
-  let vs = []; try { vs = speechSynthesis.getVoices(); } catch(e) {}
-  try { const saved = localStorage.getItem('kmGateVoice'); if (saved && (!lang || lang === 'en')) { const sv = vs.find(v => v.name === saved); if (sv && !/ravi|prabhat|hemant|bashkar|david|mark|guy|george|james|richard|\bmale\b/i.test(sv.name.replace(/female/ig,''))) return sv; } } catch(e) {}
-  const want = { en:['en-IN','en-GB','en-US','en'], hi:['hi-IN'], as:['as-IN','bn-IN','bn'] }[lang || 'en'] || ['en'];
-  const F = /neerja|heera|swara|kalpana|tanishaa|veena|lekha|female|zira|aria|jenny|samantha|susan|hazel|libby|sonia|natasha|google/i, M = /ravi|prabhat|hemant|bashkar|david|mark|guy|george|james|richard|\bmale\b/i;
-  const score = v => { const l = v.lang.replace('_','-').toLowerCase(); const i = want.findIndex(t => l === t.toLowerCase() || l.startsWith(t.toLowerCase() + '-') || (t.length <= 3 && l.startsWith(t)));
-    if (i < 0) return -99; let s = 10 - i * 2; if (F.test(v.name)) s += 6; if (M.test(v.name) && !/female/i.test(v.name)) s -= 9; return s; };
-  return vs.filter(v => score(v) > -99).sort((a, b) => score(b) - score(a))[0] || null;
-}
-
-  $('test').onclick = () => { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance($('txt').value || 'Namaskar! I am KAVYA.'); const v = kavyaVoice('en'); if (v){ u.voice = v; u.lang = v.lang; } u.pitch = 1.15; speechSynthesis.speak(u); } catch(e) {} };
-  function jsonp(params){ return new Promise(res => { const cb = 'c' + Date.now() + Math.floor(Math.random() * 1e4), sc = document.createElement('script');
-    const t = setTimeout(() => { done(); res(null); }, 15000); function done(){ clearTimeout(t); delete window[cb]; sc.remove(); }
-    window[cb] = d => { done(); res(d); }; sc.onerror = () => { done(); res(null); };
-    sc.src = SCRIPT + '?' + new URLSearchParams(Object.assign({}, params, { callback: cb })).toString(); document.body.appendChild(sc); }); }
-  const log = [];
-  async function send(){
-    const text = $('txt').value.trim(); if (!text){ $('msg').className = 'msg bad'; $('msg').textContent = 'Type a message first.'; return; }
-    $('send').disabled = true; $('msg').className = 'msg'; $('msg').textContent = 'Sending…';
-    const d = await jsonp({ action: 'announce', pin, text });
-    $('send').disabled = false;
-    if (d && d.pin === false){ try { localStorage.removeItem('kmStaffPin'); } catch(e) {} pin = ''; $('pinBox').style.display = 'flex'; $('pinErr').textContent = 'Wrong PIN. Try again.'; return; }
-    if (d && d.ok){ $('msg').className = 'msg ok'; $('msg').textContent = '✅ Sent! KAVYA will speak it on the kiosk in a few seconds.'; log.unshift([d.sent.at, text]);
-      $('log').innerHTML = log.slice(0, 12).map(([t, x]) => `<div><small>${esc(t)}</small>${esc(x)}</div>`).join(''); }
-    else { $('msg').className = 'msg bad'; $('msg').textContent = '❌ Not sent. Check the internet and try again.'; }
-  }
-  $('send').onclick = send;
-  function open(){ $('pinBox').style.display = 'none'; $('st').textContent = 'Connected as staff'; }
-  $('go').onclick = () => { const v = $('pin').value.trim(); if (!v) return; pin = v; try { localStorage.setItem('kmStaffPin', v); } catch(e) {} open(); };
-  $('pin').onkeydown = e => { if (e.key === 'Enter') $('go').click(); };
-  if (pin) open();
-})();
-</script>
-</body>
-</html>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:28px 20px;text-align:center;font-family:Poppins,'Segoe UI',system-ui,sans-serif;color:#fff;
+ background:radial-gradient(ellipse at 50% 35%,#24409e 0%,#132063 55%,#080f3a 100%)}
+.band{position:fixed;left:0;right:0;height:6px;background:linear-gradient(90deg,#e8325a,#f47b20,#f2b630,#8cc63f,#1aa37a,#1d9bd7,#3b5bdb,#8e44ad)}
+.logos{display:flex;gap:14px;align-items:center;justify-content:center}.logos img{height:84px}
+h1{font-size:clamp(28px,6vw,48px);font-weight:800;line-height:1.1}h1 span{color:#f2b630}
+p{font-size:clamp(15px,2.6vw,19px);color:#dfe5ff;max-width:560px;line-height:1.5}
+a.go{display:inline-block;margin-top:6px;background:#e8325a;color:#fff;text-decoration:none;font-weight:800;font-size:20px;padding:16px 34px;border-radius:99px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+small{color:#aab6ee;font-size:13px;line-height:1.6}small b{color:#f2c64a}
+</style></head><body>
+<div class="band" style="top:0"></div><div class="band" style="bottom:0"></div>
+<div class="logos"><img src="km-logo.png" alt=""><img src="kavya.png" alt="KAVYA"></div>
+<h1>Kaushal Mela 2026 <span>is complete</span></h1>
+<p>Thank you to every parent, guest, student and teacher who made it special. The stalls are closed, but every skill story lives on in Kaushal TV.</p>
+<a class="go" href="play.html">📺 Watch Kaushal TV</a>
+<small id="t">Taking you to Kaushal TV in a few seconds…</small>
+<small>Kaushal TV · <b>A Project TRINeTRA product</b><br>Department of Skill and Innovation · Army Public School Jorhat</small>
+</body></html>
